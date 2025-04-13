@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Gacha Simulator</title>
+</head>
+<body>
+
+    <header>
+        <h2>
+            Customizable Gacha Simulator
+            <small class="header-subtext">(w/ Monte Carlo Simulation)</small>
+            <small class="header-subtext">v0.0.1</small>
+        </h2>       
+    </header>
+
+    <main>
+  
+        <div id="settingsPanel">
+            <h3>
+                Banner Drop Rates
+                <span id="validationMessage"></span>
+            </h3>
+            
+            <div>
+                <span>5★ Base Rate:</span>
+                <input type="text" id="fiveStarBaseRate" value="2.00" min="1" max="100"
+                       oninput="validateDecimalInput('fiveStarBaseRate'); updateThreeStarRate();"
+                       onblur="formatDecimalInput('fiveStarBaseRate')">
+                       <span class="tight-percent">%</span>
+                <span> | 5★ Limited Distribution Rate:</span>
+                <input type="text" id="fiveStarLimitedDistributionRate" value="50.00" min="0" max="100"
+                       oninput="validateDecimalInput('fiveStarLimitedDistributionRate'); updateLimitedRates();"
+                       onblur="formatDecimalInput('fiveStarLimitedDistributionRate')">
+                       <span class="tight-percent">%</span>
+            </div>
+            
+            <div>
+                <span>4★ Base Rate:</span>
+                <input type="text" id="fourStarBaseRate" value="8.00" min="1" max="100"
+                       oninput="validateDecimalInput('fourStarBaseRate'); updateThreeStarRate();"
+                       onblur="formatDecimalInput('fourStarBaseRate')">
+                       <span class="tight-percent">%</span>
+                <span> | 4★ Limited Distribution Rate:</span>
+                <input type="text" id="fourStarLimitedDistributionRate" value="50.00" min="0" max="100"
+                       oninput="validateDecimalInput('fourStarLimitedDistributionRate'); updateLimitedRates();"
+                       onblur="formatDecimalInput('fourStarLimitedDistributionRate')">
+                       <span class="tight-percent">%</span>
+            </div>
+            
+            <div>
+                <span>3★ Base Rate:</span>
+                <input type="number" id="threeStarRate" value="90.00" disabled>
+                <span class="tight-percent">%</span>
+            </div>
+            
+            <h3>
+                Banner Item Pool
+                <span id="validationLimitedRateUpMessage"></span>
+            </h3>
+            
+            <div>
+                <span>5★ Standard Items:</span>
+                <input type="number" id="fiveStarStandardItems" value="5" min="1" oninput="validateItemCount('fiveStarStandardItems')">
+                <span> | 5★ Limited Items:</span>
+                <input type="number" id="fiveStarLimitedItems" value="1" min="1" oninput="validateItemCount('fiveStarLimitedItems')">
+            </div>
+            
+            <div>
+                <span>4★ Standard Items:</span>
+                <input type="number" id="fourStarStandardItems" value="20" min="1" oninput="validateItemCount('fourStarStandardItems')">
+                <span> | 4★ Limited Items:</span>
+                <input type="number" id="fourStarLimitedItems" value="3" min="1" oninput="validateItemCount('fourStarLimitedItems')">
+            </div>
+            
+            
+            <h3>
+                Banner Rules
+            </h3>
+            
+            <!-- Enable Hard Pity System -->
+            <div>
+                <input type="checkbox" id="enableHardPity" onchange="toggleHardPitySettings()">
+                <label for="enableHardPity">Enable Hard Pity System</label>
+            </div>
+            
+            <div id="hardPitySettings" style="display: none; margin-left: 20px;">
+                <div>
+                    <span>5★ Hard Pity:</span>
+                    <input type="number" id="fiveStarPity" value="90" min="1" oninput="validateIntegerInput('fiveStarPity')">
+                    
+                    <div class="guarantee-group" style="margin-top: 5px;">
+                        <input type="checkbox" id="enableFiveStarGuaranteed" onchange="toggleGuaranteedInput('five')">
+                        <label for="enableFiveStarGuaranteed">Guarantee limited after</label>
+                        <input type="number" id="fiveStarGuaranteedAfter" value="1" min="1" style="display: none;" oninput="validateIntegerInput('fiveStarGuaranteedAfter')">
+                        <span id="fiveGuaranteedLabel" style="display: none;">standard pulls</span>
+                    </div>
+                </div>
+            
+                <div style="margin-top: 10px;">
+                    <span>4★ Hard Pity:</span>
+                    <input type="number" id="fourStarPity" value="10" min="1" oninput="validateIntegerInput('fourStarPity')">
+                    
+                    <div class="guarantee-group" style="margin-top: 5px;">
+                        <input type="checkbox" id="enableFourStarGuaranteed" onchange="toggleGuaranteedInput('four')">
+                        <label for="enableFourStarGuaranteed">Guarantee limited after</label>
+                        <input type="number" id="fourStarGuaranteedAfter" value="1" min="1" style="display: none;" oninput="validateIntegerInput('fourStarGuaranteedAfter')">
+                        <span id="fourGuaranteedLabel" style="display: none;">standard pulls</span>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Enable Soft Pity System -->
+            <div>
+                <input type="checkbox" id="enableSoftPity" onchange="toggleSoftPitySettings()">
+                <label for="enableSoftPity">Enable Soft Pity System</label>
+            </div>
+            
+            <div id="softPitySettings" style="display: none; margin-left: 20px;">
+                <!-- 5★ Soft Pity Settings -->
+                <div>
+                    <span>5★ Soft Pity Threshold</span>
+                    <input type="number" id="softPityFiveStarThreshold" value="50" min="1" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFiveStarThreshold')">
+                    <span>|</span>
+                    <span>5★ Soft Pity Increment</span>
+                    <input type="text" id="softPityFiveStarRate" value="2" min="0" step="0.1" oninput="validateDecimalInput('softPityFiveStarRate')" onblur="formatDecimalInput('softPityFiveStarRate')" style="width: 80px; margin-left: 10px;">
+                    <span class="tight-percent">% per pull</span>
+                </div>
+                
+                <!-- 4★ Soft Pity Settings -->
+                <div style="margin-top: 10px;">
+                    <span>4★ Soft Pity Threshold</span>
+                    <input type="number" id="softPityFourStarThreshold" value="8" min="2" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFourStarThreshold')">
+                    <span>|</span>
+                    <span>4★ Soft Pity Increment</span>
+                    <input type="text" id="softPityFourStarRate" value="50" min="0" step="0.1" oninput="validateDecimalInput('softPityFourStarRate')" onblur="formatDecimalInput('softPityFourStarRate')" style="width: 80px; margin-left: 10px;">
+                    <span class="tight-percent">% per pull</span>
+                </div>
+            </div>
+        
+            <h3>
+                Banner Pull Cost
+            </h3>
+            
+            <div>
+                <span>Currency per Pull:</span>
+                <input type="number" id="currencyPerPull" value="600" min="1" oninput="validateIntegerInput('currencyPerPull')">
+            </div>
+            
+            <div>
+                <span>Cost per Pull:</span>
+                <input type="number" id="costPerPull" value="0.555" min="0" step="0.01" oninput="validateDecimalInput('costPerPull')">
+                <span class="tight-percent">$</span>
+            </div>
+                
+            <h3> 
+                Monte Carlo Simulation
+                <button id="RunSimulationBtn" onclick="runMonteCarloSimulation()">Run Simulation</button>
+            </h3>
+            
+            <div>
+                <label for="simulationCount">Pulls:</label>
+                <input type="number" id="simulationCount" value="100000" min="1" step="1" oninput="validateIntegerInput(this)"/>
+            </div>
+        
+        </div>
+
+        <div id="resultsPanel">
+            <h3>Simulation Results</h3>
+            <span> Click "Run Simulation" to get started. </span>
+            <!-- Dynamically injected content will appear here -->
+        </div>
+
+    </main>
+
+    <script>
+
+        //---------- Main Simulation Logic ----------//
+        //---------- Main Simulation Logic ----------//
+        //---------- Main Simulation Logic ----------//
+        //---------- Main Simulation Logic ----------//
+        //---------- Main Simulation Logic ----------//
+
+        function getGachaSettings() {
+            return {
+                pool: {
+                    "5★": Math.max(parseFloat(document.getElementById('fiveStarStandardItems').value) || 1, 1),
+                    "4★": Math.max(parseFloat(document.getElementById('fourStarStandardItems').value) || 1, 1),
+                    "3★": parseFloat(document.getElementById('threeStarRate').value) || 50
+                },
+                rates: {
+                    "5★": parseFloat(document.getElementById('fiveStarBaseRate').value) || 0,
+                    "4★": parseFloat(document.getElementById('fourStarBaseRate').value) || 0,
+                    "3★": parseFloat(document.getElementById('threeStarRate').value) || 0
+                }
+            };
+        }
+
+        function runMonteCarloSimulation() {
+            const settings = getGachaSettings();
+            const pulls = parseInt(document.getElementById("simulationCount").value) || 100000;
+
+            let results = {
+                "5★": {
+                    total: 0, standard: 0, limited: 0,
+                    pulls: [], standardPulls: [], limitedPulls: [],
+                    pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
+                    hardPityHits: { total: 0, standard: 0, limited: 0 },
+                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: []
+                },
+                "4★": {
+                    total: 0, standard: 0, limited: 0,
+                    pulls: [], standardPulls: [], limitedPulls: [],
+                    pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
+                    hardPityHits: { total: 0, standard: 0, limited: 0 },
+                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: []
+                },
+                "3★": 0
+            };
+
+            const limitedRates = {
+                "5★": parseFloat(document.getElementById('fiveStarLimitedDistributionRate').value) || 0,
+                "4★": parseFloat(document.getElementById('fourStarLimitedDistributionRate').value) || 0
+            };
+
+            const useHardPity = document.getElementById("enableHardPity").checked;
+            const useSoftPity = document.getElementById("enableSoftPity").checked;
+
+            const hardPity5Value = parseInt(document.getElementById("fiveStarPity").value) || 90;
+            const hardPity4Value = parseInt(document.getElementById("fourStarPity").value) || 10;
+
+            const useGuaranteedLimited5 = document.getElementById("enableFiveStarGuaranteed").checked;
+            const guaranteeAfterStandard5 = parseInt(document.getElementById("fiveStarGuaranteedAfter").value) || 1;
+
+            const useGuaranteedLimited4 = document.getElementById("enableFourStarGuaranteed").checked;
+            const guaranteeAfterStandard4 = parseInt(document.getElementById("fourStarGuaranteedAfter").value) || 1;
+
+            const softPity = useSoftPity ? getSoftPityRates() : null;
+
+            let pullCountSinceLast5 = 0, pullCountSinceLast4 = 0;
+            let pullsSinceLast5Limited = 0, pullsSinceLast5Standard = 0;
+            let pullsSinceLast4Limited = 0, pullsSinceLast4Standard = 0;
+            let standard5Streak = 0, standard4Streak = 0;
+
+            for (let i = 0; i < pulls; i++) {
+                pullCountSinceLast5++;
+                pullCountSinceLast4++;
+                pullsSinceLast5Limited++;
+                pullsSinceLast5Standard++;
+                pullsSinceLast4Limited++;
+                pullsSinceLast4Standard++;
+
+                let fiveStarRate = settings.rates["5★"];
+                let fourStarRate = settings.rates["4★"];
+
+                if (useSoftPity) {
+                    if (pullCountSinceLast5 > softPity["5★"].threshold) {
+                        fiveStarRate = Math.min(100, fiveStarRate + (pullCountSinceLast5 - softPity["5★"].threshold) * softPity["5★"].rateIncrement);
+                    }
+                    if (pullCountSinceLast4 > softPity["4★"].threshold) {
+                        fourStarRate = Math.min(100 - fiveStarRate, fourStarRate + (pullCountSinceLast4 - softPity["4★"].threshold) * softPity["4★"].rateIncrement);
+                    }
+                }
+
+                let roll = Math.random() * 100;
+                let is5Star = false, is4Star = false;
+                let hitHardPity5 = false, hitHardPity4 = false;
+                let hitSoftPity5 = false, hitSoftPity4 = false;
+
+                if (useHardPity && pullCountSinceLast5 >= hardPity5Value) {
+                    is5Star = true;
+                    hitHardPity5 = true;
+                } else if (roll < fiveStarRate) {
+                    is5Star = true;
+                    if (useSoftPity && pullCountSinceLast5 >= softPity["5★"].threshold &&
+                        (!useHardPity || pullCountSinceLast5 < hardPity5Value)) {
+                        hitSoftPity5 = true;
+                    }
+                } else if (useHardPity && pullCountSinceLast4 >= hardPity4Value) {
+                    is4Star = true;
+                    hitHardPity4 = true;
+                } else if (roll < fiveStarRate + fourStarRate) {
+                    is4Star = true;
+                    if (useSoftPity && pullCountSinceLast4 >= softPity["4★"].threshold &&
+                        (!useHardPity || pullCountSinceLast4 < hardPity4Value)) {
+                        hitSoftPity4 = true;
+                    }
+                }
+
+                if (is5Star) {
+                    results["5★"].total++;
+                    results["5★"].pulls.push(pullCountSinceLast5);
+                    results["5★"].pullNumbers.push(i + 1);
+
+                    if (hitSoftPity5) {
+                        results["5★"].softPityHits.push(pullCountSinceLast5);
+                        results["5★"].softPityPullNumbers.push(i + 1);
+                        results["5★"].softPityHitCount++;
+                    }
+
+                    let isLimited = Math.random() * 100 < limitedRates["5★"];
+                    if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5) {
+                        isLimited = true;
+                    }
+
+                    if (isLimited) {
+                        results["5★"].limited++;
+                        results["5★"].limitedPulls.push(pullsSinceLast5Limited);
+                        results["5★"].limitedPullNumbers.push(i + 1);
+                        if (hitHardPity5) results["5★"].hardPityHits.limited++;
+                        pullsSinceLast5Limited = 0;
+                        standard5Streak = 0;
+                    } else {
+                        results["5★"].standard++;
+                        results["5★"].standardPulls.push(pullsSinceLast5Standard);
+                        results["5★"].standardPullNumbers.push(i + 1);
+                        if (hitHardPity5) results["5★"].hardPityHits.standard++;
+                        pullsSinceLast5Standard = 0;
+                        standard5Streak++;
+                    }
+
+                    if (hitHardPity5) results["5★"].hardPityHits.total++;
+                    pullCountSinceLast5 = 0;
+
+                } else if (is4Star) {
+                    results["4★"].total++;
+                    results["4★"].pulls.push(pullCountSinceLast4);
+                    results["4★"].pullNumbers.push(i + 1);
+
+                    if (hitSoftPity4) {
+                        results["4★"].softPityHits.push(pullCountSinceLast4);
+                        results["4★"].softPityPullNumbers.push(i + 1);
+                        results["4★"].softPityHitCount++;
+                    }
+
+                    let isLimited = Math.random() * 100 < limitedRates["4★"];
+                    if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4) {
+                        isLimited = true;
+                    }
+
+                    if (isLimited) {
+                        results["4★"].limited++;
+                        results["4★"].limitedPulls.push(pullsSinceLast4Limited);
+                        results["4★"].limitedPullNumbers.push(i + 1);
+                        if (hitHardPity4) results["4★"].hardPityHits.limited++;
+                        pullsSinceLast4Limited = 0;
+                        standard4Streak = 0;
+                    } else {
+                        results["4★"].standard++;
+                        results["4★"].standardPulls.push(pullsSinceLast4Standard);
+                        results["4★"].standardPullNumbers.push(i + 1);
+                        if (hitHardPity4) results["4★"].hardPityHits.standard++;
+                        pullsSinceLast4Standard = 0;
+                        standard4Streak++;
+                    }
+
+                    if (hitHardPity4) results["4★"].hardPityHits.total++;
+                    pullCountSinceLast4 = 0;
+                } else {
+                    results["3★"]++;
+                }
+            }
+
+            updateSimulationResults(results, pulls);
+        }
+
+        function updateSimulationResults(results, pulls) {
+            const useHardPity = document.getElementById("enableHardPity").checked;
+            const useSoftPity = document.getElementById("enableSoftPity").checked;
+
+            // Helper functions
+            const formatDecimal = (num, decimals) => num.toFixed(decimals);
+            const formatPct = (num, total) => total ? `${formatDecimal((num / total) * 100, 2)}%` : "0%";
+
+            // Calculate statistics
+            const stats5 = calculateStats(results["5★"].pulls);
+            const stats5Standard = calculateStats(results["5★"].standardPulls);
+            const stats5Limited = calculateStats(results["5★"].limitedPulls);
+            const soft5Stats = calculateStats(results["5★"].softPityHits);
+
+            const stats4 = calculateStats(results["4★"].pulls);
+            const stats4Standard = calculateStats(results["4★"].standardPulls);
+            const stats4Limited = calculateStats(results["4★"].limitedPulls);
+            const soft4Stats = calculateStats(results["4★"].softPityHits);
+
+            const hard5 = results["5★"].hardPityHits;
+            const hard4 = results["4★"].hardPityHits;
+
+            // Build results HTML
+            let resultHTML = `
+                <h3>Simulation Results</h3>
+
+                <h4>Overall Distribution</h4>
+                <hr />
+                <div class="stats-section">
+                    <!-- Doughnut Chart -->
+                    <div>
+                        <canvas id="rarityDistributionChart" class="donutchart-canvas"></canvas>
+                    </div>
+
+                    <!-- Summary Stats -->
+                    <div class="stats-block">
+                        <p><strong>Total Pulls:</strong> ${pulls}</p> <br>
+
+                        <p><strong>General Rarity Distribution:</strong></p>
+                        <ul>
+                            <li>5★: ${results["5★"].total} (${formatPct(results["5★"].total, pulls)})</li>
+                            <li>4★: ${results["4★"].total} (${formatPct(results["4★"].total, pulls)})</li>
+                            <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
+                        </ul> <br>
+
+                        <p><strong>Standard / Limited Rarity Distribution:</strong></p>
+                        <ul>
+                            <li>5★ Limited: ${results["5★"].limited} (${formatPct(results["5★"].limited, pulls)})</li>
+                            <li>5★ Standard: ${results["5★"].standard} (${formatPct(results["5★"].standard, pulls)})</li>
+                            <li>4★ Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, pulls)})</li>
+                            <li>4★ Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, pulls)})</li>
+                            <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>5★ Statistics</h4>
+                <hr />
+                <div class="stats-section">
+                    <div>
+                        <canvas id="fiveStarDistributionChart" class="donutchart-canvas"></canvas>
+                    </div>
+
+                    <div class="stats-block">
+                        <p><strong>Total 5★:</strong> ${results["5★"].total} (${formatPct(results["5★"].total, pulls)} from ${pulls} pulls)</p> <br>
+
+                        <p><strong>5★ Type Distribution:</strong></p>
+                        <ul>
+                            <li>Limited: ${results["5★"].limited} (${formatPct(results["5★"].limited, results["5★"].total)})</li>
+                            <li>Standard: ${results["5★"].standard} (${formatPct(results["5★"].standard, results["5★"].total)})</li>
+                        </ul> <br>
+
+                        <p><strong>Avg / Min / Max Pulls:</strong></p>
+                        <ul>
+                            <li>Any: Avg (${stats5.avg}), Min (${stats5.min}), Max (${stats5.max})</li>
+                            <li>Standard: Avg (${stats5Standard.avg}), Min (${stats5Standard.min}), Max (${stats5Standard.max})</li>
+                            <li>Limited: Avg (${stats5Limited.avg}), Min (${stats5Limited.min}), Max (${stats5Limited.max})</li>
+                        </ul>
+                    </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fiveStarPullDistributionChart" class="histogram-canvas"></canvas>
+                    </div>
+                </div>
+
+                <h4>4★ Statistics</h4>
+                <hr />
+                <div class="stats-section">
+                    <div>
+                        <canvas id="fourStarDistributionChart" class="donutchart-canvas"></canvas>
+                    </div>
+
+                    <div class="stats-block">
+                        <p><strong>Total 4★:</strong> ${results["4★"].total} (${formatPct(results["4★"].total, pulls)} from ${pulls} pulls)</p>
+                        <br>
+
+                        <p><strong>4★ Type Distribution:</strong></p>
+                        <ul>
+                            <li>Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, results["4★"].total)})</li>
+                            <li>Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, results["4★"].total)})</li>
+                        </ul>
+                        <br>
+
+                        <p><strong>Avg / Min / Max Pulls:</strong></p>
+                        <ul>
+                            <li>Any: Avg (${stats4.avg}), Min (${stats4.min}), Max (${stats4.max})</li>
+                            <li>Standard: Avg (${stats4Standard.avg}), Min (${stats4Standard.min}), Max (${stats4Standard.max})</li>
+                            <li>Limited: Avg (${stats4Limited.avg}), Min (${stats4Limited.min}), Max (${stats4Limited.max})</li>
+                        </ul>
+                    </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fourStarPullDistributionChart" class="histogram-canvas"></canvas>
+                    </div>
+                </div>
+            `;
+
+            // If Hard Pity is enabled, show Hard Pity section
+            if (useHardPity) {
+                const nonHard5 = results["5★"].total - hard5.total;
+                const nonHard4 = results["4★"].total - hard4.total;
+
+                resultHTML += `
+                    <h4>Hard Pity Statistics</h4>
+                    <hr />
+                    <div class="stats-section">
+                        <div>
+                            <canvas id="fiveStarHardPityChart" class="donutchart-canvas"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="fourStarHardPityChart" class="donutchart-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stats-block">
+                        <p><strong>5★ Hard Pity Distribution:</strong></p>
+                        <ul>
+                            <li>Hard Pity: ${hard5.total} (${formatPct(hard5.total, results["5★"].total)}) </li>
+                            <li>Non-Hard Pity: ${nonHard5} (${formatPct(nonHard5, results["5★"].total)})</li>
+                        </ul><br>
+
+                        <p><strong>4★ Hard Pity Distribution:</strong></p>
+                        <ul>
+                            <li>Hard Pity: ${hard4.total} (${formatPct(hard4.total, results["4★"].total)})</li>
+                            <li>Non-Hard Pity: ${nonHard4} (${formatPct(nonHard4, results["4★"].total)})</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // If Soft Pity is enabled, show Soft Pity section
+            if (useSoftPity) {
+                const nonSoft5 = results["5★"].total - results["5★"].softPityHitCount;
+                const nonSoft4 = results["4★"].total - results["4★"].softPityHitCount;
+
+                resultHTML += `
+                    <h4>Soft Pity Statistics</h4>
+                    <hr />
+                    <div class="stats-section">
+                        <div>
+                            <canvas id="fiveStarSoftPityChart" class="donutchart-canvas"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="fourStarSoftPityChart" class="donutchart-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stats-block">
+                        <p><strong>5★ Soft Pity Distribution:</strong></p>
+                        <ul>
+                            <li>Soft Pity: ${results["5★"].softPityHitCount} (${formatPct(results["5★"].softPityHitCount, results["5★"].total)})</li>
+                            <li>Non-Soft Pity: ${nonSoft5} (${formatPct(nonSoft5, results["5★"].total)})</li>
+                        </ul><br>
+
+                        <p><strong>Soft Pity Pull Range (5★):</strong></p>
+                        <ul>
+                            <li>Min Pull: ${soft5Stats.min}</li>
+                            <li>Avg Pull: ${soft5Stats.avg}</li>
+                            <li>Max Pull: ${soft5Stats.max}</li>
+                        </ul><br>
+
+                        <p><strong>4★ Soft Pity Distribution:</strong></p>
+                        <ul>
+                            <li>Soft Pity: ${results["4★"].softPityHitCount} (${formatPct(results["4★"].softPityHitCount, results["4★"].total)})</li>
+                            <li>Non-Soft Pity: ${nonSoft4} (${formatPct(nonSoft4, results["4★"].total)})</li>
+                        </ul><br>
+
+                        <p><strong>Soft Pity Pull Range (4★):</strong></p>
+                        <ul>
+                            <li>Min Pull: ${soft4Stats.min}</li>
+                            <li>Avg Pull: ${soft4Stats.avg}</li>
+                            <li>Max Pull: ${soft4Stats.max}</li>
+                        </ul>
+                    </div>
+
+                    <div class="full-width-wrapper">
+                        <canvas id="fiveStarSoftPityDistributionChart" class="histogram-canvas"></canvas>
+                    </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fourStarSoftPityDistributionChart" class="histogram-canvas"></canvas>
+                    </div>
+                `;
+            }
+
+            resultHTML += `</div>`;
+
+            const resultsPanel = document.getElementById("resultsPanel");
+            resultsPanel.innerHTML = resultHTML;
+
+            // Render charts
+            renderDoughnutChart("rarityDistributionChart", ["5★ Limited", "5★ Standard", "4★ Limited", "4★ Standard", "3★"], [results["5★"].limited, results["5★"].standard, results["4★"].limited, results["4★"].standard, results["3★"]], ["#FFD700", "#BFB773", "#B366FF", "#9E84B7", "#3DA5A5"], "Total Item Distribution");
+            renderDoughnutChart("fiveStarDistributionChart", ["5★ Limited", "5★ Standard"], [results["5★"].limited, results["5★"].standard], ["#FFD700", "#BFB773"], "5★: Standard vs Limited");
+            renderDoughnutChart("fourStarDistributionChart", ["4★ Limited", "4★ Standard"], [results["4★"].limited, results["4★"].standard], ["#B366FF", "#9E84B7"], "4★: Standard vs Limited");
+
+            renderHistogramChart(results["5★"].pulls, "5★", "fiveStarPullDistributionChart", "rgba(255, 215, 100, 0.6)", "5★ Pull Distribution");
+            renderHistogramChart(results["4★"].pulls, "4★", "fourStarPullDistributionChart", "rgba(179, 102, 230, 0.6)", "4★ Pull Distribution");
+
+            if (useHardPity) {
+                renderDoughnutChart("fiveStarHardPityChart", ["Hard Pity", "Non-Hard Pity"], [hard5.total, results["5★"].total - hard5.total], ["#E6A400", "#FFDD66"], "5★ Hard vs Non-Hard Pity");
+                renderDoughnutChart("fourStarHardPityChart", ["Hard Pity", "Non-Hard Pity"], [hard4.total, results["4★"].total - hard4.total], ["#8E44AD", "#C39BD3"], "4★ Hard vs Non-Hard Pity");
+            }
+            if (useSoftPity) {
+                renderDoughnutChart("fiveStarSoftPityChart", ["Soft Pity", "Non-Soft Pity"], [results["5★"].softPityHitCount, results["5★"].total - results["5★"].softPityHitCount], ["#E6A400", "#FFDD66"], "5★ Soft vs Non-Soft Pity");
+                renderDoughnutChart("fourStarSoftPityChart", ["Soft Pity", "Non-Soft Pity"], [results["4★"].softPityHitCount, results["4★"].total - results["4★"].softPityHitCount], ["#8E44AD", "#C39BD3"], "4★ Soft vs Non-Soft Pity");
+
+                renderHistogramChart(results["5★"].softPityHits, "5★", "fiveStarSoftPityDistributionChart", "rgba(230, 164, 0, 0.6)", "5★ Soft Pity Pull Distribution");
+                renderHistogramChart(results["4★"].softPityHits, "4★", "fourStarSoftPityDistributionChart", "rgba(142, 68, 173, 0.6)", "4★ Soft Pity Pull Distribution");
+            }
+        }
+
+        function renderDoughnutChart(canvasId, labels, data, colors, chartTitle) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '50%', // Adjust the thickness of the doughnut (50% is a good start)
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: chartTitle, // Title for the chart
+                            color: '#ffffff', // Title color
+                            font: {
+                                size: 18, // Font size for the title
+                                weight: 'bold', // Font weight for the title
+                            },
+                            padding: {
+                                bottom: 20, // Add some padding below the title
+                            },
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#ffffff',
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (tooltipItem) => {
+                                    const total = data.reduce((a, b) => a + b, 0);
+                                    const value = tooltipItem.raw;
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            formatter: (value, ctx) => {
+                                let total = ctx.chart._metasets[0].total || ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                let percentage = (value / total * 100).toFixed(1) + '%';
+                                return percentage;
+                            },
+                            anchor: 'center',
+                            align: 'center',
+                            offset: 8,
+                            clamp: true,
+                            display: (context) => {
+                                const value = context.dataset.data[context.dataIndex];
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total * 100).toFixed(2);
+                                return parseFloat(percentage) > 5; // Only display labels for slices larger than 5%
+                            },
+                            padding: 10
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        function renderHistogramChart(data, label, canvasId, color, titleText) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            // Optional: destroy any existing chart instance on this canvas
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+
+            const bins = {};
+            data.forEach(value => {
+                bins[value] = (bins[value] || 0) + 1;
+            });
+
+            const labels = Object.keys(bins).map(n => parseInt(n)).sort((a, b) => a - b);
+            const counts = labels.map(label => bins[label]);
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label + ' Pulls',
+                        data: counts,
+                        backgroundColor: color,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: titleText,  // ← Your custom title here
+                            color: '#ffffff',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 10,
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Pull Number',
+                                color: '#ffffff'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Frequency',
+                                color: '#ffffff'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Optional: attach chart instance to canvas for future reference
+            ctx.chart = chart;
+        }
+
+        function calculateStats(arr) {
+            if (arr.length === 0) return { min: 0, avg: 0, max: 0 };
+            let min = Math.min(...arr);
+            let max = Math.max(...arr);
+            let avg = arr.reduce((sum, val) => sum + val, 0) / arr.length;
+            return { min, avg: formatDecimal(avg, 2), max };
+        }
+
+        function formatDecimal(value, minDecimals = 0) {
+            let formattedValue = value.toFixed(3).replace(/\.?0+$/, '');
+            if (minDecimals > 0 && !formattedValue.includes('.')) {
+                formattedValue += '.' + '0'.repeat(minDecimals);
+            }
+            return formattedValue;
+        }
+
+        //---------- Formatting Functions ----------//
+        //---------- Formatting Functions ----------//
+        //---------- Formatting Functions ----------//
+
+        function formatDecimalInput(id) {
+            const inputField = document.getElementById(id);
+            let value = parseFloat(inputField.value) || 0;
+            inputField.value = formatDecimal(value, 2);
+        }
+
+        function validateDecimalInput(id) {
+            const inputField = document.getElementById(id);
+            let value = inputField.value;
+
+            // Remove any non-numeric characters except the decimal point
+            value = value.replace(/[^0-9.]/g, "");
+
+            // Allow only one decimal point
+            if (value.split('.').length > 2) {
+                value = value.substring(0, value.lastIndexOf('.')) + value.substring(value.lastIndexOf('.'), value.length).replace('.', '');
+            }
+
+            // Limit to 3 decimal places
+            let decimalIndex = value.indexOf('.');
+            if (decimalIndex !== -1) {
+                value = value.substring(0, decimalIndex + 4); // Allow 3 decimal places (index 0 + decimal point + 3 digits)
+            }
+
+            // If the value is less than 0, default to 1
+            if (parseFloat(value) < 0) {
+                value = "1";
+            }
+
+            // If the value is greater than 100, default to 100
+            if (parseFloat(value) > 100) {
+                value = "100";
+            }
+
+            // Set the validated value
+            inputField.value = value;
+        }
+
+        function validateIntegerInput(id) {
+            const inputField = document.getElementById(id);
+            let value = inputField.value;
+
+            // Remove any non-numeric characters
+            value = value.replace(/[^0-9]/g, "");
+
+            // Remove leading zeros
+            value = value.replace(/^0+/, "");
+
+            // If the value is empty after removing leading zeros, set it to "1"
+            if (value === "") {
+                value = "1";
+            }
+
+            // Ensure the value doesn't go below 1
+            if (parseInt(value) < 1) {
+                value = "1";
+            }
+
+            // Set the validated value
+            inputField.value = value;
+        }
+
+        function updateThreeStarRate() {
+            const fiveStarRate = parseFloat(document.getElementById('fiveStarBaseRate').value) || 0;
+            const fourStarRate = parseFloat(document.getElementById('fourStarBaseRate').value) || 0;
+            const threeStarRate = Math.max(0, 100 - (fiveStarRate + fourStarRate));
+            document.getElementById('threeStarRate').value = formatDecimal(threeStarRate, 2);
+            validateRates();  // Revalidate all rates
+        }
+
+        function updateLimitedRates() {
+            const fiveStarRate = parseFloat(document.getElementById('fiveStarBaseRate').value) || 0;
+            const fourStarRate = parseFloat(document.getElementById('fourStarBaseRate').value) || 0;
+
+            const valid = (fiveStarRate <= 100 && fourStarRate <= 100);
+            document.getElementById('RunSimulationBtn').disabled = !valid;
+
+            if (valid) {
+                document.getElementById('rateUpValidationMessage').innerHTML = "<span style='color: green;'>✔</span>";
+            } else {
+                document.getElementById('rateUpValidationMessage').innerHTML = "<span style='color: red;'>Error: Each rate must be ≤ 100%</span>";
+            }
+        }
+
+        function validateRates() {
+            const fiveStarRate = parseFloat(document.getElementById('fiveStarBaseRate').value) || 0;
+            const fourStarRate = parseFloat(document.getElementById('fourStarBaseRate').value) || 0;
+            const threeStarRate = parseFloat(document.getElementById('threeStarRate').value) || 0;
+            const totalRate = fiveStarRate + fourStarRate + threeStarRate;
+
+            if (totalRate > 100) {
+                document.getElementById('validationMessage').innerHTML = "<span style='color: red;'>Error: Total rates cannot exceed 100%.</span>";
+                document.getElementById('RunSimulationBtn').disabled = true;
+            } else if (Math.abs(totalRate - 100) < 0.0001) {
+                document.getElementById('validationMessage').innerHTML = "";
+                document.getElementById('RunSimulationBtn').disabled = false;
+            } else {
+                document.getElementById('validationMessage').innerHTML = "<span style='color: red;'>Error: Total rates must be 100%.</span>";
+                document.getElementById('RunSimulationBtn').disabled = true;
+            }
+        }
+
+        function validateItemCount(id) {
+            const value = parseFloat(document.getElementById(id).value) || 1;
+            document.getElementById(id).value = Math.max(value, 1);
+        }
+
+        function toggleHardPitySettings() {
+            const hardPitySettings = document.getElementById("hardPitySettings");
+            const isChecked = document.getElementById("enableHardPity").checked;
+            hardPitySettings.style.display = isChecked ? "block" : "none";
+        }
+
+        function toggleSoftPitySettings() {
+            const softPitySettings = document.getElementById("softPitySettings");
+            const isChecked = document.getElementById("enableSoftPity").checked;
+            softPitySettings.style.display = isChecked ? "block" : "none";
+        }
+
+        function initializeForm() {
+            const softPitySettings = document.getElementById("softPitySettings");
+            softPitySettings.style.display = "none";  // Soft Pity is disabled by default
+            const hardPitySettings = document.getElementById("hardPitySettings");
+            hardPitySettings.style.display = "none";  // Hard Pity is disabled by default
+        }
+
+        function getSoftPityRates() {
+            const softPityFiveStarRate = parseFloat(document.getElementById("softPityFiveStarRate").value) || 0;
+            const softPityFourStarRate = parseFloat(document.getElementById("softPityFourStarRate").value) || 0;
+            const softPityFiveStarThreshold = parseInt(document.getElementById("softPityFiveStarThreshold").value) || 0;
+            const softPityFourStarThreshold = parseInt(document.getElementById("softPityFourStarThreshold").value) || 0;
+
+            return {
+                "5★": {
+                    rateIncrement: softPityFiveStarRate,
+                    threshold: softPityFiveStarThreshold
+                },
+                "4★": {
+                    rateIncrement: softPityFourStarRate,
+                    threshold: softPityFourStarThreshold
+                }
+            };
+        }
+
+        function toggleGuaranteedInput(starTier) {
+            const input = document.getElementById(`${starTier}StarGuaranteedAfter`);
+            const label = document.getElementById(`${starTier}GuaranteedLabel`);
+            const checkbox = document.getElementById(`enable${capitalize(starTier)}StarGuaranteed`);
+
+            if (checkbox.checked) {
+                input.style.display = 'inline-block';
+                label.style.display = 'inline-block';
+            } else {
+                input.style.display = 'none';
+                label.style.display = 'none';
+            }
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+
+</body>
+</html>

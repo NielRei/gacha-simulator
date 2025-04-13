@@ -1,0 +1,306 @@
+/* Base Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b1020;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: #181e33;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    margin-bottom: 16px;
+}
+
+header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+header h2 .header-subtext {
+    font-size: 0.7em;
+    font-weight: normal;
+    color: #ffffff;
+    margin-left: 2px;
+}
+
+/* Main Layout */
+main {
+    display: flex;
+    gap: 20px;
+    padding: 0 20px 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Settings Panel */
+#settingsPanel {
+    display: inline-block;
+    min-width: 700px;
+    max-width: 100%;
+    background-color: #151c30;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    vertical-align: top;
+}
+
+#settingsPanel h3 {
+    font-size: 1.15rem;
+    margin: 12px 0 8px;
+    color: #ffffff;
+    border-bottom: 2px solid #3c4c70;
+    padding-bottom: 4px;
+    margin-left: 0;
+}
+
+#settingsPanel h3 ~ div {
+    padding-left: 15px;
+}
+
+#settingsPanel span,
+#settingsPanel label {
+    font-size: 0.9rem;
+    margin-right: 6px;
+    color: rgba(240, 250, 255, 0.9);
+}
+
+input[type="text"],
+input[type="number"] {
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #3c4c70;
+    color: #ffffff;
+    width: 6ch;
+    transition: border-color 0.2s ease;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#simulationCount {
+    width: 12ch !important;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-bottom-color: #91aaff;
+    box-shadow: 0 1px 0 #91aaff99;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="text"]::-webkit-scrollbar,
+input[type="number"]::-webkit-scrollbar {
+    height: 4px;
+}
+input[type="text"]::-webkit-scrollbar-thumb,
+input[type="number"]::-webkit-scrollbar-thumb {
+    background: #5a6ab0;
+    border-radius: 4px;
+}
+
+input[disabled],
+input:disabled {
+    border-bottom: 2px dashed #4a5063;
+    color: #888ca0;
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+#threeStarRateLabel {
+    color: #888ca0;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.1);
+    margin-right: 6px;
+}
+
+#settingsPanel div {
+    margin-bottom: 8px;
+}
+
+.tight-percent {
+    font-size: 3rem;
+    color: #ffffff;
+}
+
+button {
+    background-color: #6f77ff;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-left: 8px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    background-color: #8892ff;
+    box-shadow: 0 0 6px #7a92ff88;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 10px;
+        gap: 16px;
+    }
+
+    #settingsPanel,
+    #resultsPanel {
+        flex: 1 0 100%;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+}
+
+/* ================================ */
+/*            Results Panel         */
+/* ================================ */
+
+#resultsPanel {
+    flex: 1;
+    width: 100%;  /* Ensure the panel expands */
+    min-width: 800px;
+    background-color: #151c30;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: auto; /* Allow the height to grow based on content */
+}
+
+#resultsPanel h3 {
+    font-size: 1.15rem;
+    margin: 12px 0 8px;
+    color: #ffffff;
+    border-bottom: 2px solid #3c4c70;
+    padding-bottom: 4px;
+}
+
+
+.stats-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 12px;
+}
+
+/* Don’t touch donutchart-canvas styling */
+.donutchart-canvas {
+    width: 100%;
+    max-width: 300px; 
+    height: auto;
+    max-height: 300px;
+    aspect-ratio: 1;
+    background-color: #1f2a44;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Allow individual chart wrappers to shrink/grow and align in a row */
+.stats-section > div:not(.stats-block):not(.full-width-wrapper) {
+    flex: 1 1 200px;
+    max-width: 250px;
+}
+
+/* Updated stats block to sit beside charts */
+.stats-block {
+    flex: 1 1 300px;  /* From 100% to this */
+    font-size: 0.9rem;
+    color: #ffffff;
+    background-color: #262f4a;
+    padding: 16px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    min-width: 280px;
+}
+
+/* Keep histogram full-width */
+.full-width-wrapper {
+    flex: 1 1 100%;
+    width: 100%;
+}
+
+.histogram-canvas {
+    width: 100%;
+    height: 100%;
+    background-color: #1f2a44;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    display: block;
+    margin: 0 auto;
+    max-height: none;
+}
+
+.stats-block ul {
+    list-style-type: none;
+}
+
+
+@media (max-width: 768px) {
+    #resultsPanel {
+        flex-direction: column; /* Stack results vertically on small screens */
+        gap: 16px;
+        padding: 10px;
+        height: auto;  /* Let it grow based on content */
+    }
+    .stats-section {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .stats-block {
+        flex: 1 1 100%; 
+        padding: 12px;
+    }
+
+        .histogram-canvas {
+        max-height: 400px;  /* Set a sensible height for smaller screens if needed */
+    }
+
+    .donutchart-canvas {
+        max-width: 100%; 
+        max-height: 250px; 
+    }
+}
+
+@media (min-width: 769px) {
+    .stats-block {
+        flex: 1 1 45%; 
+    }
+    .histogram-canvas {
+        max-width: 100%;  
+        height: 300px;  
+}
