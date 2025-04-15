@@ -64,17 +64,17 @@
             </h3>
             
             <div>
-                <span>5★ Standard Items:</span>
-                <input type="number" id="fiveStarStandardItems" value="5" min="1" oninput="validateItemCount('fiveStarStandardItems')">
-                <span> | 5★ Limited Items:</span>
+                <span> 5★ Limited Items:</span>
                 <input type="number" id="fiveStarLimitedItems" value="1" min="1" oninput="validateItemCount('fiveStarLimitedItems')">
+                <span> | 5★ Standard Items:</span>
+                <input type="number" id="fiveStarStandardItems" value="5" min="1" disabled>
             </div>
             
             <div>
-                <span>4★ Standard Items:</span>
-                <input type="number" id="fourStarStandardItems" value="20" min="1" oninput="validateItemCount('fourStarStandardItems')">
-                <span> | 4★ Limited Items:</span>
+                <span> 4★ Limited Items:</span>
                 <input type="number" id="fourStarLimitedItems" value="3" min="1" oninput="validateItemCount('fourStarLimitedItems')">
+                <span> | 4★ Standard Items:</span>
+                <input type="number" id="fourStarStandardItems" value="20" min="1" disabled>
             </div>
             
             
@@ -145,12 +145,7 @@
             <h3>
                 Banner Pull Cost
             </h3>
-            
-            <div>
-                <span>Currency per Pull:</span>
-                <input type="number" id="currencyPerPull" value="600" min="1" oninput="validateIntegerInput('currencyPerPull')">
-            </div>
-            
+
             <div>
                 <span>Cost per Pull:</span>
                 <input type="number" id="costPerPull" value="0.555" min="0" step="0.01" oninput="validateDecimalInput('costPerPull')">
