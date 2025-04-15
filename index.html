@@ -591,6 +591,22 @@
             }
         }
 
+        function calculateStats(arr) {
+            if (arr.length === 0) return { min: 0, avg: 0, max: 0 };
+            let min = Math.min(...arr);
+            let max = Math.max(...arr);
+            let avg = arr.reduce((sum, val) => sum + val, 0) / arr.length;
+            return { min, avg: formatDecimal(avg, 2), max };
+        }
+
+        function formatDecimal(value, minDecimals = 0) {
+            let formattedValue = value.toFixed(3).replace(/\.?0+$/, '');
+            if (minDecimals > 0 && !formattedValue.includes('.')) {
+                formattedValue += '.' + '0'.repeat(minDecimals);
+            }
+            return formattedValue;
+        }
+
         function renderDoughnutChart(canvasId, labels, data, colors, chartTitle) {
             const ctx = document.getElementById(canvasId).getContext('2d');
 
@@ -739,22 +755,6 @@
 
             // Optional: attach chart instance to canvas for future reference
             ctx.chart = chart;
-        }
-
-        function calculateStats(arr) {
-            if (arr.length === 0) return { min: 0, avg: 0, max: 0 };
-            let min = Math.min(...arr);
-            let max = Math.max(...arr);
-            let avg = arr.reduce((sum, val) => sum + val, 0) / arr.length;
-            return { min, avg: formatDecimal(avg, 2), max };
-        }
-
-        function formatDecimal(value, minDecimals = 0) {
-            let formattedValue = value.toFixed(3).replace(/\.?0+$/, '');
-            if (minDecimals > 0 && !formattedValue.includes('.')) {
-                formattedValue += '.' + '0'.repeat(minDecimals);
-            }
-            return formattedValue;
         }
 
         //---------- Formatting Functions ----------//
