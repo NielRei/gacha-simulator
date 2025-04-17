@@ -467,6 +467,11 @@
 
             const setStats5 = calculateStats(results["5★"].pullsToFullSet);
 
+            const allNextCopyPulls = Object.values(results["5★"].pullsToNext).flat();
+            const allNextCopyStats = calculateStats(allNextCopyPulls);
+            const allNextCopyPulls4 = Object.values(results["4★"].pullsToNext).flat();
+            const allNextCopyStats4 = calculateStats(allNextCopyPulls4);
+
             const percentileRanges5 = calculatePercentileRanges(results["5★"].pulls);
             const percentileRanges5Standard = calculatePercentileRanges(results["5★"].standardPulls);
             const percentileRanges5Limited = calculatePercentileRanges(results["5★"].limitedPulls);
@@ -481,19 +486,20 @@
             let resultHTML = `
                 <h3>Simulation Results</h3>
 
+                <!-- Overall Distribution -->
                 <h4>Overall Distribution</h4>
                 <hr />
                 <div class="stats-section">
                     <div><canvas id="rarityDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
-                        <p><strong>Total Pulls:</strong> ${pulls}</p> <br>
+                        <p><strong>Total Pulls:</strong> ${pulls}</p><br>
 
                         <p><strong>General Rarity Distribution:</strong></p>
                         <ul>
                             <li>5★: ${results["5★"].total} (${formatPct(results["5★"].total, pulls)})</li>
                             <li>4★: ${results["4★"].total} (${formatPct(results["4★"].total, pulls)})</li>
                             <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
-                        </ul> <br>
+                        </ul><br>
 
                         <p><strong>Standard / Limited Rarity Distribution:</strong></p>
                         <ul>
@@ -506,42 +512,39 @@
                     </div>
                 </div>
 
+                <!-- 5★ Stats -->
                 <h4>5★ Statistics</h4>
                 <hr />
                 <div class="stats-section">
                     <div><canvas id="fiveStarDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
-                        <p><strong>Total 5★:</strong> ${results["5★"].total} (${formatPct(results["5★"].total, pulls)} from ${pulls} pulls)</p> <br>
+                        <p><strong>Total 5★:</strong> ${results["5★"].total} (${formatPct(results["5★"].total, pulls)} from ${pulls} pulls)</p><br>
 
                         <p><strong>5★ Type Distribution:</strong></p>
                         <ul>
                             <li>Limited: ${results["5★"].limited} (${formatPct(results["5★"].limited, results["5★"].total)})</li>
                             <li>Standard: ${results["5★"].standard} (${formatPct(results["5★"].standard, results["5★"].total)})</li>
-                        </ul> <br>
-
-                        <p><strong>Avg / Min / Max Pulls:</strong></p>
-                        <ul>
-                            <li>Any: Avg (${stats5.avg}), Min (${stats5.min}), Max (${stats5.max})</li>
-                            <li>Standard: Avg (${stats5Standard.avg}), Min (${stats5Standard.min}), Max (${stats5Standard.max})</li>
-                            <li>Limited: Avg (${stats5Limited.avg}), Min (${stats5Limited.min}), Max (${stats5Limited.max})</li>
                         </ul><br>
 
-                        <p><strong>Avg / Min / Max Cost:</strong></p>
+                        <p><strong>5★ Avg / Min / Max Pulls:</strong></p>
                         <ul>
-                            <li>Any: Avg (${formatCost(stats5.avg)}), Min (${formatCost(stats5.min)}), Max (${formatCost(stats5.max)})</li>
-                            <li>Standard: Avg (${formatCost(stats5Standard.avg)}), Min (${formatCost(stats5Standard.min)}), Max (${formatCost(stats5Standard.max)})</li>
-                            <li>Limited: Avg (${formatCost(stats5Limited.avg)}), Min (${formatCost(stats5Limited.min)}), Max (${formatCost(stats5Limited.max)})</li>
+                            <li>Any: <span class="avg-highlight">Avg (${stats5.avg})</span>, Min (${stats5.min}), Max (${stats5.max})</li>
+                            <li>Standard: <span class="avg-highlight">Avg (${stats5Standard.avg})</span>, Min (${stats5Standard.min}), Max (${stats5Standard.max})</li>
+                            <li>Limited: <span class="avg-highlight">Avg (${stats5Limited.avg})</span>, Min (${stats5Limited.min}), Max (${stats5Limited.max})</li>
+                        </ul><br>
+
+                        <p><strong>5★ Avg / Min / Max Cost:</strong></p>
+                        <ul>
+                            <li>Any: <span class="avg-highlight">Avg (${formatCost(stats5.avg)})</span>, Min (${formatCost(stats5.min)}), Max (${formatCost(stats5.max)})</li>
+                            <li>Standard: <span class="avg-highlight">Avg (${formatCost(stats5Standard.avg)})</span>, Min (${formatCost(stats5Standard.min)}), Max (${formatCost(stats5Standard.max)})</li>
+                            <li>Limited: <span class="avg-highlight">Avg (${formatCost(stats5Limited.avg)})</span>, Min (${formatCost(stats5Limited.min)}), Max (${formatCost(stats5Limited.max)})</li>
                         </ul>
                     </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fiveStarPullDistributionChart" class="histogram-canvas"></canvas>
-                    </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fiveStarStandardPullDistanceChart" class="histogram-canvas"></canvas>
-                    </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fiveStarLimitedPullDistanceChart" class="histogram-canvas"></canvas>
-                    </div>
+
+                    <div class="full-width-wrapper"><canvas id="fiveStarPullDistributionChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fiveStarStandardPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fiveStarLimitedPullDistanceChart" class="histogram-canvas"></canvas></div>
+
                     <div class="stats-block">
                         <p><strong>5★ Pull Range Distribution</strong></p>
                         <ul>
@@ -550,70 +553,72 @@
                             ${formatPercentileRange("Limited", percentileRanges5Limited["70"])}
                         </ul>
                     </div>
+
+                    <!-- 5★ Limited Items -->
+                    ${
+                        Object.keys(results["5★"].limitedItemCounts).length >= 2 ? `
+                            <div class="stats-block">
+                                <p><strong>5★ Limited Item Tracking:</strong><br>
+                                    ${Object.keys(results["5★"].limitedItemCounts).map(item =>
+                                        `Item ${item} (${results["5★"].limitedItemCounts[item] || 0})`
+                                    ).join(", ")}
+                                </p><br>
+
+                                <p><strong>Pulls to Get One Specific Limited 5★ Item (Avg / Min / Max):</strong></p>
+                                <ul>
+                                    ${(() => {
+                                        const allLimitedItemPulls = Object.values(results["5★"].pullsToNext).flat();
+                                        const stat = calculateStats(allLimitedItemPulls);
+                                        return `
+                                            <li>Pulls: Avg (<span class="avg-highlight stat-num">${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
+                                            Cost: Avg (<span class="avg-highlight stat-cost">${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
+                                        `;
+                                    })()}
+                                </ul><br>
+
+                                <p><strong>Pulls to Get One Copy of Each Limited 5★ Item (Avg / Min / Max):</strong></p>
+                                <p>
+                                    Pulls: Avg (<span class="avg-highlight stat-num">${setStats5.avg}</span>), Min (<span class="stat-num">${setStats5.min}</span>), Max (<span class="stat-num">${setStats5.max}</span>)<br>
+                                    Cost: Avg (<span class="avg-highlight stat-cost">${formatCost(setStats5.avg)}</span>), Min (<span class="stat-cost">${formatCost(setStats5.min)}</span>), Max (<span class="stat-cost">${formatCost(setStats5.max)}</span>)
+                                </p>
+                            </div>
+                        ` : ""
+                    }
                 </div>
 
-                ${
-                    Object.keys(results["5★"].limitedItemCounts).length >= 2 ? `
-                    <div class="stats-section">
-                        <div class="stats-block">
-                            <p><strong>5★ Limited Item Tracking:</strong> <br>
-                                ${Object.keys(results["5★"].limitedItemCounts).map(item =>
-                                    `Item ${item} (${results["5★"].limitedItemCounts[item] || 0})`
-                                ).join(", ")}
-                            </p><br>
-
-                            <p><strong>Pulls Between Copies (Avg / Min / Max):</strong></p>
-                            <ul>
-                                ${Object.keys(results["5★"].pullsToNext).map(item => {
-                                    const stat = calculateStats(results["5★"].pullsToNext[item] || []);
-                                    return `<li>${item}: Avg (${stat.avg}), Min (${stat.min}), Max (${stat.max})</li>`;
-                                }).join("")}
-                            </ul><br>
-
-                            <p><strong>Pulls to Complete One Set (Avg / Min / Max):</strong> <br>
-                                Avg (${setStats5.avg}), Min (${setStats5.min}), Max (${setStats5.max})
-                            </p>
-                        </div>
-                    </div>
-                    ` : ""
-                }
-
+                <!-- 4★ Stats -->
                 <h4>4★ Statistics</h4>
                 <hr />
                 <div class="stats-section">
                     <div><canvas id="fourStarDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
-                        <p><strong>Total 4★:</strong> ${results["4★"].total} (${formatPct(results["4★"].total, pulls)} from ${pulls} pulls)</p> <br>
+                        <p><strong>Total 4★:</strong> ${results["4★"].total} (${formatPct(results["4★"].total, pulls)} from ${pulls} pulls)</p><br>
 
                         <p><strong>4★ Type Distribution:</strong></p>
                         <ul>
                             <li>Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, results["4★"].total)})</li>
                             <li>Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, results["4★"].total)})</li>
-                        </ul> <br>
+                        </ul><br>
 
-                        <p><strong>Avg / Min / Max Pulls:</strong></p>
+                        <p><strong>4★ Avg / Min / Max Pulls:</strong></p>
                         <ul>
-                            <li>Any: Avg (${stats4.avg}), Min (${stats4.min}), Max (${stats4.max})</li>
-                            <li>Standard: Avg (${stats4Standard.avg}), Min (${stats4Standard.min}), Max (${stats4Standard.max})</li>
-                            <li>Limited: Avg (${stats4Limited.avg}), Min (${stats4Limited.min}), Max (${stats4Limited.max})</li>
-                        </ul> <br>
+                            <li>Any: <span class="avg-highlight">Avg (${stats4.avg})</span>, Min (${stats4.min}), Max (${stats4.max})</li>
+                            <li>Standard: <span class="avg-highlight">Avg (${stats4Standard.avg})</span>, Min (${stats4Standard.min}), Max (${stats4Standard.max})</li>
+                            <li>Limited: <span class="avg-highlight">Avg (${stats4Limited.avg})</span>, Min (${stats4Limited.min}), Max (${stats4Limited.max})</li>
+                        </ul><br>
 
-                        <p><strong>Avg / Min / Max Cost:</strong></p>
+                        <p><strong>4★ Avg / Min / Max Cost:</strong></p>
                         <ul>
-                            <li>Any: Avg (${formatCost(stats4.avg)}), Min (${formatCost(stats4.min)}), Max (${formatCost(stats4.max)})</li>
-                            <li>Standard: Avg (${formatCost(stats4Standard.avg)}), Min (${formatCost(stats4Standard.min)}), Max (${formatCost(stats4Standard.max)})</li>
-                            <li>Limited: Avg (${formatCost(stats4Limited.avg)}), Min (${formatCost(stats4Limited.min)}), Max (${formatCost(stats4Limited.max)})</li>
+                            <li>Any: <span class="avg-highlight">Avg (${formatCost(stats4.avg)})</span>, Min (${formatCost(stats4.min)}), Max (${formatCost(stats4.max)})</li>
+                            <li>Standard: <span class="avg-highlight">Avg (${formatCost(stats4Standard.avg)})</span>, Min (${formatCost(stats4Standard.min)}), Max (${formatCost(stats4Standard.max)})</li>
+                            <li>Limited: <span class="avg-highlight">Avg (${formatCost(stats4Limited.avg)})</span>, Min (${formatCost(stats4Limited.min)}), Max (${formatCost(stats4Limited.max)})</li>
                         </ul>
                     </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fourStarPullDistributionChart" class="histogram-canvas"></canvas>
-                    </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fourStarStandardPullDistanceChart" class="histogram-canvas"></canvas>
-                    </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fourStarLimitedPullDistanceChart" class="histogram-canvas"></canvas>
-                    </div>
+
+                    <div class="full-width-wrapper"><canvas id="fourStarPullDistributionChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fourStarStandardPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fourStarLimitedPullDistanceChart" class="histogram-canvas"></canvas></div>
+
                     <div class="stats-block">
                         <p><strong>4★ Pull Range Distribution</strong></p>
                         <ul>
@@ -622,36 +627,41 @@
                             ${formatPercentileRange("Limited", percentileRanges4Limited["70"])}
                         </ul>
                     </div>
+
+                    <!-- 4★ Limited Items -->
+                    ${
+                        Object.keys(results["4★"].limitedItemCounts).length >= 2 ? `
+                            <div class="stats-block">
+                                <p><strong>4★ Limited Item Tracking:</strong><br>
+                                    ${Object.keys(results["4★"].limitedItemCounts).map(item =>
+                                        `Item ${item} (${results["4★"].limitedItemCounts[item] || 0})`
+                                    ).join(", ")}
+                                </p><br>
+
+                                <p><strong>Pulls to Get One Specific Limited 4★ Item (Avg / Min / Max):</strong></p>
+                                <ul>
+                                    ${(() => {
+                                        const allLimitedItemPulls = Object.values(results["4★"].pullsToNext).flat();
+                                        const stat = calculateStats(allLimitedItemPulls);
+                                        return `
+                                            <li>Pulls: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
+                                            Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
+                                        `;
+                                    })()}
+                                </ul><br>
+
+                                <p><strong>Pulls to Get One Copy of Each Limited 4★ Item (Avg / Min / Max):</strong></p>
+                                <p>
+                                    ${(() => {
+                                        const setStats4 = calculateStats(results["4★"].pullsToFullSet || []);
+                                        return `Pulls: <span class="avg-highlight stat-num">Avg (${setStats4.avg}</span>), Min (<span class="stat-num">${setStats4.min}</span>), Max (<span class="stat-num">${setStats4.max}</span>)<br>
+                                        Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(setStats4.avg)}</span>), Min (<span class="stat-cost">${formatCost(setStats4.min)}</span>), Max (<span class="stat-cost">${formatCost(setStats4.max)}</span>)`;
+                                    })()}
+                                </p>
+                            </div>
+                        ` : ""
+                    }
                 </div>
-
-                ${
-                    Object.keys(results["4★"].limitedItemCounts).length >= 2 ? `
-                    <div class="stats-section">
-                        <div class="stats-block">
-                            <p><strong>4★ Limited Item Tracking:</strong> <br>
-                                ${Object.keys(results["4★"].limitedItemCounts).map(item =>
-                                    `Item ${item} (${results["4★"].limitedItemCounts[item] || 0})`
-                                ).join(", ")}
-                            </p><br>
-
-                            <p><strong>Pulls Between Copies (Avg / Min / Max):</strong></p>
-                            <ul>
-                                ${Object.keys(results["4★"].pullsToNext).map(item => {
-                                    const stat = calculateStats(results["4★"].pullsToNext[item] || []);
-                                    return `<li>${item}: Avg (${stat.avg}), Min (${stat.min}), Max (${stat.max})</li>`;
-                                }).join("")}
-                            </ul><br>
-
-                            <p><strong>Pulls to Complete One Set (Avg / Min / Max):</strong> <br>
-                                ${(() => {
-                                    const setStats4 = calculateStats(results["4★"].pullsToFullSet || []);
-                                    return `Avg (${setStats4.avg}), Min (${setStats4.min}), Max (${setStats4.max})`;
-                                })()}
-                            </p>
-                        </div>
-                    </div>
-                    ` : ""
-                }
             `;
 
             if (useHardPity) {
@@ -662,31 +672,25 @@
                     <h4>Hard Pity Statistics</h4>
                     <hr />
                     <div class="stats-section">
-                        <div>
-                            <canvas id="fiveStarHardPityChart" class="donutchart-canvas"></canvas>
-                        </div>
-                        <div>
-                            <canvas id="fourStarHardPityChart" class="donutchart-canvas"></canvas>
-                        </div>
-                    </div>
+                        <div><canvas id="fiveStarHardPityChart" class="donutchart-canvas"></canvas></div>
+                        <div><canvas id="fourStarHardPityChart" class="donutchart-canvas"></canvas></div>
+                        <div class="stats-block">
+                            <p><strong>5★ Hard Pity Distribution:</strong></p>
+                            <ul>
+                                <li>Hard Pity: ${hard5.total} (${formatPct(hard5.total, results["5★"].total)})</li>
+                                <li>Non-Hard Pity: ${nonHard5} (${formatPct(nonHard5, results["5★"].total)})</li>
+                            </ul><br>
 
-                    <div class="stats-block">
-                        <p><strong>5★ Hard Pity Distribution:</strong></p>
-                        <ul>
-                            <li>Hard Pity: ${hard5.total} (${formatPct(hard5.total, results["5★"].total)}) </li>
-                            <li>Non-Hard Pity: ${nonHard5} (${formatPct(nonHard5, results["5★"].total)})</li>
-                        </ul><br>
-
-                        <p><strong>4★ Hard Pity Distribution:</strong></p>
-                        <ul>
-                            <li>Hard Pity: ${hard4.total} (${formatPct(hard4.total, results["4★"].total)})</li>
-                            <li>Non-Hard Pity: ${nonHard4} (${formatPct(nonHard4, results["4★"].total)})</li>
-                        </ul>
+                            <p><strong>4★ Hard Pity Distribution:</strong></p>
+                            <ul>
+                                <li>Hard Pity: ${hard4.total} (${formatPct(hard4.total, results["4★"].total)})</li>
+                                <li>Non-Hard Pity: ${nonHard4} (${formatPct(nonHard4, results["4★"].total)})</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             }
 
-            // If Soft Pity is enabled, show Soft Pity section
             if (useSoftPity) {
                 const nonSoft5 = results["5★"].total - results["5★"].softPityHitCount;
                 const nonSoft4 = results["4★"].total - results["4★"].softPityHitCount;
@@ -695,47 +699,39 @@
                     <h4>Soft Pity Statistics</h4>
                     <hr />
                     <div class="stats-section">
-                        <div>
-                            <canvas id="fiveStarSoftPityChart" class="donutchart-canvas"></canvas>
+                        <div><canvas id="fiveStarSoftPityChart" class="donutchart-canvas"></canvas></div>
+                        <div><canvas id="fourStarSoftPityChart" class="donutchart-canvas"></canvas></div>
+
+                        <div class="stats-block">
+                            <!-- 5★ Soft Pity Distribution -->
+                            <p><strong>5★ Soft Pity Distribution:</strong></p>
+                            <ul>
+                                <li>Soft Pity: ${results["5★"].softPityHitCount} (${formatPct(results["5★"].softPityHitCount, results["5★"].total)})</li>
+                                <li>Non-Soft Pity: ${nonSoft5} (${formatPct(nonSoft5, results["5★"].total)})</li>
+                            </ul><br>
+
+                            <!-- 4★ Soft Pity Distribution -->
+                            <p><strong>4★ Soft Pity Distribution:</strong></p>
+                            <ul>
+                                <li>Soft Pity: ${results["4★"].softPityHitCount} (${formatPct(results["4★"].softPityHitCount, results["4★"].total)})</li>
+                                <li>Non-Soft Pity: ${nonSoft4} (${formatPct(nonSoft4, results["4★"].total)})</li>
+                            </ul>
                         </div>
-                        <div>
-                            <canvas id="fourStarSoftPityChart" class="donutchart-canvas"></canvas>
+
+                        <div class="half-width-wrapper"><canvas id="fiveStarSoftPityDistributionChart" class="histogram-canvas"></canvas></div>
+                        <div class="half-width-wrapper"><canvas id="fourStarSoftPityDistributionChart" class="histogram-canvas"></canvas></div>
+
+                        <div class="stats-block">
+                            <p><strong>Soft Pity Pull Range (5★):</strong></p>
+                            <ul>
+                                <li><span class="avg-highlight">Avg (${soft5Stats.avg}</span>), Min (${soft5Stats.min}), Max (${soft5Stats.max})</li>
+                            </ul><br>
+
+                            <p><strong>Soft Pity Pull Range (4★):</strong></p>
+                            <ul>
+                                <li><span class="avg-highlight">Avg (${soft4Stats.avg}</span>), Min (${soft4Stats.min}), Max (${soft4Stats.max})</li>
+                            </ul>
                         </div>
-                    </div>
-
-                    <div class="stats-block">
-                        <p><strong>5★ Soft Pity Distribution:</strong></p>
-                        <ul>
-                            <li>Soft Pity: ${results["5★"].softPityHitCount} (${formatPct(results["5★"].softPityHitCount, results["5★"].total)})</li>
-                            <li>Non-Soft Pity: ${nonSoft5} (${formatPct(nonSoft5, results["5★"].total)})</li>
-                        </ul><br>
-
-                        <p><strong>Soft Pity Pull Range (5★):</strong></p>
-                        <ul>
-                            <li>Min Pull: ${soft5Stats.min}</li>
-                            <li>Avg Pull: ${soft5Stats.avg}</li>
-                            <li>Max Pull: ${soft5Stats.max}</li>
-                        </ul><br>
-
-                        <p><strong>4★ Soft Pity Distribution:</strong></p>
-                        <ul>
-                            <li>Soft Pity: ${results["4★"].softPityHitCount} (${formatPct(results["4★"].softPityHitCount, results["4★"].total)})</li>
-                            <li>Non-Soft Pity: ${nonSoft4} (${formatPct(nonSoft4, results["4★"].total)})</li>
-                        </ul><br>
-
-                        <p><strong>Soft Pity Pull Range (4★):</strong></p>
-                        <ul>
-                            <li>Min Pull: ${soft4Stats.min}</li>
-                            <li>Avg Pull: ${soft4Stats.avg}</li>
-                            <li>Max Pull: ${soft4Stats.max}</li>
-                        </ul>
-                    </div>
-
-                    <div class="full-width-wrapper">
-                        <canvas id="fiveStarSoftPityDistributionChart" class="histogram-canvas"></canvas>
-                    </div>
-                    <div class="full-width-wrapper">
-                        <canvas id="fourStarSoftPityDistributionChart" class="histogram-canvas"></canvas>
                     </div>
                 `;
             }
