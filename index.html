@@ -19,7 +19,6 @@
     </header>
 
     <main>
-  
         <div id="settingsPanel">
             <h3>
                 Banner Drop Rates
@@ -124,7 +123,7 @@
                 <!-- 5★ Soft Pity Settings -->
                 <div>
                     <span>5★ Soft Pity Threshold</span>
-                    <input type="number" id="softPityFiveStarThreshold" value="50" min="1" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFiveStarThreshold')">
+                    <input type="number" id="softPityFiveStarThreshold" value="51" min="1" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFiveStarThreshold')">
                     <span>|</span>
                     <span>5★ Soft Pity Increment</span>
                     <input type="text" id="softPityFiveStarRate" value="2" min="0" step="0.1" oninput="validateDecimalInput('softPityFiveStarRate')" onblur="formatDecimalInput('softPityFiveStarRate')" style="width: 80px; margin-left: 10px;">
@@ -134,7 +133,7 @@
                 <!-- 4★ Soft Pity Settings -->
                 <div style="margin-top: 10px;">
                     <span>4★ Soft Pity Threshold</span>
-                    <input type="number" id="softPityFourStarThreshold" value="8" min="2" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFourStarThreshold')">
+                    <input type="number" id="softPityFourStarThreshold" value="9" min="2" style="width: 80px; margin-left: 10px;" oninput="validateIntegerInput('softPityFourStarThreshold')">
                     <span>|</span>
                     <span>4★ Soft Pity Increment</span>
                     <input type="text" id="softPityFourStarRate" value="50" min="0" step="0.1" oninput="validateDecimalInput('softPityFourStarRate')" onblur="formatDecimalInput('softPityFourStarRate')" style="width: 80px; margin-left: 10px;">
@@ -199,40 +198,66 @@
             const settings = getGachaSettings();
             const pulls = parseInt(document.getElementById("simulationCount").value) || 100000;
 
+            const fiveStarLimitedCount = parseInt(document.getElementById('fiveStarLimitedItems').value) || 1;
+            const fourStarLimitedCount = parseInt(document.getElementById('fourStarLimitedItems')?.value) || 1;
+
+            const generateItemLabels = (count) => Array.from({ length: count }, (_, i) => String.fromCharCode(65 + i)); // A-Z
+
+            const fiveStarLimitedLabels = generateItemLabels(Math.min(fiveStarLimitedCount, 26));
+            const fourStarLimitedLabels = generateItemLabels(Math.min(fourStarLimitedCount, 26));
+
             let results = {
                 "5★": {
                     total: 0, standard: 0, limited: 0,
                     pulls: [], standardPulls: [], limitedPulls: [],
                     pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
                     hardPityHits: { total: 0, standard: 0, limited: 0 },
-                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: []
+                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: [],
+                    limitedItems: {},
+                    limitedSetStats: []
                 },
                 "4★": {
                     total: 0, standard: 0, limited: 0,
                     pulls: [], standardPulls: [], limitedPulls: [],
                     pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
                     hardPityHits: { total: 0, standard: 0, limited: 0 },
-                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: []
+                    softPityHits: [], softPityHitCount: 0, softPityPullNumbers: [],
+                    limitedItems: {},
+                    limitedSetStats: []
                 },
                 "3★": 0
             };
 
+            // Initialize limited item tracking
+            const initLimitedTracking = (labels) => {
+                const obj = {};
+                for (let label of labels) {
+                    obj[label] = {
+                        count: 0,
+                        pullsSinceLast: 0,
+                        pullsToNext: [],
+                        totalPulls: 0
+                    };
+                }
+                return obj;
+            };
+
+            results["5★"].limitedItems = initLimitedTracking(fiveStarLimitedLabels);
+            results["4★"].limitedItems = initLimitedTracking(fourStarLimitedLabels);
+
             const limitedRates = {
                 "5★": parseFloat(document.getElementById('fiveStarLimitedDistributionRate').value) || 0,
-                "4★": parseFloat(document.getElementById('fourStarLimitedDistributionRate').value) || 0
+                "4★": parseFloat(document.getElementById('fourStarLimitedDistributionRate')?.value) || 0
             };
 
             const useHardPity = document.getElementById("enableHardPity").checked;
             const useSoftPity = document.getElementById("enableSoftPity").checked;
-
             const hardPity5Value = parseInt(document.getElementById("fiveStarPity").value) || 90;
             const hardPity4Value = parseInt(document.getElementById("fourStarPity").value) || 10;
-
             const useGuaranteedLimited5 = document.getElementById("enableFiveStarGuaranteed").checked;
             const guaranteeAfterStandard5 = parseInt(document.getElementById("fiveStarGuaranteedAfter").value) || 1;
-
-            const useGuaranteedLimited4 = document.getElementById("enableFourStarGuaranteed").checked;
-            const guaranteeAfterStandard4 = parseInt(document.getElementById("fourStarGuaranteedAfter").value) || 1;
+            const useGuaranteedLimited4 = document.getElementById("enableFourStarGuaranteed")?.checked;
+            const guaranteeAfterStandard4 = parseInt(document.getElementById("fourStarGuaranteedAfter")?.value) || 1;
 
             const softPity = useSoftPity ? getSoftPityRates() : null;
 
@@ -241,6 +266,11 @@
             let pullsSinceLast4Limited = 0, pullsSinceLast4Standard = 0;
             let standard5Streak = 0, standard4Streak = 0;
 
+            let fiveStarSet = new Set();
+            let fourStarSet = new Set();
+            let pullSinceLast5SetComplete = 0;
+            let pullSinceLast4SetComplete = 0;
+
             for (let i = 0; i < pulls; i++) {
                 pullCountSinceLast5++;
                 pullCountSinceLast4++;
@@ -248,16 +278,21 @@
                 pullsSinceLast5Standard++;
                 pullsSinceLast4Limited++;
                 pullsSinceLast4Standard++;
+                pullSinceLast5SetComplete++;
+                pullSinceLast4SetComplete++;
+
+                for (let label of fiveStarLimitedLabels) results["5★"].limitedItems[label].pullsSinceLast++;
+                for (let label of fourStarLimitedLabels) results["4★"].limitedItems[label].pullsSinceLast++;
 
                 let fiveStarRate = settings.rates["5★"];
                 let fourStarRate = settings.rates["4★"];
 
                 if (useSoftPity) {
-                    if (pullCountSinceLast5 > softPity["5★"].threshold) {
-                        fiveStarRate = Math.min(100, fiveStarRate + (pullCountSinceLast5 - softPity["5★"].threshold) * softPity["5★"].rateIncrement);
+                    if (pullCountSinceLast5 >= softPity["5★"].threshold) {
+                        fiveStarRate = Math.min(100, fiveStarRate + (pullCountSinceLast5 - softPity["5★"].threshold + 1) * softPity["5★"].rateIncrement);
                     }
-                    if (pullCountSinceLast4 > softPity["4★"].threshold) {
-                        fourStarRate = Math.min(100 - fiveStarRate, fourStarRate + (pullCountSinceLast4 - softPity["4★"].threshold) * softPity["4★"].rateIncrement);
+                    if (pullCountSinceLast4 >= softPity["4★"].threshold) {
+                        fourStarRate = Math.min(100 - fiveStarRate, fourStarRate + (pullCountSinceLast4 - softPity["4★"].threshold + 1) * softPity["4★"].rateIncrement);
                     }
                 }
 
@@ -290,7 +325,6 @@
                     results["5★"].total++;
                     results["5★"].pulls.push(pullCountSinceLast5);
                     results["5★"].pullNumbers.push(i + 1);
-
                     if (hitSoftPity5) {
                         results["5★"].softPityHits.push(pullCountSinceLast5);
                         results["5★"].softPityPullNumbers.push(i + 1);
@@ -298,15 +332,29 @@
                     }
 
                     let isLimited = Math.random() * 100 < limitedRates["5★"];
-                    if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5) {
-                        isLimited = true;
-                    }
+                    if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5) isLimited = true;
 
+                    // Revised: Allow limited tracking even when fiveStarLimitedCount is 1
                     if (isLimited) {
                         results["5★"].limited++;
                         results["5★"].limitedPulls.push(pullsSinceLast5Limited);
                         results["5★"].limitedPullNumbers.push(i + 1);
                         if (hitHardPity5) results["5★"].hardPityHits.limited++;
+
+                        const item = fiveStarLimitedLabels[Math.floor(Math.random() * fiveStarLimitedLabels.length)];
+                        let track = results["5★"].limitedItems[item];
+                        track.count++;
+                        track.pullsToNext.push(track.pullsSinceLast);
+                        track.totalPulls += track.pullsSinceLast;
+                        track.pullsSinceLast = 0;
+
+                        fiveStarSet.add(item);
+                        if (fiveStarSet.size === fiveStarLimitedLabels.length) {
+                            results["5★"].limitedSetStats.push(pullSinceLast5SetComplete);
+                            pullSinceLast5SetComplete = 0;
+                            fiveStarSet.clear();
+                        }
+
                         pullsSinceLast5Limited = 0;
                         standard5Streak = 0;
                     } else {
@@ -325,7 +373,6 @@
                     results["4★"].total++;
                     results["4★"].pulls.push(pullCountSinceLast4);
                     results["4★"].pullNumbers.push(i + 1);
-
                     if (hitSoftPity4) {
                         results["4★"].softPityHits.push(pullCountSinceLast4);
                         results["4★"].softPityPullNumbers.push(i + 1);
@@ -333,15 +380,29 @@
                     }
 
                     let isLimited = Math.random() * 100 < limitedRates["4★"];
-                    if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4) {
-                        isLimited = true;
-                    }
+                    if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4) isLimited = true;
 
+                    // Revised: Allow limited tracking even when fourStarLimitedCount is 1
                     if (isLimited) {
                         results["4★"].limited++;
                         results["4★"].limitedPulls.push(pullsSinceLast4Limited);
                         results["4★"].limitedPullNumbers.push(i + 1);
                         if (hitHardPity4) results["4★"].hardPityHits.limited++;
+
+                        const item = fourStarLimitedLabels[Math.floor(Math.random() * fourStarLimitedLabels.length)];
+                        let track = results["4★"].limitedItems[item];
+                        track.count++;
+                        track.pullsToNext.push(track.pullsSinceLast);
+                        track.totalPulls += track.pullsSinceLast;
+                        track.pullsSinceLast = 0;
+
+                        fourStarSet.add(item);
+                        if (fourStarSet.size === fourStarLimitedLabels.length) {
+                            results["4★"].limitedSetStats.push(pullSinceLast4SetComplete);
+                            pullSinceLast4SetComplete = 0;
+                            fourStarSet.clear();
+                        }
+
                         pullsSinceLast4Limited = 0;
                         standard4Streak = 0;
                     } else {
@@ -355,14 +416,34 @@
 
                     if (hitHardPity4) results["4★"].hardPityHits.total++;
                     pullCountSinceLast4 = 0;
+
                 } else {
                     results["3★"]++;
                 }
             }
 
+            // Prepare statistics for updateSimulationResults()
+            results["5★"].limitedItemCounts = {};
+            results["5★"].pullsToNext = {};
+            for (const [label, data] of Object.entries(results["5★"].limitedItems)) {
+                results["5★"].limitedItemCounts[label] = data.count;
+                results["5★"].pullsToNext[label] = data.pullsToNext;
+            }
+            results["5★"].pullsToFullSet = results["5★"].limitedSetStats;
+
+            // Prepare the 4★ statistics in the same way
+            results["4★"].limitedItemCounts = {};
+            results["4★"].pullsToNext = {};
+            for (const [label, data] of Object.entries(results["4★"].limitedItems)) {
+                results["4★"].limitedItemCounts[label] = data.count;
+                results["4★"].pullsToNext[label] = data.pullsToNext;
+            }
+            results["4★"].pullsToFullSet = results["4★"].limitedSetStats;
+
+            // Send the results to updateSimulationResults
             updateSimulationResults(results, pulls);
         }
-
+        
         function updateSimulationResults(results, pulls) {
             const useHardPity = document.getElementById("enableHardPity").checked;
             const useSoftPity = document.getElementById("enableSoftPity").checked;
@@ -371,7 +452,6 @@
             const formatDecimal = (num, decimals) => num.toFixed(decimals);
             const formatPct = (num, total) => total ? `${formatDecimal((num / total) * 100, 2)}%` : "0%";
 
-            // Calculate statistics
             const stats5 = calculateStats(results["5★"].pulls);
             const stats5Standard = calculateStats(results["5★"].standardPulls);
             const stats5Limited = calculateStats(results["5★"].limitedPulls);
@@ -385,19 +465,26 @@
             const hard5 = results["5★"].hardPityHits;
             const hard4 = results["4★"].hardPityHits;
 
-            // Build results HTML
+            const setStats5 = calculateStats(results["5★"].pullsToFullSet);
+
+            const percentileRanges5 = calculatePercentileRanges(results["5★"].pulls);
+            const percentileRanges5Standard = calculatePercentileRanges(results["5★"].standardPulls);
+            const percentileRanges5Limited = calculatePercentileRanges(results["5★"].limitedPulls);
+
+            const percentileRanges4 = calculatePercentileRanges(results["4★"].pulls);
+            const percentileRanges4Standard = calculatePercentileRanges(results["4★"].standardPulls);
+            const percentileRanges4Limited = calculatePercentileRanges(results["4★"].limitedPulls);
+
+            const costPerPull = parseFloat(document.getElementById("costPerPull").value) || 0;
+            const formatCost = (pulls) => `$${(pulls * costPerPull).toFixed(2)}`;
+            
             let resultHTML = `
                 <h3>Simulation Results</h3>
 
                 <h4>Overall Distribution</h4>
                 <hr />
                 <div class="stats-section">
-                    <!-- Doughnut Chart -->
-                    <div>
-                        <canvas id="rarityDistributionChart" class="donutchart-canvas"></canvas>
-                    </div>
-
-                    <!-- Summary Stats -->
+                    <div><canvas id="rarityDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
                         <p><strong>Total Pulls:</strong> ${pulls}</p> <br>
 
@@ -422,10 +509,7 @@
                 <h4>5★ Statistics</h4>
                 <hr />
                 <div class="stats-section">
-                    <div>
-                        <canvas id="fiveStarDistributionChart" class="donutchart-canvas"></canvas>
-                    </div>
-
+                    <div><canvas id="fiveStarDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
                         <p><strong>Total 5★:</strong> ${results["5★"].total} (${formatPct(results["5★"].total, pulls)} from ${pulls} pulls)</p> <br>
 
@@ -440,45 +524,136 @@
                             <li>Any: Avg (${stats5.avg}), Min (${stats5.min}), Max (${stats5.max})</li>
                             <li>Standard: Avg (${stats5Standard.avg}), Min (${stats5Standard.min}), Max (${stats5Standard.max})</li>
                             <li>Limited: Avg (${stats5Limited.avg}), Min (${stats5Limited.min}), Max (${stats5Limited.max})</li>
+                        </ul><br>
+
+                        <p><strong>Avg / Min / Max Cost:</strong></p>
+                        <ul>
+                            <li>Any: Avg (${formatCost(stats5.avg)}), Min (${formatCost(stats5.min)}), Max (${formatCost(stats5.max)})</li>
+                            <li>Standard: Avg (${formatCost(stats5Standard.avg)}), Min (${formatCost(stats5Standard.min)}), Max (${formatCost(stats5Standard.max)})</li>
+                            <li>Limited: Avg (${formatCost(stats5Limited.avg)}), Min (${formatCost(stats5Limited.min)}), Max (${formatCost(stats5Limited.max)})</li>
                         </ul>
                     </div>
                     <div class="full-width-wrapper">
                         <canvas id="fiveStarPullDistributionChart" class="histogram-canvas"></canvas>
                     </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fiveStarStandardPullDistanceChart" class="histogram-canvas"></canvas>
+                    </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fiveStarLimitedPullDistanceChart" class="histogram-canvas"></canvas>
+                    </div>
+                    <div class="stats-block">
+                        <p><strong>5★ Pull Range Distribution</strong></p>
+                        <ul>
+                            ${formatPercentileRange("Any", percentileRanges5["70"])}
+                            ${formatPercentileRange("Standard", percentileRanges5Standard["70"])}
+                            ${formatPercentileRange("Limited", percentileRanges5Limited["70"])}
+                        </ul>
+                    </div>
                 </div>
+
+                ${
+                    Object.keys(results["5★"].limitedItemCounts).length >= 2 ? `
+                    <div class="stats-section">
+                        <div class="stats-block">
+                            <p><strong>5★ Limited Item Tracking:</strong> <br>
+                                ${Object.keys(results["5★"].limitedItemCounts).map(item =>
+                                    `Item ${item} (${results["5★"].limitedItemCounts[item] || 0})`
+                                ).join(", ")}
+                            </p><br>
+
+                            <p><strong>Pulls Between Copies (Avg / Min / Max):</strong></p>
+                            <ul>
+                                ${Object.keys(results["5★"].pullsToNext).map(item => {
+                                    const stat = calculateStats(results["5★"].pullsToNext[item] || []);
+                                    return `<li>${item}: Avg (${stat.avg}), Min (${stat.min}), Max (${stat.max})</li>`;
+                                }).join("")}
+                            </ul><br>
+
+                            <p><strong>Pulls to Complete One Set (Avg / Min / Max):</strong> <br>
+                                Avg (${setStats5.avg}), Min (${setStats5.min}), Max (${setStats5.max})
+                            </p>
+                        </div>
+                    </div>
+                    ` : ""
+                }
 
                 <h4>4★ Statistics</h4>
                 <hr />
                 <div class="stats-section">
-                    <div>
-                        <canvas id="fourStarDistributionChart" class="donutchart-canvas"></canvas>
-                    </div>
-
+                    <div><canvas id="fourStarDistributionChart" class="donutchart-canvas"></canvas></div>
                     <div class="stats-block">
-                        <p><strong>Total 4★:</strong> ${results["4★"].total} (${formatPct(results["4★"].total, pulls)} from ${pulls} pulls)</p>
-                        <br>
+                        <p><strong>Total 4★:</strong> ${results["4★"].total} (${formatPct(results["4★"].total, pulls)} from ${pulls} pulls)</p> <br>
 
                         <p><strong>4★ Type Distribution:</strong></p>
                         <ul>
                             <li>Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, results["4★"].total)})</li>
                             <li>Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, results["4★"].total)})</li>
-                        </ul>
-                        <br>
+                        </ul> <br>
 
                         <p><strong>Avg / Min / Max Pulls:</strong></p>
                         <ul>
                             <li>Any: Avg (${stats4.avg}), Min (${stats4.min}), Max (${stats4.max})</li>
                             <li>Standard: Avg (${stats4Standard.avg}), Min (${stats4Standard.min}), Max (${stats4Standard.max})</li>
                             <li>Limited: Avg (${stats4Limited.avg}), Min (${stats4Limited.min}), Max (${stats4Limited.max})</li>
+                        </ul> <br>
+
+                        <p><strong>Avg / Min / Max Cost:</strong></p>
+                        <ul>
+                            <li>Any: Avg (${formatCost(stats4.avg)}), Min (${formatCost(stats4.min)}), Max (${formatCost(stats4.max)})</li>
+                            <li>Standard: Avg (${formatCost(stats4Standard.avg)}), Min (${formatCost(stats4Standard.min)}), Max (${formatCost(stats4Standard.max)})</li>
+                            <li>Limited: Avg (${formatCost(stats4Limited.avg)}), Min (${formatCost(stats4Limited.min)}), Max (${formatCost(stats4Limited.max)})</li>
                         </ul>
                     </div>
                     <div class="full-width-wrapper">
                         <canvas id="fourStarPullDistributionChart" class="histogram-canvas"></canvas>
                     </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fourStarStandardPullDistanceChart" class="histogram-canvas"></canvas>
+                    </div>
+                    <div class="full-width-wrapper">
+                        <canvas id="fourStarLimitedPullDistanceChart" class="histogram-canvas"></canvas>
+                    </div>
+                    <div class="stats-block">
+                        <p><strong>4★ Pull Range Distribution</strong></p>
+                        <ul>
+                            ${formatPercentileRange("Any", percentileRanges4["70"])}
+                            ${formatPercentileRange("Standard", percentileRanges4Standard["70"])}
+                            ${formatPercentileRange("Limited", percentileRanges4Limited["70"])}
+                        </ul>
+                    </div>
                 </div>
+
+                ${
+                    Object.keys(results["4★"].limitedItemCounts).length >= 2 ? `
+                    <div class="stats-section">
+                        <div class="stats-block">
+                            <p><strong>4★ Limited Item Tracking:</strong> <br>
+                                ${Object.keys(results["4★"].limitedItemCounts).map(item =>
+                                    `Item ${item} (${results["4★"].limitedItemCounts[item] || 0})`
+                                ).join(", ")}
+                            </p><br>
+
+                            <p><strong>Pulls Between Copies (Avg / Min / Max):</strong></p>
+                            <ul>
+                                ${Object.keys(results["4★"].pullsToNext).map(item => {
+                                    const stat = calculateStats(results["4★"].pullsToNext[item] || []);
+                                    return `<li>${item}: Avg (${stat.avg}), Min (${stat.min}), Max (${stat.max})</li>`;
+                                }).join("")}
+                            </ul><br>
+
+                            <p><strong>Pulls to Complete One Set (Avg / Min / Max):</strong> <br>
+                                ${(() => {
+                                    const setStats4 = calculateStats(results["4★"].pullsToFullSet || []);
+                                    return `Avg (${setStats4.avg}), Min (${setStats4.min}), Max (${setStats4.max})`;
+                                })()}
+                            </p>
+                        </div>
+                    </div>
+                    ` : ""
+                }
             `;
 
-            // If Hard Pity is enabled, show Hard Pity section
             if (useHardPity) {
                 const nonHard5 = results["5★"].total - hard5.total;
                 const nonHard4 = results["4★"].total - hard4.total;
@@ -567,16 +742,22 @@
 
             resultHTML += `</div>`;
 
-            const resultsPanel = document.getElementById("resultsPanel");
+            document.getElementById("resultsPanel").innerHTML = resultHTML;
             resultsPanel.innerHTML = resultHTML;
 
-            // Render charts
+            // Render Charts
             renderDoughnutChart("rarityDistributionChart", ["5★ Limited", "5★ Standard", "4★ Limited", "4★ Standard", "3★"], [results["5★"].limited, results["5★"].standard, results["4★"].limited, results["4★"].standard, results["3★"]], ["#FFD700", "#BFB773", "#B366FF", "#9E84B7", "#3DA5A5"], "Total Item Distribution");
             renderDoughnutChart("fiveStarDistributionChart", ["5★ Limited", "5★ Standard"], [results["5★"].limited, results["5★"].standard], ["#FFD700", "#BFB773"], "5★: Standard vs Limited");
             renderDoughnutChart("fourStarDistributionChart", ["4★ Limited", "4★ Standard"], [results["4★"].limited, results["4★"].standard], ["#B366FF", "#9E84B7"], "4★: Standard vs Limited");
 
             renderHistogramChart(results["5★"].pulls, "5★", "fiveStarPullDistributionChart", "rgba(255, 215, 100, 0.6)", "5★ Pull Distribution");
+            renderHistogramChart(results["5★"].standardPulls, "5★", "fiveStarStandardPullDistanceChart", "rgba(191, 183, 115, 0.6)", "5★ Pulls Distance (Standard)");
+            renderHistogramChart(results["5★"].limitedPulls, "5★", "fiveStarLimitedPullDistanceChart", "rgba(255, 215, 0, 0.6)", "5★ Pulls Distance (Limited)");
+
             renderHistogramChart(results["4★"].pulls, "4★", "fourStarPullDistributionChart", "rgba(179, 102, 230, 0.6)", "4★ Pull Distribution");
+            renderHistogramChart(results["4★"].standardPulls, "4★", "fourStarStandardPullDistanceChart", "rgba(158, 132, 183, 0.6)", "4★ Pulls Distance (Standard)");
+            renderHistogramChart(results["4★"].limitedPulls, "4★", "fourStarLimitedPullDistanceChart", "rgba(179, 102, 255, 0.6)", "4★ Pulls Distance (Limited)");
+
 
             if (useHardPity) {
                 renderDoughnutChart("fiveStarHardPityChart", ["Hard Pity", "Non-Hard Pity"], [hard5.total, results["5★"].total - hard5.total], ["#E6A400", "#FFDD66"], "5★ Hard vs Non-Hard Pity");
@@ -591,12 +772,51 @@
             }
         }
 
+        function calculatePercentileRanges(pulls, percentiles = [50, 70, 80, 90, 95]) {
+            if (!pulls || pulls.length === 0) return {};
+
+            const sorted = [...pulls].sort((a, b) => a - b);
+            const result = {};
+
+            percentiles.forEach(pct => {
+                const lowerIndex = Math.floor((100 - pct) / 2 / 100 * sorted.length);
+                const upperIndex = Math.ceil((1 - (100 - pct) / 2 / 100) * sorted.length) - 1;
+                result[pct] = {
+                    from: sorted[lowerIndex],
+                    to: sorted[upperIndex]
+                };
+            });
+
+            return result;
+        }
+
+        function formatPercentileRange(label, range) {
+            if (!range) {
+                return `<li>${label}: Not enough data</li>`;
+            }
+            return `<li>${label}: 70% of pulls happened between pulls ${range.from} and ${range.to}</li>`;
+        }
+
         function calculateStats(arr) {
             if (arr.length === 0) return { min: 0, avg: 0, max: 0 };
             let min = Math.min(...arr);
             let max = Math.max(...arr);
             let avg = arr.reduce((sum, val) => sum + val, 0) / arr.length;
             return { min, avg: formatDecimal(avg, 2), max };
+        }
+
+        function calculateAverage(itemCounts) {
+            const totalPulls = Object.values(itemCounts).reduce((sum, count) => sum + count, 0);
+            const numItems = Object.keys(itemCounts).length;
+            return totalPulls / numItems;
+        }
+
+        function calculateMin(itemCounts) {
+            return Math.min(...Object.values(itemCounts));
+        }
+
+        function calculateMax(itemCounts) {
+            return Math.max(...Object.values(itemCounts));
         }
 
         function formatDecimal(value, minDecimals = 0) {
