@@ -195,24 +195,7 @@ button:hover {
     margin-top: 0.75rem;
 }
 
-/* Don’t touch donutchart-canvas styling */
-.donutchart-canvas {
-    width: 100%;
-    max-width: 18.75rem;
-    aspect-ratio: 1;
-    background-color: #1f2a44;
-    border-radius: 0.625rem;
-    padding: 0.5rem;
-    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.5);
-    display: block;
-    margin: 0 auto;
-}
-
-.stats-section > div:not(.stats-block):not(.full-width-wrapper) {
-    flex: 1 1 12.5rem;
-    max-width: 15.625rem;
-}
-
+/* Stats Block */
 .stats-block {
     flex: 1 1 18.75rem;
     font-size: 0.9rem;
@@ -224,8 +207,25 @@ button:hover {
     min-width: 17.5rem;
 }
 
+.stats-block p strong {
+  font-size: 1.1em;
+  text-decoration: underline;
+}
+
+.stats-block ul li {
+  font-size: 1em;
+}
+
+.avg-highlight {
+  font-weight: bold;
+}
+
 .full-width-wrapper {
     flex: 1 1 100%;
+    width: 100%;
+}
+
+.half-width-wrapper {
     width: 100%;
 }
 
@@ -240,8 +240,23 @@ button:hover {
     margin: 0 auto;
 }
 
+/* Remove bullets for lists inside stats blocks */
 .stats-block ul {
     list-style-type: none;
+    padding-left: 0;
+}
+
+/* Donut chart background color */
+.donutchart-canvas {
+    width: 100%;
+    max-width: 18.75rem;
+    aspect-ratio: 1;
+    background-color: #262f4a;  /* Same as stats-block background */
+    border-radius: 0.625rem;
+    padding: 0.5rem;
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.5);
+    display: block;
+    margin: 0 auto;
 }
 
 /* Responsive Design */
@@ -278,15 +293,36 @@ button:hover {
         max-width: 100%;
         max-height: 15.625rem;
     }
+
+    /* Keep Pulls Distance full-width on mobile */
+    .pulls-distance-block {
+        flex: 1 1 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .half-width-wrapper {
+        width: 48%;  /* Adjust this width as needed */
+        margin-right: 2%; /* Optional: add gap between elements */
+    }
+
+    .half-width-wrapper:nth-child(even) {
+        margin-right: 0; /* Remove margin for even elements */
+    }
 }
 
 @media (min-width: 769px) {
     .stats-block {
-        flex: 1 1 45%;
+        flex: 1 1 55%;
     }
 
     .histogram-canvas {
         max-width: 100%;
         height: 18.75rem;
+    }
+
+    /* Pulls Distance becomes half-width on larger screens */
+    .pulls-distance-block {
+        flex: 1 1 45%; /* Only half-width on big screens */
     }
 }
