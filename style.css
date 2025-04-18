@@ -73,15 +73,38 @@ main {
     padding-bottom: 0.25rem;
 }
 
-#settingsPanel h3 ~ div {
-    padding-left: 1rem;
-}
-
 #settingsPanel span,
 #settingsPanel label {
     font-size: 0.9rem;
     margin-right: 0.4rem;
     color: rgba(240, 250, 255, 0.9);
+}
+
+.rate-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+/* Individual rate box (Base or Limited) */
+.rate-box {
+    flex: 1 1 18rem; /* Responsive with a reasonable min width */
+    background-color: #1f2a44; /* Consistent with histogram/donut blocks */
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #ffffff;
+}
+
+/* Optional: inner spacing between lines inside the box */
+.rate-box > div {
+    margin-bottom: 0.50rem;
+}
+
+.subsettings {
+    padding-left: 1rem;
 }
 
 /* Inputs */
@@ -134,10 +157,6 @@ input:disabled {
 input[type="checkbox"] {
     transform: scale(1.1);
     margin-right: 0.4rem;
-}
-
-#settingsPanel div {
-    margin-bottom: 0.5rem;
 }
 
 button {
