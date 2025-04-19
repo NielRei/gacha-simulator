@@ -3,7 +3,7 @@ A basic customizable gacha simulator with Monte Carlo Simulation - simulate hund
 
 Please answer the survey form for my thesis! https://forms.gle/xnt2UUgmYqDMzo7T8
 
-# 📌 Features:
+# 📌 Features
 - Fully customizable gacha settings
 - Supports basic gacha mechanics such as drop rates, distribution rates, standard/limited items, hard pity systems, soft pity systems, sparking systems, etc
 - Detailed basic statistical data analysis and output (min, max, average, ratio, distribution, etc)
@@ -30,4 +30,7 @@ Please answer the survey form for my thesis! https://forms.gle/xnt2UUgmYqDMzo7T8
 - Soft Pity Statistics (Soft Pity Hits vs Non-Soft Pity Hits)
 - Spark Statistics (Spark Hits vs Non-Spark Hits; Success vs Failure to get Item before Spark)
 
-
+# Others
+- Credits for Cute Logos!
+- Priestess: @wittleRedd
+- Nymph: u/Tou-chi
