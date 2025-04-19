@@ -58,21 +58,21 @@
                     </div>
                 </div>
         
-                <!-- Limited Distribution Rate Section -->
+                <!-- RateUp Distribution Rate Section -->
                 <div class="rate-box">
                     <div>
-                        <span>5★ Limited Distribution Rate:</span>
-                        <input type="text" id="fiveStarLimitedDistributionRate" value="50.00" min="0" max="100"
-                            oninput="validateDecimalInput('fiveStarLimitedDistributionRate'); updateLimitedRates();"
-                            onblur="formatDecimalInput('fiveStarLimitedDistributionRate')">
+                        <span>5★ Rate-Up Distribution:</span>
+                        <input type="text" id="fiveStarRateUpDistributionRate" value="50.00" min="0" max="100"
+                            oninput="validateDecimalInput('fiveStarRateUpDistributionRate'); updateRateUpRates();"
+                            onblur="formatDecimalInput('fiveStarRateUpDistributionRate')">
                         <span class="tight-percent">%</span>
                     </div>
         
                     <div>
-                        <span>4★ Limited Distribution Rate:</span>
-                        <input type="text" id="fourStarLimitedDistributionRate" value="50.00" min="0" max="100"
-                            oninput="validateDecimalInput('fourStarLimitedDistributionRate'); updateLimitedRates();"
-                            onblur="formatDecimalInput('fourStarLimitedDistributionRate')">
+                        <span>4★ Rate-Up Distribution:</span>
+                        <input type="text" id="fourStarRateUpDistributionRate" value="50.00" min="0" max="100"
+                            oninput="validateDecimalInput('fourStarRateUpDistributionRate'); updateRateUpRates();"
+                            onblur="formatDecimalInput('fourStarRateUpDistributionRate')">
                         <span class="tight-percent">%</span>
                     </div>
                 </div>
@@ -80,32 +80,32 @@
             
             <h3>
                 Banner Item Pool
-                <span id="validationLimitedRateUpMessage"></span>
+                <span id="validationRateUpRateUpMessage"></span>
             </h3>
             
             <div class="rate-sections">
                 <div class="rate-box">            
                     <div>
-                        <span>5★ Limited Items:</span>
-                        <input type="number" id="fiveStarLimitedItems" value="1" min="1"
+                        <span>5★ Rate-Up Items:</span>
+                        <input type="number" id="fiveStarRateUpItems" value="1" min="1"
                                oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this, 10)">
                     </div>
             
                     <div>
-                        <span>4★ Limited Items:</span>
-                        <input type="number" id="fourStarLimitedItems" value="3" min="1"
+                        <span>4★ Rate-Up Items:</span>
+                        <input type="number" id="fourStarRateUpItems" value="3" min="1"
                                oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this, 10)">
                     </div>
                 </div>
                 <div class="rate-box">  
                     <div>
-                        <span>5★ Standard Items:</span>
-                        <input type="number" id="fiveStarStandardItems" value="5" min="1" disabled>
+                        <span>5★ Non-Rate-Up Items:</span>
+                        <input type="number" id="fiveStarNonRateUpItems" value="5" min="1" disabled>
                     </div>
             
                     <div>
-                        <span>4★ Standard Items:</span>
-                        <input type="number" id="fourStarStandardItems" value="20" min="1" disabled>
+                        <span>4★ Non-Rate-Up Items:</span>
+                        <input type="number" id="fourStarNonRateUpItems" value="20" min="1" disabled>
                     </div>
                 </div>
             </div>
@@ -131,10 +131,10 @@
                                        oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
                                 <div class="guarantee-group" style="margin-top: 0.25rem;">
                                     <input type="checkbox" id="enableFiveStarGuaranteed" onchange="toggleGuaranteedInput('five')">
-                                    <label for="enableFiveStarGuaranteed">Guarantee Limited after</label>
+                                    <label for="enableFiveStarGuaranteed">Guarantee Rate-Up after</label>
                                     <input type="number" id="fiveStarGuaranteedAfter" value="1" min="1" style="display: none;"
                                            oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                    <span id="fiveGuaranteedLabel" style="display: none;">Standard pulls</span>
+                                    <span id="fiveGuaranteedLabel" style="display: none;">Non-Rate-Up pulls</span>
                                 </div>
                             </div>
             
@@ -144,10 +144,10 @@
                                        oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
                                 <div class="guarantee-group" style="margin-top: 0.25rem;">
                                     <input type="checkbox" id="enableFourStarGuaranteed" onchange="toggleGuaranteedInput('four')">
-                                    <label for="enableFourStarGuaranteed">Guarantee Limited after</label>
+                                    <label for="enableFourStarGuaranteed">Guarantee Rate-Up after</label>
                                     <input type="number" id="fourStarGuaranteedAfter" value="1" min="1" style="display: none;"
                                            oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                    <span id="fourGuaranteedLabel" style="display: none;">Standard pulls</span>
+                                    <span id="fourGuaranteedLabel" style="display: none;">NonRate-Up pulls</span>
                                 </div>
                             </div>
                         </div>
@@ -248,23 +248,25 @@
                 <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: #ffffff;">Guide for Dummies:</h4>
                 <ul style="list-style-type: disc; margin-left: 1.25rem; color: #dfeaff;">
                     <li><strong>Base Rate:</strong> Chance to pull a 5★/4★ item</li>
-                    <li><strong>Limited Distribution Rate:</strong> Chance to get a Limited item upon pulling a 5★/4★ (50/50, 75/25 system)</li>
+                    <li><strong>Rate-Up Distribution:</strong> Chance to get a Rate-Up item upon pulling a 5★/4★ (50/50, 75/25 system)</li>
                     <br>
-                    <li><strong>Limited Items:</strong> Specific "Featured" Items on a banner, typically with a higher rate-up</li>
-                    <li><strong>Standard Items:</strong> Non-Featured Items on a banner, general pool you "lose" to</li>
+                    <li><strong>Rate-Up Items:</strong> Specific "Featured" Items on a banner, typically with a higher rate-up</li>
+                    <li><strong>Non-Rate-Up Items:</strong> Non-Featured Items on a banner, general pool you "lose" to</li>
                     <br>
                     <li><strong>Hard Pity System:</strong> Guarantees a 5★/4★ item if item hasn't been pulled yet</li>
                     <li><strong>Hard Pity Cap:</strong> Exact pull number that guarantees an item</li>
-                    <li><strong>Guarantee Limited After:</strong> Guarantees a Limited item after losing to Standard X amount of times</li>
+                    <li><strong>Guarantee Rate-Up After:</strong> Guarantees a Rate-Up item after losing to Non-Rate-Up X amount of times</li>
                     <br>
                     <li><strong>Soft Pity System:</strong> Increases chances of getting the 5★/4★ item that hasn't been pulled yet</li>
                     <li><strong>Soft Pity Threshold:</strong> Exact pull number when the rate starts increasing</li>
                     <li><strong>Soft Pity Increment:</strong> How much the rate increases each pull past the threshold</li>
                     <br>
-                    <li><strong>Sparking System:</strong>  Enables free pick-up of 5★ Limited item after pulling a certain number of times (does not affect pity logic) </li>
+                    <li><strong>Sparking System:</strong>  Enables free pick-up of 5★ Rate-Up item after pulling a certain number of times (does not affect pity logic) </li>
                     <li><strong>Pull Requirement:</strong> Number of pulls to "spark" or get an Item</li>
                     <br>
                     <li><strong>Cost per Pull:</strong> Conversion of IRL money to pulls (based on Highest Top-Up)</li>
+                    <br>
+                    <li><strong>Other Notes: </strong> 3★ Base Rate, 5★/4★ Non-Rate-Up Items are disabled/uneditable.</li>
                 </ul>
             </section>
         
@@ -284,8 +286,8 @@
         function getGachaSettings() {
             return {
                 pool: {
-                    "5★": Math.max(parseFloat(document.getElementById('fiveStarStandardItems').value) || 1, 1),
-                    "4★": Math.max(parseFloat(document.getElementById('fourStarStandardItems').value) || 1, 1),
+                    "5★": Math.max(parseFloat(document.getElementById('fiveStarNonRateUpItems').value) || 1, 1),
+                    "4★": Math.max(parseFloat(document.getElementById('fourStarNonRateUpItems').value) || 1, 1),
                     "3★": parseFloat(document.getElementById('threeStarRate').value) || 50
                 },
                 rates: {
@@ -301,54 +303,54 @@
                 const settings = getGachaSettings();
                 const pulls = parseInt(document.getElementById("simulationCount").value) || 100000;
 
-                const fiveStarLimitedCount = parseInt(document.getElementById('fiveStarLimitedItems').value) || 1;
-                const fourStarLimitedCount = parseInt(document.getElementById('fourStarLimitedItems')?.value) || 1;
+                const fiveStarRateUpCount = parseInt(document.getElementById('fiveStarRateUpItems').value) || 1;
+                const fourStarRateUpCount = parseInt(document.getElementById('fourStarRateUpItems')?.value) || 1;
 
                 const generateItemLabels = (count) =>
                     Array.from({ length: count }, (_, i) => String.fromCharCode(65 + i)); // A-Z
 
-                const fiveStarLimitedLabels = generateItemLabels(Math.min(fiveStarLimitedCount, 26));
-                const fourStarLimitedLabels = generateItemLabels(Math.min(fourStarLimitedCount, 26));
+                const fiveStarRateUpLabels = generateItemLabels(Math.min(fiveStarRateUpCount, 26));
+                const fourStarRateUpLabels = generateItemLabels(Math.min(fourStarRateUpCount, 26));
 
                 let results = {
                     "5★": {
                         total: 0,
-                        standard: 0,
-                        limited: 0,
+                        NonRateUp: 0,
+                        RateUp: 0,
                         pulls: [],
-                        standardPulls: [],
-                        limitedPulls: [],
+                        NonRateUpPulls: [],
+                        RateUpPulls: [],
                         pullNumbers: [],
-                        standardPullNumbers: [],
-                        limitedPullNumbers: [],
-                        hardPityHits: { total: 0, standard: 0, limited: 0 },
+                        NonRateUpPullNumbers: [],
+                        RateUpPullNumbers: [],
+                        hardPityHits: { total: 0, NonRateUp: 0, RateUp: 0 },
                         softPityHits: [],
                         softPityHitCount: 0,
                         softPityPullNumbers: [],
-                        limitedItems: {},
-                        limitedSetStats: []
+                        RateUpItems: {},
+                        RateUpSetStats: []
                     },
                     "4★": {
                         total: 0,
-                        standard: 0,
-                        limited: 0,
+                        NonRateUp: 0,
+                        RateUp: 0,
                         pulls: [],
-                        standardPulls: [],
-                        limitedPulls: [],
+                        NonRateUpPulls: [],
+                        RateUpPulls: [],
                         pullNumbers: [],
-                        standardPullNumbers: [],
-                        limitedPullNumbers: [],
-                        hardPityHits: { total: 0, standard: 0, limited: 0 },
+                        NonRateUpPullNumbers: [],
+                        RateUpPullNumbers: [],
+                        hardPityHits: { total: 0, NonRateUp: 0, RateUp: 0 },
                         softPityHits: [],
                         softPityHitCount: 0,
                         softPityPullNumbers: [],
-                        limitedItems: {},
-                        limitedSetStats: []
+                        RateUpItems: {},
+                        RateUpSetStats: []
                     },
                     "3★": 0
                 };
 
-                const initLimitedTracking = (labels) => {
+                const initRateUpTracking = (labels) => {
                     const obj = {};
                     for (let label of labels) {
                         obj[label] = {
@@ -361,22 +363,22 @@
                     return obj;
                 };
 
-                results["5★"].limitedItems = initLimitedTracking(fiveStarLimitedLabels);
-                results["4★"].limitedItems = initLimitedTracking(fourStarLimitedLabels);
+                results["5★"].RateUpItems = initRateUpTracking(fiveStarRateUpLabels);
+                results["4★"].RateUpItems = initRateUpTracking(fourStarRateUpLabels);
 
-                const limitedRates = {
-                    "5★": parseFloat(document.getElementById('fiveStarLimitedDistributionRate').value) || 0,
-                    "4★": parseFloat(document.getElementById('fourStarLimitedDistributionRate')?.value) || 0
+                const RateUpRates = {
+                    "5★": parseFloat(document.getElementById('fiveStarRateUpDistributionRate').value) || 0,
+                    "4★": parseFloat(document.getElementById('fourStarRateUpDistributionRate')?.value) || 0
                 };
 
                 const useHardPity = document.getElementById("enableHardPity").checked;
                 const useSoftPity = document.getElementById("enableSoftPity").checked;
                 const hardPity5Value = parseInt(document.getElementById("fiveStarPity").value) || 90;
                 const hardPity4Value = parseInt(document.getElementById("fourStarPity").value) || 10;
-                const useGuaranteedLimited5 = document.getElementById("enableFiveStarGuaranteed").checked;
-                const guaranteeAfterStandard5 = parseInt(document.getElementById("fiveStarGuaranteedAfter").value) || 1;
-                const useGuaranteedLimited4 = document.getElementById("enableFourStarGuaranteed")?.checked;
-                const guaranteeAfterStandard4 = parseInt(document.getElementById("fourStarGuaranteedAfter")?.value) || 1;
+                const useGuaranteedRateUp5 = document.getElementById("enableFiveStarGuaranteed").checked;
+                const guaranteeAfterNonRateUp5 = parseInt(document.getElementById("fiveStarGuaranteedAfter").value) || 1;
+                const useGuaranteedRateUp4 = document.getElementById("enableFourStarGuaranteed")?.checked;
+                const guaranteeAfterNonRateUp4 = parseInt(document.getElementById("fourStarGuaranteedAfter")?.value) || 1;
 
                 const softPity = useSoftPity ? getSoftPityRates() : null;
 
@@ -392,18 +394,18 @@
                     preSparkVariety: { "0": 0, "1": 0, "2+": 0 }
                     // We'll add total and sparkAttempts later.
                 };
-                let sparkLimitedSet = new Set();
+                let sparkRateUpSet = new Set();
 
                 // We'll track real pulls for pity in a separate variable.
                 let pullCountSinceLast5 = 0;
                 let internalPullCountSinceLast5 = 0;
                 let pullCountSinceLast4 = 0;
-                let pullsSinceLast5Limited = 0,
-                    pullsSinceLast5Standard = 0;
-                let pullsSinceLast4Limited = 0,
-                    pullsSinceLast4Standard = 0;
-                let standard5Streak = 0,
-                    standard4Streak = 0;
+                let pullsSinceLast5RateUp = 0,
+                    pullsSinceLast5NonRateUp = 0;
+                let pullsSinceLast4RateUp = 0,
+                    pullsSinceLast4NonRateUp = 0;
+                let NonRateUp5Streak = 0,
+                    NonRateUp4Streak = 0;
 
                 let fiveStarSet = new Set();
                 let fourStarSet = new Set();
@@ -418,17 +420,17 @@
                     pullCountSinceLast5++;
                     internalPullCountSinceLast5++;
                     pullCountSinceLast4++;
-                    pullsSinceLast5Limited++;
-                    pullsSinceLast5Standard++;
-                    pullsSinceLast4Limited++;
-                    pullsSinceLast4Standard++;
+                    pullsSinceLast5RateUp++;
+                    pullsSinceLast5NonRateUp++;
+                    pullsSinceLast4RateUp++;
+                    pullsSinceLast4NonRateUp++;
                     pullSinceLast5SetComplete++;
                     pullSinceLast4SetComplete++;
 
-                    for (let label of fiveStarLimitedLabels)
-                        results["5★"].limitedItems[label].pullsSinceLast++;
-                    for (let label of fourStarLimitedLabels)
-                        results["4★"].limitedItems[label].pullsSinceLast++;
+                    for (let label of fiveStarRateUpLabels)
+                        results["5★"].RateUpItems[label].pullsSinceLast++;
+                    for (let label of fourStarRateUpLabels)
+                        results["4★"].RateUpItems[label].pullsSinceLast++;
 
                     let fiveStarRate = settings.rates["5★"];
                     let fourStarRate = settings.rates["4★"];
@@ -496,43 +498,43 @@
                             results["5★"].softPityHitCount++;
                         }
 
-                        let isLimited = Math.random() * 100 < limitedRates["5★"];
-                        if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5)
-                            isLimited = true;
+                        let isRateUp = Math.random() * 100 < RateUpRates["5★"];
+                        if (useGuaranteedRateUp5 && NonRateUp5Streak >= guaranteeAfterNonRateUp5)
+                            isRateUp = true;
 
-                        if (isLimited) {
-                            results["5★"].limited++;
-                            results["5★"].limitedPulls.push(pullsSinceLast5Limited);
-                            results["5★"].limitedPullNumbers.push(i + 1);
-                            if (hitHardPity5) results["5★"].hardPityHits.limited++;
+                        if (isRateUp) {
+                            results["5★"].RateUp++;
+                            results["5★"].RateUpPulls.push(pullsSinceLast5RateUp);
+                            results["5★"].RateUpPullNumbers.push(i + 1);
+                            if (hitHardPity5) results["5★"].hardPityHits.RateUp++;
 
                             const item =
-                                fiveStarLimitedLabels[
-                                    Math.floor(Math.random() * fiveStarLimitedLabels.length)
+                                fiveStarRateUpLabels[
+                                    Math.floor(Math.random() * fiveStarRateUpLabels.length)
                                 ];
-                            let track = results["5★"].limitedItems[item];
+                            let track = results["5★"].RateUpItems[item];
                             track.count++;
                             track.pullsToNext.push(track.pullsSinceLast);
                             track.totalPulls += track.pullsSinceLast;
                             track.pullsSinceLast = 0;
 
-                            sparkLimitedSet.add(item);
+                            sparkRateUpSet.add(item);
                             fiveStarSet.add(item);
-                            if (fiveStarSet.size === fiveStarLimitedLabels.length) {
-                                results["5★"].limitedSetStats.push(pullSinceLast5SetComplete);
+                            if (fiveStarSet.size === fiveStarRateUpLabels.length) {
+                                results["5★"].RateUpSetStats.push(pullSinceLast5SetComplete);
                                 pullSinceLast5SetComplete = 0;
                                 fiveStarSet.clear();
                             }
 
-                            pullsSinceLast5Limited = 0;
-                            standard5Streak = 0;
+                            pullsSinceLast5RateUp = 0;
+                            NonRateUp5Streak = 0;
                         } else {
-                            results["5★"].standard++;
-                            results["5★"].standardPulls.push(pullsSinceLast5Standard);
-                            results["5★"].standardPullNumbers.push(i + 1);
-                            if (hitHardPity5) results["5★"].hardPityHits.standard++;
-                            pullsSinceLast5Standard = 0;
-                            standard5Streak++;
+                            results["5★"].NonRateUp++;
+                            results["5★"].NonRateUpPulls.push(pullsSinceLast5NonRateUp);
+                            results["5★"].NonRateUpPullNumbers.push(i + 1);
+                            if (hitHardPity5) results["5★"].hardPityHits.NonRateUp++;
+                            pullsSinceLast5NonRateUp = 0;
+                            NonRateUp5Streak++;
                         }
 
                         if (hitHardPity5) results["5★"].hardPityHits.total++;
@@ -548,42 +550,42 @@
                             results["4★"].softPityHitCount++;
                         }
 
-                        let isLimited = Math.random() * 100 < limitedRates["4★"];
-                        if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4)
-                            isLimited = true;
+                        let isRateUp = Math.random() * 100 < RateUpRates["4★"];
+                        if (useGuaranteedRateUp4 && NonRateUp4Streak >= guaranteeAfterNonRateUp4)
+                            isRateUp = true;
 
-                        if (isLimited) {
-                            results["4★"].limited++;
-                            results["4★"].limitedPulls.push(pullsSinceLast4Limited);
-                            results["4★"].limitedPullNumbers.push(i + 1);
-                            if (hitHardPity4) results["4★"].hardPityHits.limited++;
+                        if (isRateUp) {
+                            results["4★"].RateUp++;
+                            results["4★"].RateUpPulls.push(pullsSinceLast4RateUp);
+                            results["4★"].RateUpPullNumbers.push(i + 1);
+                            if (hitHardPity4) results["4★"].hardPityHits.RateUp++;
 
                             const item =
-                                fourStarLimitedLabels[
-                                    Math.floor(Math.random() * fourStarLimitedLabels.length)
+                                fourStarRateUpLabels[
+                                    Math.floor(Math.random() * fourStarRateUpLabels.length)
                                 ];
-                            let track = results["4★"].limitedItems[item];
+                            let track = results["4★"].RateUpItems[item];
                             track.count++;
                             track.pullsToNext.push(track.pullsSinceLast);
                             track.totalPulls += track.pullsSinceLast;
                             track.pullsSinceLast = 0;
 
                             fourStarSet.add(item);
-                            if (fourStarSet.size === fourStarLimitedLabels.length) {
-                                results["4★"].limitedSetStats.push(pullSinceLast4SetComplete);
+                            if (fourStarSet.size === fourStarRateUpLabels.length) {
+                                results["4★"].RateUpSetStats.push(pullSinceLast4SetComplete);
                                 pullSinceLast4SetComplete = 0;
                                 fourStarSet.clear();
                             }
 
-                            pullsSinceLast4Limited = 0;
-                            standard4Streak = 0;
+                            pullsSinceLast4RateUp = 0;
+                            NonRateUp4Streak = 0;
                         } else {
-                            results["4★"].standard++;
-                            results["4★"].standardPulls.push(pullsSinceLast4Standard);
-                            results["4★"].standardPullNumbers.push(i + 1);
-                            if (hitHardPity4) results["4★"].hardPityHits.standard++;
-                            pullsSinceLast4Standard = 0;
-                            standard4Streak++;
+                            results["4★"].NonRateUp++;
+                            results["4★"].NonRateUpPulls.push(pullsSinceLast4NonRateUp);
+                            results["4★"].NonRateUpPullNumbers.push(i + 1);
+                            if (hitHardPity4) results["4★"].hardPityHits.NonRateUp++;
+                            pullsSinceLast4NonRateUp = 0;
+                            NonRateUp4Streak++;
                         }
 
                         if (hitHardPity4) results["4★"].hardPityHits.total++;
@@ -596,7 +598,7 @@
                     if (sparkEnabled && pullsSinceLastSpark >= sparkThreshold) {
                         sparkStats.sparked++;
 
-                        const preSparkPulled = sparkLimitedSet.size;
+                        const preSparkPulled = sparkRateUpSet.size;
                         if (preSparkPulled === 0) {
                             sparkStats.preSparkFailure++;
                         } else {
@@ -609,43 +611,43 @@
                             sparkStats.preSparkVariety[preSparkPulled.toString()]++;
                         }
 
-                        const perItemSpark = 1 / fiveStarLimitedLabels.length;
-                        for (let label of fiveStarLimitedLabels) {
-                            const track = results["5★"].limitedItems[label];
+                        const perItemSpark = 1 / fiveStarRateUpLabels.length;
+                        for (let label of fiveStarRateUpLabels) {
+                            const track = results["5★"].RateUpItems[label];
                             track.count += perItemSpark;
-                            track.pullsToNext.push(pullsSinceLast5Limited);
-                            track.totalPulls += pullsSinceLast5Limited;
+                            track.pullsToNext.push(pullsSinceLast5RateUp);
+                            track.totalPulls += pullsSinceLast5RateUp;
                         }
 
                         results["5★"].total += 1;
-                        results["5★"].limited += 1;
-                        results["5★"].limitedPulls.push(pullsSinceLast5Limited);
-                        results["5★"].limitedPullNumbers.push(i + 1);
+                        results["5★"].RateUp += 1;
+                        results["5★"].RateUpPulls.push(pullsSinceLast5RateUp);
+                        results["5★"].RateUpPullNumbers.push(i + 1);
                         results["5★"].pulls.push(pullCountSinceLast5);
                         results["5★"].pullNumbers.push(i + 1);
 
                         pullCountSinceLast5 = 0;
-                        pullsSinceLast5Limited = 0;
+                        pullsSinceLast5RateUp = 0;
                         pullsSinceLastSpark = 0;
-                        sparkLimitedSet.clear();
+                        sparkRateUpSet.clear();
                     }
                 }
 
-                results["5★"].limitedItemCounts = {};
+                results["5★"].RateUpItemCounts = {};
                 results["5★"].pullsToNext = {};
-                for (const [label, data] of Object.entries(results["5★"].limitedItems)) {
-                    results["5★"].limitedItemCounts[label] = data.count;
+                for (const [label, data] of Object.entries(results["5★"].RateUpItems)) {
+                    results["5★"].RateUpItemCounts[label] = data.count;
                     results["5★"].pullsToNext[label] = data.pullsToNext;
                 }
-                results["5★"].pullsToFullSet = results["5★"].limitedSetStats;
+                results["5★"].pullsToFullSet = results["5★"].RateUpSetStats;
 
-                results["4★"].limitedItemCounts = {};
+                results["4★"].RateUpItemCounts = {};
                 results["4★"].pullsToNext = {};
-                for (const [label, data] of Object.entries(results["4★"].limitedItems)) {
-                    results["4★"].limitedItemCounts[label] = data.count;
+                for (const [label, data] of Object.entries(results["4★"].RateUpItems)) {
+                    results["4★"].RateUpItemCounts[label] = data.count;
                     results["4★"].pullsToNext[label] = data.pullsToNext;
                 }
-                results["4★"].pullsToFullSet = results["4★"].limitedSetStats;
+                results["4★"].pullsToFullSet = results["4★"].RateUpSetStats;
 
                 sparkStats.nonSparked = results["5★"].total - sparkStats.sparked;
                 sparkStats.sparkAttempts = sparkStats.preSparkSuccess + sparkStats.preSparkFailure;
@@ -680,13 +682,13 @@
             const formatPct = (num, total) => total ? `${formatDecimal((num / total) * 100, 2)}%` : "0%";
 
             const stats5 = calculateStats(results["5★"].pulls);
-            const stats5Standard = calculateStats(results["5★"].standardPulls);
-            const stats5Limited = calculateStats(results["5★"].limitedPulls);
+            const stats5NonRateUp = calculateStats(results["5★"].NonRateUpPulls);
+            const stats5RateUp = calculateStats(results["5★"].RateUpPulls);
             const soft5Stats = calculateStats(results["5★"].softPityHits);
 
             const stats4 = calculateStats(results["4★"].pulls);
-            const stats4Standard = calculateStats(results["4★"].standardPulls);
-            const stats4Limited = calculateStats(results["4★"].limitedPulls);
+            const stats4NonRateUp = calculateStats(results["4★"].NonRateUpPulls);
+            const stats4RateUp = calculateStats(results["4★"].RateUpPulls);
             const soft4Stats = calculateStats(results["4★"].softPityHits);
 
             const hard5 = results["5★"].hardPityHits;
@@ -700,12 +702,12 @@
             const allNextCopyStats4 = calculateStats(allNextCopyPulls4);
 
             const percentileRanges5 = calculatePercentileRanges(results["5★"].pulls);
-            const percentileRanges5Standard = calculatePercentileRanges(results["5★"].standardPulls);
-            const percentileRanges5Limited = calculatePercentileRanges(results["5★"].limitedPulls);
+            const percentileRanges5NonRateUp = calculatePercentileRanges(results["5★"].NonRateUpPulls);
+            const percentileRanges5RateUp = calculatePercentileRanges(results["5★"].RateUpPulls);
 
             const percentileRanges4 = calculatePercentileRanges(results["4★"].pulls);
-            const percentileRanges4Standard = calculatePercentileRanges(results["4★"].standardPulls);
-            const percentileRanges4Limited = calculatePercentileRanges(results["4★"].limitedPulls);
+            const percentileRanges4NonRateUp = calculatePercentileRanges(results["4★"].NonRateUpPulls);
+            const percentileRanges4RateUp = calculatePercentileRanges(results["4★"].RateUpPulls);
 
             const costPerPull = parseFloat(document.getElementById("costPerPull").value) || 0;
             const formatCost = (pulls) => `$${(pulls * costPerPull).toFixed(2)}`;
@@ -728,12 +730,12 @@
                             <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
                         </ul><br>
 
-                        <p><strong>Standard / Limited Rarity Distribution:</strong></p>
+                        <p><strong>Non-Rate-Up / Rate-Up Rarity Distribution:</strong></p>
                         <ul>
-                            <li>5★ Limited: ${results["5★"].limited} (${formatPct(results["5★"].limited, pulls)})</li>
-                            <li>5★ Standard: ${results["5★"].standard} (${formatPct(results["5★"].standard, pulls)})</li>
-                            <li>4★ Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, pulls)})</li>
-                            <li>4★ Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, pulls)})</li>
+                            <li>5★ Rate-Up: ${results["5★"].RateUp} (${formatPct(results["5★"].RateUp, pulls)})</li>
+                            <li>5★ Non-Rate-Up: ${results["5★"].NonRateUp} (${formatPct(results["5★"].NonRateUp, pulls)})</li>
+                            <li>4★ Rate-Up: ${results["4★"].RateUp} (${formatPct(results["4★"].RateUp, pulls)})</li>
+                            <li>4★ NonRate-Up: ${results["4★"].NonRateUp} (${formatPct(results["4★"].NonRateUp, pulls)})</li>
                             <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
                         </ul>
                     </div>
@@ -749,45 +751,45 @@
 
                         <p><strong>5★ Type Distribution:</strong></p>
                         <ul>
-                            <li>Limited: ${results["5★"].limited} (${formatPct(results["5★"].limited, results["5★"].total)})</li>
-                            <li>Standard: ${results["5★"].standard} (${formatPct(results["5★"].standard, results["5★"].total)})</li>
+                            <li>Rate-Up: ${results["5★"].RateUp} (${formatPct(results["5★"].RateUp, results["5★"].total)})</li>
+                            <li>Non-Rate-Up: ${results["5★"].NonRateUp} (${formatPct(results["5★"].NonRateUp, results["5★"].total)})</li>
                         </ul><br>
 
                         <p><strong>5★ Avg / Min / Max Pulls:</strong></p>
                         <ul>
                             <li>Any: <span class="avg-highlight">Avg (${stats5.avg})</span>, Min (${stats5.min}), Max (${stats5.max})</li>
-                            <li>Limited: <span class="avg-highlight">Avg (${stats5Limited.avg})</span>, Min (${stats5Limited.min}), Max (${stats5Limited.max})</li>
-                            <li>Standard: <span class="avg-highlight">Avg (${stats5Standard.avg})</span>, Min (${stats5Standard.min}), Max (${stats5Standard.max})</li> 
+                            <li>Rate-Up: <span class="avg-highlight">Avg (${stats5RateUp.avg})</span>, Min (${stats5RateUp.min}), Max (${stats5RateUp.max})</li>
+                            <li>Non-Rate-Up: <span class="avg-highlight">Avg (${stats5NonRateUp.avg})</span>, Min (${stats5NonRateUp.min}), Max (${stats5NonRateUp.max})</li> 
                         </ul><br>
 
                         <p><strong>5★ Avg / Min / Max Cost:</strong></p>
                         <ul>
                             <li>Any: <span class="avg-highlight">Avg (${formatCost(stats5.avg)})</span>, Min (${formatCost(stats5.min)}), Max (${formatCost(stats5.max)})</li>
-                            <li>Limited: <span class="avg-highlight">Avg (${formatCost(stats5Limited.avg)})</span>, Min (${formatCost(stats5Limited.min)}), Max (${formatCost(stats5Limited.max)})</li>
-                            <li>Standard: <span class="avg-highlight">Avg (${formatCost(stats5Standard.avg)})</span>, Min (${formatCost(stats5Standard.min)}), Max (${formatCost(stats5Standard.max)})</li>
+                            <li>Rate-Up: <span class="avg-highlight">Avg (${formatCost(stats5RateUp.avg)})</span>, Min (${formatCost(stats5RateUp.min)}), Max (${formatCost(stats5RateUp.max)})</li>
+                            <li>Non-Rate-Up: <span class="avg-highlight">Avg (${formatCost(stats5NonRateUp.avg)})</span>, Min (${formatCost(stats5NonRateUp.min)}), Max (${formatCost(stats5NonRateUp.max)})</li>
                         </ul>
                     </div>
 
                     <div class="full-width-wrapper"><canvas id="fiveStarPullDistributionChart" class="histogram-canvas"></canvas></div>
-                    <div class="half-width-wrapper"><canvas id="fiveStarStandardPullDistanceChart" class="histogram-canvas"></canvas></div>
-                    <div class="half-width-wrapper"><canvas id="fiveStarLimitedPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fiveStarNonRateUpPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fiveStarRateUpPullDistanceChart" class="histogram-canvas"></canvas></div>
 
                     <div class="stats-block">
                         <p><strong>5★ Pull Range Distribution</strong></p>
                         <ul>
                             ${formatPercentileRange("Any", percentileRanges5["70"])}
-                            ${formatPercentileRange("Limited", percentileRanges5Limited["70"])}
-                            ${formatPercentileRange("Standard", percentileRanges5Standard["70"])}
+                            ${formatPercentileRange("Rate-Up", percentileRanges5RateUp["70"])}
+                            ${formatPercentileRange("Non-Rate-Up", percentileRanges5NonRateUp["70"])}
                         </ul>
                     </div>
 
-                    <!-- 5★ Limited Items -->
+                    <!-- 5★ RateUp Items -->
                     ${
-                        Object.keys(results["5★"].limitedItemCounts).length >= 2 ? `
+                        Object.keys(results["5★"].RateUpItemCounts).length >= 2 ? `
                             <div class="stats-block">
-                                <p><strong>5★ Limited Item Tracking:</strong><br>
+                                <p><strong>5★ Rate-Up Item Tracking:</strong><br>
                                     ${(() => {
-                                        const counts = results["5★"].limitedItemCounts;
+                                        const counts = results["5★"].RateUpItemCounts;
                                         const total = Object.values(counts).reduce((a, b) => a + b, 0);
                                         const formatted = Object.entries(counts).map(([item, count]) => {
                                             const percent = total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
@@ -797,11 +799,11 @@
                                     })()}
                                 </p> <br>
 
-                                <p><strong>Pulls to Get One Specific Limited 5★ Item (Avg / Min / Max):</strong></p>
+                                <p><strong>Pulls to Get One Specific Rate-Up 5★ Item (Avg / Min / Max):</strong></p>
                                 <ul>
                                     ${(() => {
-                                        const allLimitedItemPulls = Object.values(results["5★"].pullsToNext).flat();
-                                        const stat = calculateStats(allLimitedItemPulls);
+                                        const allRateUpItemPulls = Object.values(results["5★"].pullsToNext).flat();
+                                        const stat = calculateStats(allRateUpItemPulls);
                                         return `
                                             <li>Pulls: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
                                             Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
@@ -809,7 +811,7 @@
                                     })()}
                                 </ul><br>
 
-                                <p><strong>Pulls to Get One Copy of Each Limited 5★ Item (Avg / Min / Max):</strong></p>
+                                <p><strong>Pulls to Get One Copy of Each Rate-Up 5★ Item (Avg / Min / Max):</strong></p>
                                 <p>
                                     Pulls: Avg (<span class="avg-highlight stat-num">${setStats5.avg}</span>), Min (<span class="stat-num">${setStats5.min}</span>), Max (<span class="stat-num">${setStats5.max}</span>)<br>
                                     Cost: Avg (<span class="avg-highlight stat-cost">${formatCost(setStats5.avg)}</span>), Min (<span class="stat-cost">${formatCost(setStats5.min)}</span>), Max (<span class="stat-cost">${formatCost(setStats5.max)}</span>)
@@ -829,45 +831,45 @@
 
                         <p><strong>4★ Type Distribution:</strong></p>
                         <ul>
-                            <li>Limited: ${results["4★"].limited} (${formatPct(results["4★"].limited, results["4★"].total)})</li>
-                            <li>Standard: ${results["4★"].standard} (${formatPct(results["4★"].standard, results["4★"].total)})</li>
+                            <li>Rate-Up: ${results["4★"].RateUp} (${formatPct(results["4★"].RateUp, results["4★"].total)})</li>
+                            <li>Non-Rate-Up: ${results["4★"].NonRateUp} (${formatPct(results["4★"].NonRateUp, results["4★"].total)})</li>
                         </ul><br>
 
                         <p><strong>4★ Avg / Min / Max Pulls:</strong></p>
                         <ul>
                             <li>Any: <span class="avg-highlight">Avg (${stats4.avg})</span>, Min (${stats4.min}), Max (${stats4.max})</li>
-                            <li>Limited: <span class="avg-highlight">Avg (${stats4Limited.avg})</span>, Min (${stats4Limited.min}), Max (${stats4Limited.max})</li>
-                            <li>Standard: <span class="avg-highlight">Avg (${stats4Standard.avg})</span>, Min (${stats4Standard.min}), Max (${stats4Standard.max})</li>
+                            <li>Rate-Up: <span class="avg-highlight">Avg (${stats4RateUp.avg})</span>, Min (${stats4RateUp.min}), Max (${stats4RateUp.max})</li>
+                            <li>Non-Rate-Up: <span class="avg-highlight">Avg (${stats4NonRateUp.avg})</span>, Min (${stats4NonRateUp.min}), Max (${stats4NonRateUp.max})</li>
                         </ul><br>
 
                         <p><strong>4★ Avg / Min / Max Cost:</strong></p>
                         <ul>
                             <li>Any: <span class="avg-highlight">Avg (${formatCost(stats4.avg)})</span>, Min (${formatCost(stats4.min)}), Max (${formatCost(stats4.max)})</li>
-                            <li>Limited: <span class="avg-highlight">Avg (${formatCost(stats4Limited.avg)})</span>, Min (${formatCost(stats4Limited.min)}), Max (${formatCost(stats4Limited.max)})</li>
-                            <li>Standard: <span class="avg-highlight">Avg (${formatCost(stats4Standard.avg)})</span>, Min (${formatCost(stats4Standard.min)}), Max (${formatCost(stats4Standard.max)})</li>
+                            <li>Rate-Up: <span class="avg-highlight">Avg (${formatCost(stats4RateUp.avg)})</span>, Min (${formatCost(stats4RateUp.min)}), Max (${formatCost(stats4RateUp.max)})</li>
+                            <li>Non-Rate-Up: <span class="avg-highlight">Avg (${formatCost(stats4NonRateUp.avg)})</span>, Min (${formatCost(stats4NonRateUp.min)}), Max (${formatCost(stats4NonRateUp.max)})</li>
                         </ul>
                     </div>
 
                     <div class="full-width-wrapper"><canvas id="fourStarPullDistributionChart" class="histogram-canvas"></canvas></div>
-                    <div class="half-width-wrapper"><canvas id="fourStarStandardPullDistanceChart" class="histogram-canvas"></canvas></div>
-                    <div class="half-width-wrapper"><canvas id="fourStarLimitedPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fourStarNonRateUpPullDistanceChart" class="histogram-canvas"></canvas></div>
+                    <div class="half-width-wrapper"><canvas id="fourStarRateUpPullDistanceChart" class="histogram-canvas"></canvas></div>
 
                     <div class="stats-block">
                         <p><strong>4★ Pull Range Distribution</strong></p>
                         <ul>
                             ${formatPercentileRange("Any", percentileRanges4["70"])}
-                            ${formatPercentileRange("Limited", percentileRanges4Limited["70"])}
-                            ${formatPercentileRange("Standard", percentileRanges4Standard["70"])}
+                            ${formatPercentileRange("Rate-Up", percentileRanges4RateUp["70"])}
+                            ${formatPercentileRange("Non-Rate-Up", percentileRanges4NonRateUp["70"])}
                         </ul>
                     </div>
 
-                    <!-- 4★ Limited Items -->
+                    <!-- 4★ Rate-Up Items -->
                     ${
-                        Object.keys(results["4★"].limitedItemCounts).length >= 2 ? `
+                        Object.keys(results["4★"].RateUpItemCounts).length >= 2 ? `
                             <div class="stats-block">
-                                <p><strong>4★ Limited Item Tracking:</strong><br>
+                                <p><strong>4★ Rate-Up Item Tracking:</strong><br>
                                     ${(() => {
-                                        const counts = results["4★"].limitedItemCounts;
+                                        const counts = results["4★"].RateUpItemCounts;
                                         const total = Object.values(counts).reduce((a, b) => a + b, 0);
                                         const formatted = Object.entries(counts).map(([item, count]) => {
                                             const percent = total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
@@ -877,11 +879,11 @@
                                     })()}
                                 </p> <br>
 
-                                <p><strong>Pulls to Get One Specific Limited 4★ Item (Avg / Min / Max):</strong></p>
+                                <p><strong>Pulls to Get One Specific Rate-Up 4★ Item (Avg / Min / Max):</strong></p>
                                 <ul>
                                     ${(() => {
-                                        const allLimitedItemPulls = Object.values(results["4★"].pullsToNext).flat();
-                                        const stat = calculateStats(allLimitedItemPulls);
+                                        const allRateUpItemPulls = Object.values(results["4★"].pullsToNext).flat();
+                                        const stat = calculateStats(allRateUpItemPulls);
                                         return `
                                             <li>Pulls: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
                                             Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
@@ -889,7 +891,7 @@
                                     })()}
                                 </ul><br>
 
-                                <p><strong>Pulls to Get One Copy of Each Limited 4★ Item (Avg / Min / Max):</strong></p>
+                                <p><strong>Pulls to Get One Copy of Each Rate-Up 4★ Item (Avg / Min / Max):</strong></p>
                                 <p>
                                     ${(() => {
                                         const setStats4 = calculateStats(results["4★"].pullsToFullSet || []);
@@ -984,7 +986,7 @@
                         <div><canvas id="sparkedVsNonSparkedChart" class="donutchart-canvas"></canvas></div>
                         <div><canvas id="sparkSuccessChart" class="donutchart-canvas"></canvas></div>
                         <div class="stats-block">
-                            <p><strong>5★ Limited Items - Sparked vs Non-Sparked:</strong></p>
+                            <p><strong>5★ Rate-Up Items - Sparked vs Non-Sparked:</strong></p>
                             <ul>
                                 <li>Sparked: ${sparkStats.sparked} (${formatPct(sparkStats.sparked, sparkStats.total)})</li>
                                 <li>Non-Sparked: ${sparkStats.nonSparked} (${formatPct(sparkStats.nonSparked, sparkStats.total)})</li>
@@ -1023,17 +1025,17 @@
             resultsPanel.innerHTML = resultHTML;
 
             // Render Charts
-            renderDoughnutChart("rarityDistributionChart", ["5★ Limited", "5★ Standard", "4★ Limited", "4★ Standard", "3★"], [results["5★"].limited, results["5★"].standard, results["4★"].limited, results["4★"].standard, results["3★"]], ["#FFD700", "#BFB773", "#B366FF", "#9E84B7", "#3DA5A5"], "Total Item Distribution");
-            renderDoughnutChart("fiveStarDistributionChart", ["5★ Limited", "5★ Standard"], [results["5★"].limited, results["5★"].standard], ["#FFD700", "#BFB773"], "5★: Standard vs Limited");
-            renderDoughnutChart("fourStarDistributionChart", ["4★ Limited", "4★ Standard"], [results["4★"].limited, results["4★"].standard], ["#B366FF", "#9E84B7"], "4★: Standard vs Limited");
+            renderDoughnutChart("rarityDistributionChart", ["5★ Rate-Up", "5★ Non-Rate-Up", "4★ Rate-Up", "4★ Non-Rate-Up", "3★"], [results["5★"].RateUp, results["5★"].NonRateUp, results["4★"].RateUp, results["4★"].NonRateUp, results["3★"]], ["#FFD700", "#BFB773", "#B366FF", "#9E84B7", "#3DA5A5"], "Total Item Distribution");
+            renderDoughnutChart("fiveStarDistributionChart", ["5★ Rate-Up", "5★ Non-Rate-Up"], [results["5★"].RateUp, results["5★"].NonRateUp], ["#FFD700", "#BFB773"], "5★: Non-ate-Up vs Rate-Up");
+            renderDoughnutChart("fourStarDistributionChart", ["4★ Rate-Up", "4★ Non-Rate-Up"], [results["4★"].RateUp, results["4★"].NonRateUp], ["#B366FF", "#9E84B7"], "4★: Non-Rate-Up vs Rate-Up");
 
             renderHistogramChart(results["5★"].pulls, "5★", "fiveStarPullDistributionChart", "rgba(255, 215, 100, 0.6)", "5★ Pull Distribution", "Pull Number", "5★ Frequency");
-            renderHistogramChart(results["5★"].standardPulls, "5★", "fiveStarStandardPullDistanceChart", "rgba(191, 183, 115, 0.6)", "5★ Pulls Distance (Standard)", "Pulls Since Last Standard 5★", "Count");
-            renderHistogramChart(results["5★"].limitedPulls, "5★", "fiveStarLimitedPullDistanceChart", "rgba(255, 215, 0, 0.6)", "5★ Pulls Distance (Limited)", "Pulls Since Last Limited 5★", "Count");
+            renderHistogramChart(results["5★"].NonRateUpPulls, "5★", "fiveStarNonRateUpPullDistanceChart", "rgba(191, 183, 115, 0.6)", "5★ Pulls Distance (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 5★", "Count");
+            renderHistogramChart(results["5★"].RateUpPulls, "5★", "fiveStarRateUpPullDistanceChart", "rgba(255, 215, 0, 0.6)", "5★ Pulls Distance (Rate-Up)", "Pulls Since Last Rate-Up 5★", "Count");
 
             renderHistogramChart(results["4★"].pulls, "4★", "fourStarPullDistributionChart", "rgba(179, 102, 230, 0.6)", "4★ Pull Distribution", "Pull Number", "4★ Frequency");
-            renderHistogramChart(results["4★"].standardPulls, "4★", "fourStarStandardPullDistanceChart", "rgba(158, 132, 183, 0.6)", "4★ Pulls Distance (Standard)", "Pulls Since Last Standard 4★", "Count");
-            renderHistogramChart(results["4★"].limitedPulls, "4★", "fourStarLimitedPullDistanceChart", "rgba(179, 102, 255, 0.6)", "4★ Pulls Distance (Limited)", "Pulls Since Last Limited 4★", "Count");
+            renderHistogramChart(results["4★"].NonRateUpPulls, "4★", "fourStarNonRateUpPullDistanceChart", "rgba(158, 132, 183, 0.6)", "4★ Pulls Distance (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 4★", "Count");
+            renderHistogramChart(results["4★"].RateUpPulls, "4★", "fourStarRateUpPullDistanceChart", "rgba(179, 102, 255, 0.6)", "4★ Pulls Distance (Rate-Up)", "Pulls Since Last Rate-Up 4★", "Count");
 
 
             if (useHardPity) {
@@ -1052,7 +1054,7 @@
                     ["Sparked", "Non-Sparked"],
                     [sparkStats.sparked, sparkStats.nonSparked],
                     ["#FFA07A", "#20B2AA"],
-                    "Sparked vs Non-Sparked (5★ Limited)"
+                    "Sparked vs Non-Sparked (5★ Rate-Up)"
                 );
 
                 renderDoughnutChart(
@@ -1060,7 +1062,7 @@
                     ["Success Before Spark", "Failure (Needed Spark)"],
                     [sparkStats.successBeforeSpark, sparkStats.failureBeforeSpark],
                     ["#90EE90", "#FF6B6B"],
-                    "Success vs Failure Before Spark (Any 5★ Limited)"
+                    "Success vs Failure Before Spark (Any 5★ Rate-Up)"
                 );
             }
         }
@@ -1340,7 +1342,7 @@
             validateRates();  // Revalidate all rates
         }
 
-        function updateLimitedRates() {
+        function updateRateUpRates() {
             const fiveStarRate = parseFloat(document.getElementById('fiveStarBaseRate').value) || 0;
             const fourStarRate = parseFloat(document.getElementById('fourStarBaseRate').value) || 0;
 
@@ -1384,12 +1386,12 @@
             // Toggle visibility of the Hard Pity settings section
             hardPitySettings.style.display = hardPityEnabled ? "block" : "none";
             
-            // If Hard Pity is disabled, reset Guarantee Limited settings
+            // If Hard Pity is disabled, reset Guarantee RateUp settings
             if (!hardPityEnabled) {
                 document.getElementById("enableFiveStarGuaranteed").checked = false;
                 document.getElementById("enableFourStarGuaranteed").checked = false;
                 
-                // Hide the inputs and labels for Guarantee Limited settings
+                // Hide the inputs and labels for Guarantee RateUp settings
                 document.getElementById("fiveStarGuaranteedAfter").style.display = "none";
                 document.getElementById("fiveGuaranteedLabel").style.display = "none";
                 document.getElementById("fourStarGuaranteedAfter").style.display = "none";
