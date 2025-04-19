@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,16 +5,24 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="priestess_logo.png">
     <title>Gacha Simulator</title>
 </head>
 <body>
 
     <header>
-        <h2>
-            Customizable Gacha Simulator
-            <small class="header-subtext">(w/ Monte Carlo Simulation)</small>
-            <small class="header-subtext">v0.0.1</small>
-        </h2>       
+        <img src="nymph.png" alt="Logo" />
+        <div>
+            <h2>
+                Customizable Gacha Simulator
+                <small class="header-subtext">(w/ Monte Carlo Simulation)</small>
+                <small class="header-subtext">v0.0.1</small>
+            </h2>
+            <p>
+                <i> After using, please answer the survey form for my thesis!
+                <a href="https://forms.gle/xnt2UUgmYqDMzo7T8" target="_blank" rel="noopener">https://forms.gle/xnt2UUgmYqDMzo7T8</a> </i>
+            </p>
+        </div>
     </header>
 
     <main>
@@ -190,6 +197,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="rate-box">
+                    <div>
+                        <input type="checkbox" id="enableSparking" onchange="toggleSparkingSettings()">
+                        <label for="enableSparking">Enable Sparking System</label>
+                    </div>
+                
+                    <div id="sparkingSettings" style="display: none;">
+                        <div class="subsettings">
+                            <div>
+                                <span>5★ Pull Requirement:</span>
+                                <input type="number" id="fiveStarSparkRequirement" value="300" min="1"
+                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
+                                <span class="tight-percent">pulls</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>            
             
         
@@ -210,7 +234,7 @@
             
             <div>
                 <label for="simulationCount">Pulls:</label>
-                <input type="number" id="simulationCount" value="100000" min="1" step="1" oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this, 999999)"/>
+                <input type="number" id="simulationCount" value="500000" min="1" step="1" oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this, 999999)"/>
             </div>
         
         </div>
@@ -236,6 +260,9 @@
                     <li><strong>Soft Pity System:</strong> Increases chances of getting the 5★/4★ item that hasn't been pulled yet</li>
                     <li><strong>Soft Pity Threshold:</strong> Exact pull number when the rate starts increasing</li>
                     <li><strong>Soft Pity Increment:</strong> How much the rate increases each pull past the threshold</li>
+                    <br>
+                    <li><strong>Sparking System:</strong>  Enables free pick-up of 5★ Limited item after pulling a certain number of times (does not affect pity logic) </li>
+                    <li><strong>Pull Requirement:</strong> Number of pulls to "spark" or get an Item</li>
                     <br>
                     <li><strong>Cost per Pull:</strong> Conversion of IRL money to pulls (based on Highest Top-Up)</li>
                 </ul>
@@ -277,27 +304,44 @@
                 const fiveStarLimitedCount = parseInt(document.getElementById('fiveStarLimitedItems').value) || 1;
                 const fourStarLimitedCount = parseInt(document.getElementById('fourStarLimitedItems')?.value) || 1;
 
-                const generateItemLabels = (count) => Array.from({ length: count }, (_, i) => String.fromCharCode(65 + i)); // A-Z
+                const generateItemLabels = (count) =>
+                    Array.from({ length: count }, (_, i) => String.fromCharCode(65 + i)); // A-Z
 
                 const fiveStarLimitedLabels = generateItemLabels(Math.min(fiveStarLimitedCount, 26));
                 const fourStarLimitedLabels = generateItemLabels(Math.min(fourStarLimitedCount, 26));
 
                 let results = {
                     "5★": {
-                        total: 0, standard: 0, limited: 0,
-                        pulls: [], standardPulls: [], limitedPulls: [],
-                        pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
+                        total: 0,
+                        standard: 0,
+                        limited: 0,
+                        pulls: [],
+                        standardPulls: [],
+                        limitedPulls: [],
+                        pullNumbers: [],
+                        standardPullNumbers: [],
+                        limitedPullNumbers: [],
                         hardPityHits: { total: 0, standard: 0, limited: 0 },
-                        softPityHits: [], softPityHitCount: 0, softPityPullNumbers: [],
+                        softPityHits: [],
+                        softPityHitCount: 0,
+                        softPityPullNumbers: [],
                         limitedItems: {},
                         limitedSetStats: []
                     },
                     "4★": {
-                        total: 0, standard: 0, limited: 0,
-                        pulls: [], standardPulls: [], limitedPulls: [],
-                        pullNumbers: [], standardPullNumbers: [], limitedPullNumbers: [],
+                        total: 0,
+                        standard: 0,
+                        limited: 0,
+                        pulls: [],
+                        standardPulls: [],
+                        limitedPulls: [],
+                        pullNumbers: [],
+                        standardPullNumbers: [],
+                        limitedPullNumbers: [],
                         hardPityHits: { total: 0, standard: 0, limited: 0 },
-                        softPityHits: [], softPityHitCount: 0, softPityPullNumbers: [],
+                        softPityHits: [],
+                        softPityHitCount: 0,
+                        softPityPullNumbers: [],
                         limitedItems: {},
                         limitedSetStats: []
                     },
@@ -336,10 +380,30 @@
 
                 const softPity = useSoftPity ? getSoftPityRates() : null;
 
-                let pullCountSinceLast5 = 0, pullCountSinceLast4 = 0;
-                let pullsSinceLast5Limited = 0, pullsSinceLast5Standard = 0;
-                let pullsSinceLast4Limited = 0, pullsSinceLast4Standard = 0;
-                let standard5Streak = 0, standard4Streak = 0;
+                const sparkEnabled = document.getElementById("enableSparking").checked;
+                const sparkThreshold = parseInt(document.getElementById("fiveStarSparkRequirement")?.value) || 0;
+                let pullsSinceLastSpark = 0;
+                // Initialize spark stats with keys used later in updateSimulationResults:
+                let sparkStats = {
+                    sparked: 0,
+                    // nonSparked will be computed later
+                    preSparkSuccess: 0,
+                    preSparkFailure: 0,
+                    preSparkVariety: { "0": 0, "1": 0, "2+": 0 }
+                    // We'll add total and sparkAttempts later.
+                };
+                let sparkLimitedSet = new Set();
+
+                // We'll track real pulls for pity in a separate variable.
+                let pullCountSinceLast5 = 0;
+                let internalPullCountSinceLast5 = 0;
+                let pullCountSinceLast4 = 0;
+                let pullsSinceLast5Limited = 0,
+                    pullsSinceLast5Standard = 0;
+                let pullsSinceLast4Limited = 0,
+                    pullsSinceLast4Standard = 0;
+                let standard5Streak = 0,
+                    standard4Streak = 0;
 
                 let fiveStarSet = new Set();
                 let fourStarSet = new Set();
@@ -347,7 +411,12 @@
                 let pullSinceLast4SetComplete = 0;
 
                 for (let i = 0; i < pulls; i++) {
+                    if (sparkEnabled) {
+                        pullsSinceLastSpark++;
+                    }
+
                     pullCountSinceLast5++;
+                    internalPullCountSinceLast5++;
                     pullCountSinceLast4++;
                     pullsSinceLast5Limited++;
                     pullsSinceLast5Standard++;
@@ -356,33 +425,51 @@
                     pullSinceLast5SetComplete++;
                     pullSinceLast4SetComplete++;
 
-                    for (let label of fiveStarLimitedLabels) results["5★"].limitedItems[label].pullsSinceLast++;
-                    for (let label of fourStarLimitedLabels) results["4★"].limitedItems[label].pullsSinceLast++;
+                    for (let label of fiveStarLimitedLabels)
+                        results["5★"].limitedItems[label].pullsSinceLast++;
+                    for (let label of fourStarLimitedLabels)
+                        results["4★"].limitedItems[label].pullsSinceLast++;
 
                     let fiveStarRate = settings.rates["5★"];
                     let fourStarRate = settings.rates["4★"];
 
                     if (useSoftPity) {
-                        if (pullCountSinceLast5 >= softPity["5★"].threshold) {
-                            fiveStarRate = Math.min(100, fiveStarRate + (pullCountSinceLast5 - softPity["5★"].threshold + 1) * softPity["5★"].rateIncrement);
+                        if (internalPullCountSinceLast5 >= softPity["5★"].threshold) {
+                            fiveStarRate = Math.min(
+                                100,
+                                fiveStarRate +
+                                    (internalPullCountSinceLast5 - softPity["5★"].threshold + 1) *
+                                        softPity["5★"].rateIncrement
+                            );
                         }
                         if (pullCountSinceLast4 >= softPity["4★"].threshold) {
-                            fourStarRate = Math.min(100 - fiveStarRate, fourStarRate + (pullCountSinceLast4 - softPity["4★"].threshold + 1) * softPity["4★"].rateIncrement);
+                            fourStarRate = Math.min(
+                                100 - fiveStarRate,
+                                fourStarRate +
+                                    (pullCountSinceLast4 - softPity["4★"].threshold + 1) *
+                                        softPity["4★"].rateIncrement
+                            );
                         }
                     }
 
                     let roll = Math.random() * 100;
-                    let is5Star = false, is4Star = false;
-                    let hitHardPity5 = false, hitHardPity4 = false;
-                    let hitSoftPity5 = false, hitSoftPity4 = false;
+                    let is5Star = false,
+                        is4Star = false;
+                    let hitHardPity5 = false,
+                        hitHardPity4 = false;
+                    let hitSoftPity5 = false,
+                        hitSoftPity4 = false;
 
-                    if (useHardPity && pullCountSinceLast5 >= hardPity5Value) {
+                    if (useHardPity && internalPullCountSinceLast5 >= hardPity5Value) {
                         is5Star = true;
                         hitHardPity5 = true;
                     } else if (roll < fiveStarRate) {
                         is5Star = true;
-                        if (useSoftPity && pullCountSinceLast5 >= softPity["5★"].threshold &&
-                            (!useHardPity || pullCountSinceLast5 < hardPity5Value)) {
+                        if (
+                            useSoftPity &&
+                            internalPullCountSinceLast5 >= softPity["5★"].threshold &&
+                            (!useHardPity || internalPullCountSinceLast5 < hardPity5Value)
+                        ) {
                             hitSoftPity5 = true;
                         }
                     } else if (useHardPity && pullCountSinceLast4 >= hardPity4Value) {
@@ -390,8 +477,11 @@
                         hitHardPity4 = true;
                     } else if (roll < fiveStarRate + fourStarRate) {
                         is4Star = true;
-                        if (useSoftPity && pullCountSinceLast4 >= softPity["4★"].threshold &&
-                            (!useHardPity || pullCountSinceLast4 < hardPity4Value)) {
+                        if (
+                            useSoftPity &&
+                            pullCountSinceLast4 >= softPity["4★"].threshold &&
+                            (!useHardPity || pullCountSinceLast4 < hardPity4Value)
+                        ) {
                             hitSoftPity4 = true;
                         }
                     }
@@ -401,13 +491,14 @@
                         results["5★"].pulls.push(pullCountSinceLast5);
                         results["5★"].pullNumbers.push(i + 1);
                         if (hitSoftPity5) {
-                            results["5★"].softPityHits.push(pullCountSinceLast5);
+                            results["5★"].softPityHits.push(internalPullCountSinceLast5);
                             results["5★"].softPityPullNumbers.push(i + 1);
                             results["5★"].softPityHitCount++;
                         }
 
                         let isLimited = Math.random() * 100 < limitedRates["5★"];
-                        if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5) isLimited = true;
+                        if (useGuaranteedLimited5 && standard5Streak >= guaranteeAfterStandard5)
+                            isLimited = true;
 
                         if (isLimited) {
                             results["5★"].limited++;
@@ -415,13 +506,17 @@
                             results["5★"].limitedPullNumbers.push(i + 1);
                             if (hitHardPity5) results["5★"].hardPityHits.limited++;
 
-                            const item = fiveStarLimitedLabels[Math.floor(Math.random() * fiveStarLimitedLabels.length)];
+                            const item =
+                                fiveStarLimitedLabels[
+                                    Math.floor(Math.random() * fiveStarLimitedLabels.length)
+                                ];
                             let track = results["5★"].limitedItems[item];
                             track.count++;
                             track.pullsToNext.push(track.pullsSinceLast);
                             track.totalPulls += track.pullsSinceLast;
                             track.pullsSinceLast = 0;
 
+                            sparkLimitedSet.add(item);
                             fiveStarSet.add(item);
                             if (fiveStarSet.size === fiveStarLimitedLabels.length) {
                                 results["5★"].limitedSetStats.push(pullSinceLast5SetComplete);
@@ -442,7 +537,7 @@
 
                         if (hitHardPity5) results["5★"].hardPityHits.total++;
                         pullCountSinceLast5 = 0;
-
+                        internalPullCountSinceLast5 = 0;
                     } else if (is4Star) {
                         results["4★"].total++;
                         results["4★"].pulls.push(pullCountSinceLast4);
@@ -454,7 +549,8 @@
                         }
 
                         let isLimited = Math.random() * 100 < limitedRates["4★"];
-                        if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4) isLimited = true;
+                        if (useGuaranteedLimited4 && standard4Streak >= guaranteeAfterStandard4)
+                            isLimited = true;
 
                         if (isLimited) {
                             results["4★"].limited++;
@@ -462,7 +558,10 @@
                             results["4★"].limitedPullNumbers.push(i + 1);
                             if (hitHardPity4) results["4★"].hardPityHits.limited++;
 
-                            const item = fourStarLimitedLabels[Math.floor(Math.random() * fourStarLimitedLabels.length)];
+                            const item =
+                                fourStarLimitedLabels[
+                                    Math.floor(Math.random() * fourStarLimitedLabels.length)
+                                ];
                             let track = results["4★"].limitedItems[item];
                             track.count++;
                             track.pullsToNext.push(track.pullsSinceLast);
@@ -489,9 +588,46 @@
 
                         if (hitHardPity4) results["4★"].hardPityHits.total++;
                         pullCountSinceLast4 = 0;
-
                     } else {
                         results["3★"]++;
+                    }
+
+                    // Spark logic
+                    if (sparkEnabled && pullsSinceLastSpark >= sparkThreshold) {
+                        sparkStats.sparked++;
+
+                        const preSparkPulled = sparkLimitedSet.size;
+                        if (preSparkPulled === 0) {
+                            sparkStats.preSparkFailure++;
+                        } else {
+                            sparkStats.preSparkSuccess++;
+                        }
+
+                        if (preSparkPulled >= 2) {
+                            sparkStats.preSparkVariety["2+"]++;
+                        } else {
+                            sparkStats.preSparkVariety[preSparkPulled.toString()]++;
+                        }
+
+                        const perItemSpark = 1 / fiveStarLimitedLabels.length;
+                        for (let label of fiveStarLimitedLabels) {
+                            const track = results["5★"].limitedItems[label];
+                            track.count += perItemSpark;
+                            track.pullsToNext.push(pullsSinceLast5Limited);
+                            track.totalPulls += pullsSinceLast5Limited;
+                        }
+
+                        results["5★"].total += 1;
+                        results["5★"].limited += 1;
+                        results["5★"].limitedPulls.push(pullsSinceLast5Limited);
+                        results["5★"].limitedPullNumbers.push(i + 1);
+                        results["5★"].pulls.push(pullCountSinceLast5);
+                        results["5★"].pullNumbers.push(i + 1);
+
+                        pullCountSinceLast5 = 0;
+                        pullsSinceLast5Limited = 0;
+                        pullsSinceLastSpark = 0;
+                        sparkLimitedSet.clear();
                     }
                 }
 
@@ -511,18 +647,31 @@
                 }
                 results["4★"].pullsToFullSet = results["4★"].limitedSetStats;
 
-                updateSimulationResults(results, pulls);
+                sparkStats.nonSparked = results["5★"].total - sparkStats.sparked;
+                sparkStats.sparkAttempts = sparkStats.preSparkSuccess + sparkStats.preSparkFailure;
+                sparkStats.total = results["5★"].total;
+
+                // Alias for UI compatibility
+                sparkStats.successBeforeSpark = sparkStats.preSparkSuccess;
+                sparkStats.failureBeforeSpark = sparkStats.preSparkFailure;
+
+                updateSimulationResults(results, pulls, sparkStats);
             } catch (error) {
-                if (error instanceof RangeError && error.message.includes("Maximum call stack size exceeded")) {
-                    alert("Error: Simulation terminated due to exceeding call stack size. Try using fewer pulls.");
+                if (
+                    error instanceof RangeError &&
+                    error.message.includes("Maximum call stack size exceeded")
+                ) {
+                    alert(
+                        "Error: Simulation terminated due to exceeding call stack size. Try using fewer pulls."
+                    );
                 } else {
                     alert("An unexpected error occurred during the simulation: " + error.message);
                     console.error(error);
                 }
             }
         }
-     
-        function updateSimulationResults(results, pulls) {
+    
+        function updateSimulationResults(results, pulls, sparkStats) {
             const useHardPity = document.getElementById("enableHardPity").checked;
             const useSoftPity = document.getElementById("enableSoftPity").checked;
 
@@ -826,6 +975,48 @@
                 `;
             }
 
+            if (document.getElementById("enableSparking").checked) {
+                resultHTML += `
+                    <!-- Sparking System Results -->
+                    <h4>Sparking System</h4>
+                    <hr />
+                    <div class="stats-section">
+                        <div><canvas id="sparkedVsNonSparkedChart" class="donutchart-canvas"></canvas></div>
+                        <div><canvas id="sparkSuccessChart" class="donutchart-canvas"></canvas></div>
+                        <div class="stats-block">
+                            <p><strong>5★ Limited Items - Sparked vs Non-Sparked:</strong></p>
+                            <ul>
+                                <li>Sparked: ${sparkStats.sparked} (${formatPct(sparkStats.sparked, sparkStats.total)})</li>
+                                <li>Non-Sparked: ${sparkStats.nonSparked} (${formatPct(sparkStats.nonSparked, sparkStats.total)})</li>
+                            </ul><br>
+
+                            <p><strong>Success vs Failure Before Spark:</strong></p>
+                            <ul>
+                                <li>Success Before Spark: ${sparkStats.preSparkSuccess} (${formatPct(sparkStats.preSparkSuccess, sparkStats.sparkAttempts)})</li>
+                                <li>Failure Before Spark: ${sparkStats.preSparkFailure} (${formatPct(sparkStats.preSparkFailure, sparkStats.sparkAttempts)})</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultHTML += `
+                <h4>Survey Form</h4>
+                <hr />
+                <div class="stats-section">
+                    <div class="stats-block">
+                        <p>
+                            <i>
+                                Don't forget to answer the survey form! 
+                                <a href="https://forms.gle/xnt2UUgmYqDMzo7T8" target="_blank" rel="noopener">
+                                    https://forms.gle/xnt2UUgmYqDMzo7T8
+                                </a>
+                            </i>
+                        </p>
+                    </div>
+                </div>
+            `;
+
             resultHTML += `</div>`;
 
             document.getElementById("resultsPanel").innerHTML = resultHTML;
@@ -855,6 +1046,23 @@
 
                 renderHistogramChart(results["5★"].softPityHits, "5★", "fiveStarSoftPityDistributionChart", "rgba(230, 164, 0, 0.6)", "5★ Soft Pity Pull Distribution", "Soft Pity Pull Number", "Soft Pity Hits");
                 renderHistogramChart(results["4★"].softPityHits, "4★", "fourStarSoftPityDistributionChart", "rgba(142, 68, 173, 0.6)", "4★ Soft Pity Pull Distribution", "Soft Pity Pull Number", "Soft Pity Hits");            }
+            if (document.getElementById("enableSparking").checked) {
+                renderDoughnutChart(
+                    "sparkedVsNonSparkedChart",
+                    ["Sparked", "Non-Sparked"],
+                    [sparkStats.sparked, sparkStats.nonSparked],
+                    ["#FFA07A", "#20B2AA"],
+                    "Sparked vs Non-Sparked (5★ Limited)"
+                );
+
+                renderDoughnutChart(
+                    "sparkSuccessChart",
+                    ["Success Before Spark", "Failure (Needed Spark)"],
+                    [sparkStats.successBeforeSpark, sparkStats.failureBeforeSpark],
+                    ["#90EE90", "#FF6B6B"],
+                    "Success vs Failure Before Spark (Any 5★ Limited)"
+                );
+            }
         }
 
         function calculatePercentileRanges(pulls, percentiles = [50, 70, 80, 90, 95]) {
@@ -1170,15 +1378,41 @@
         }
 
         function toggleHardPitySettings() {
+            const hardPityEnabled = document.getElementById("enableHardPity").checked;
             const hardPitySettings = document.getElementById("hardPitySettings");
-            const isChecked = document.getElementById("enableHardPity").checked;
-            hardPitySettings.style.display = isChecked ? "block" : "none";
+            
+            // Toggle visibility of the Hard Pity settings section
+            hardPitySettings.style.display = hardPityEnabled ? "block" : "none";
+            
+            // If Hard Pity is disabled, reset Guarantee Limited settings
+            if (!hardPityEnabled) {
+                document.getElementById("enableFiveStarGuaranteed").checked = false;
+                document.getElementById("enableFourStarGuaranteed").checked = false;
+                
+                // Hide the inputs and labels for Guarantee Limited settings
+                document.getElementById("fiveStarGuaranteedAfter").style.display = "none";
+                document.getElementById("fiveGuaranteedLabel").style.display = "none";
+                document.getElementById("fourStarGuaranteedAfter").style.display = "none";
+                document.getElementById("fourGuaranteedLabel").style.display = "none";
+            }
+            // If Hard Pity is enabled, you could optionally set up behaviors for the Guarantee options
+            else {
+                // Uncomment and customize if you want to enable guarantee settings on Hard Pity enable
+                // document.getElementById("enableFiveStarGuaranteed").disabled = false;
+                // document.getElementById("enableFourStarGuaranteed").disabled = false;
+            }
         }
 
         function toggleSoftPitySettings() {
             const softPitySettings = document.getElementById("softPitySettings");
             const isChecked = document.getElementById("enableSoftPity").checked;
             softPitySettings.style.display = isChecked ? "block" : "none";
+        }
+        
+        function toggleSparkingSettings() {
+            const checkbox = document.getElementById("enableSparking");
+            const settings = document.getElementById("sparkingSettings");
+            settings.style.display = checkbox.checked ? "block" : "none";
         }
 
         function initializeForm() {
