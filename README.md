@@ -1,4 +1,4 @@
-# gacha-simulator
+# 🎰 gacha-simulator
 A basic customizable gacha simulator with Monte Carlo Simulation - simulate hundreds of thousands of pulls to analyze drop rates, probabilities, trends and luck in gacha banners in gacha games.
 
 Please answer the survey form for my thesis! https://forms.gle/xnt2UUgmYqDMzo7T8
