@@ -16,17 +16,33 @@ body {
     line-height: 1.6;
 }
 
-/* Header */
 header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
     background-color: #181e33;
     padding: 1rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.4);
     margin-bottom: 1rem;
     width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Keeps the spacing between logo and title */
 }
 
-/* Header text */
+
+header img {
+    height: 4em;
+    width: auto;
+    flex-shrink: 0;
+    max-width: 20%;
+}
+
+header div {
+    flex-grow: 1;
+}
+
 header h2 {
+    margin: 0;
     font-size: 1.75rem;
     font-weight: 600;
     color: #ffffff;
@@ -42,7 +58,46 @@ header h2 .header-subtext {
     color: #ffffff;
 }
 
-/* Main Layout */
+header p {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    header {
+        justify-content: center; /* Center the items on mobile */
+        text-align: left; /* Ensure text aligns to the left */
+    }
+
+    header img {
+        max-width: 30%; /* Adjust logo size */
+    }
+
+    header h2, header p {
+        text-align: left; /* Keep the title and paragraph aligned left */
+        margin-left: 1rem; /* Add some left margin to align properly */
+    }
+}
+
+
+header p {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    color: #ffffff;
+}
+
+a {
+    color: #91aaff;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #b8cdff;
+    text-decoration: none;
+}
+
 main {
     display: flex;
     flex-wrap: wrap;
@@ -53,7 +108,6 @@ main {
     width: 100%;
 }
 
-/* Settings Panel */
 #settingsPanel {
     flex: 1 1 100%;
     min-width: 0;
@@ -64,7 +118,6 @@ main {
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
-/* Headings inside panel */
 #settingsPanel h3 {
     font-size: 1.15rem;
     margin: 0.75rem 0 0.5rem;
@@ -87,10 +140,9 @@ main {
     margin-top: 1rem;
 }
 
-/* Individual rate box (Base or Limited) */
 .rate-box {
-    flex: 1 1 18rem; /* Responsive with a reasonable min width */
-    background-color: #1f2a44; /* Consistent with histogram/donut blocks */
+    flex: 1 1 18rem;
+    background-color: #1f2a44;
     padding: 0.75rem;
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
@@ -98,7 +150,6 @@ main {
     color: #ffffff;
 }
 
-/* Optional: inner spacing between lines inside the box */
 .rate-box > div {
     margin-bottom: 0.50rem;
 }
@@ -176,10 +227,7 @@ button:hover {
     box-shadow: 0 0 0.375rem #7a92ff88;
 }
 
-/* ================================ */
-/*            Results Panel         */
-/* ================================ */
-
+/* Results Panel */
 #resultsPanel {
     flex: 1 1 100%;
     min-width: 0;
@@ -195,7 +243,6 @@ button:hover {
     width: 100%;
 }
 
-/* Section headers */
 #resultsPanel h3 {
     font-size: 1.15rem;
     margin: 0.75rem 0 0.5rem;
@@ -204,7 +251,6 @@ button:hover {
     padding-bottom: 0.25rem;
 }
 
-/* Stats section layout */
 .stats-section {
     display: flex;
     flex-wrap: wrap;
@@ -214,7 +260,6 @@ button:hover {
     margin-top: 0.75rem;
 }
 
-/* Stats Block */
 .stats-block {
     flex: 1 1 18.75rem;
     font-size: 0.9rem;
@@ -227,16 +272,16 @@ button:hover {
 }
 
 .stats-block p strong {
-  font-size: 1.1em;
-  text-decoration: underline;
+    font-size: 1.1em;
+    text-decoration: underline;
 }
 
 .stats-block ul li {
-  font-size: 1em;
+    font-size: 1em;
 }
 
 .avg-highlight {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .full-width-wrapper {
@@ -259,18 +304,16 @@ button:hover {
     margin: 0 auto;
 }
 
-/* Remove bullets for lists inside stats blocks */
 .stats-block ul {
     list-style-type: none;
     padding-left: 0;
 }
 
-/* Donut chart background color */
 .donutchart-canvas {
     width: 100%;
     max-width: 18.75rem;
     aspect-ratio: 1;
-    background-color: #262f4a;  /* Same as stats-block background */
+    background-color: #262f4a;
     border-radius: 0.625rem;
     padding: 0.5rem;
     box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.5);
@@ -313,7 +356,6 @@ button:hover {
         max-height: 15.625rem;
     }
 
-    /* Keep Pulls Distance full-width on mobile */
     .pulls-distance-block {
         flex: 1 1 100%;
     }
@@ -321,12 +363,12 @@ button:hover {
 
 @media (min-width: 768px) {
     .half-width-wrapper {
-        width: 48%;  /* Adjust this width as needed */
-        margin-right: 2%; /* Optional: add gap between elements */
+        width: 48%;
+        margin-right: 2%;
     }
 
     .half-width-wrapper:nth-child(even) {
-        margin-right: 0; /* Remove margin for even elements */
+        margin-right: 0;
     }
 }
 
@@ -340,8 +382,7 @@ button:hover {
         height: 18.75rem;
     }
 
-    /* Pulls Distance becomes half-width on larger screens */
     .pulls-distance-block {
-        flex: 1 1 45%; /* Only half-width on big screens */
+        flex: 1 1 45%;
     }
 }
