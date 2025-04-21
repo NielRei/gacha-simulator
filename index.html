@@ -126,28 +126,30 @@
                     <div id="hardPitySettings" style="display: none;">
                         <div class="subsettings">
                             <div>
-                                <span>5★ Hard Pity Cap:</span>
+                                <input type="checkbox" id="enableFiveStarPityCap" onchange="toggleInput('fiveStarPity')">
+                                <label for="enableFiveStarPityCap">5★ Hard Pity Cap:</label>
                                 <input type="number" id="fiveStarPity" value="90" min="1"
-                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                <div class="guarantee-group" style="margin-top: 0.25rem;">
+                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
+                                <div class="guarantee-group">
                                     <input type="checkbox" id="enableFiveStarGuaranteed" onchange="toggleGuaranteedInput('five')">
-                                    <label for="enableFiveStarGuaranteed">Guarantee Rate-Up after</label>
-                                    <input type="number" id="fiveStarGuaranteedAfter" value="1" min="1" style="display: none;"
-                                           oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                    <span id="fiveGuaranteedLabel" style="display: none;">Non-Rate-Up pulls</span>
+                                    <label for="enableFiveStarGuaranteed">Guarantee 5★ Rate-Up after</label>
+                                    <input type="number" id="fiveStarGuaranteedAfter" value="1" min="1"
+                                           oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
+                                    <span id="fiveGuaranteedLabel" >Non-Rate-Up pulls</span>
                                 </div>
                             </div>
             
-                            <div style="margin-top: 0.5rem;">
-                                <span>4★ Hard Pity Cap:</span>
+                            <div>
+                                <input type="checkbox" id="enableFourStarPityCap" onchange="toggleInput('fourStarPity')">
+                                <label for="enableFourStarPityCap">4★ Hard Pity Cap:</label>
                                 <input type="number" id="fourStarPity" value="10" min="1"
-                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                <div class="guarantee-group" style="margin-top: 0.25rem;">
+                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
+                                <div class="guarantee-group">
                                     <input type="checkbox" id="enableFourStarGuaranteed" onchange="toggleGuaranteedInput('four')">
-                                    <label for="enableFourStarGuaranteed">Guarantee Rate-Up after</label>
-                                    <input type="number" id="fourStarGuaranteedAfter" value="1" min="1" style="display: none;"
-                                           oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                                    <span id="fourGuaranteedLabel" style="display: none;">NonRate-Up pulls</span>
+                                    <label for="enableFourStarGuaranteed">Guarantee 4★ Rate-Up after</label>
+                                    <input type="number" id="fourStarGuaranteedAfter" value="1" min="1" 
+                                           oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
+                                    <span id="fourGuaranteedLabel" >Non-Rate-Up pulls</span>
                                 </div>
                             </div>
                         </div>
@@ -155,54 +157,54 @@
                 </div>
             
                 <!-- Soft Pity Rate Box -->
-                <div class="rate-box">          
+                <div class="rate-box">
                     <div>
                         <input type="checkbox" id="enableSoftPity" onchange="toggleSoftPitySettings()">
                         <label for="enableSoftPity">Enable Soft Pity System</label>
                     </div>
-            
+                
                     <div id="softPitySettings" style="display: none;">
                         <div class="subsettings">
+                            <!-- 5★ Soft Pity Settings -->
                             <div>
-                                <span>5★ Soft Pity Threshold:</span>
+                                <input type="checkbox" id="enableFiveStarSoftThreshold" onchange="toggleSoftPityGroup('Five')">
+                                <label for="enableFiveStarSoftThreshold">5★ Soft Pity Threshold:</label>
                                 <input type="number" id="softPityFiveStarThreshold" value="51" min="1"
-                                       style="width: 6ch; margin-left: 0.5rem;"
-                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
+                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
                             </div>
-            
-                            <div style="margin-top: 0.5rem;">
-                                <span>4★ Soft Pity Threshold:</span>
-                                <input type="number" id="softPityFourStarThreshold" value="9" min="2"
-                                       style="width: 6ch; margin-left: 0.5rem;"
-                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)">
-                            </div>
-            
-                            <div style="margin-top: 0.5rem;">
-                                <span>5★ Soft Pity Increment:</span>
+                            <div style="margin-left: 1.5em;">
+                                <label for="softPityFiveStarRate">5★ Soft Pity Increment:</label>
                                 <input type="text" id="softPityFiveStarRate" value="2" min="0" step="0.1"
                                        oninput="validateDecimalInput('softPityFiveStarRate')"
-                                       onblur="formatDecimalInput('softPityFiveStarRate')"
-                                       style="width: 6ch; margin-left: 0.5rem;">
+                                       onblur="formatDecimalInput('softPityFiveStarRate')" disabled>
                                 <span class="tight-percent">% per pull</span>
                             </div>
-            
-                            <div style="margin-top: 0.5rem;">
-                                <span>4★ Soft Pity Increment:</span>
+                
+                            <!-- 4★ Soft Pity Settings -->
+                            <div>
+                                <input type="checkbox" id="enableFourStarSoftThreshold" onchange="toggleSoftPityGroup('Four')">
+                                <label for="enableFourStarSoftThreshold">4★ Soft Pity Threshold:</label>
+                                <input type="number" id="softPityFourStarThreshold" value="9" min="2"
+                                       oninput="sanitizeIntegerInput(this)" onblur="validateIntegerInput(this)" disabled>
+                            </div>
+                            <div style="margin-left: 1.5em;">
+                                <label for="softPityFourStarRate">4★ Soft Pity Increment:</label>
                                 <input type="text" id="softPityFourStarRate" value="42" min="0" step="0.1"
                                        oninput="validateDecimalInput('softPityFourStarRate')"
-                                       onblur="formatDecimalInput('softPityFourStarRate')"
-                                       style="width: 6ch; margin-left: 0.5rem;">
+                                       onblur="formatDecimalInput('softPityFourStarRate')" disabled>
                                 <span class="tight-percent">% per pull</span>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                            
+            
+                <!-- Sparking System -->
                 <div class="rate-box">
                     <div>
                         <input type="checkbox" id="enableSparking" onchange="toggleSparkingSettings()">
-                        <label for="enableSparking">Enable Sparking System</label>
+                        <label for="enableSparking">Enable Sparking System (5★ Rate-Up only)</label>
                     </div>
-                
+            
                     <div id="sparkingSettings" style="display: none;">
                         <div class="subsettings">
                             <div>
@@ -214,16 +216,22 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
             
-        
+            <script>
+                function toggleInput(id) {
+                    const input = document.getElementById(id);
+                    input.disabled = !input.disabled;
+                }
+            </script>                
+            
             <h3>
                 Banner Pull Cost
             </h3>
 
             <div>
                 <span>Cost per Pull:</span>
-                <input type="text" id="costPerPull" value="0.555" min="0" step="0.01" oninput="validateDecimalInput('costPerPull')">
+                <input type="text" id="costPerPull" value="1.80" min="0" step="0.01" oninput="validateDecimalInput('costPerPull')">
                 <span class="tight-percent">$</span>
             </div>
                 
@@ -261,12 +269,12 @@
                     <li><strong>Soft Pity Threshold:</strong> Exact pull number when the rate starts increasing</li>
                     <li><strong>Soft Pity Increment:</strong> How much the rate increases each pull past the threshold</li>
                     <br>
-                    <li><strong>Sparking System:</strong>  Enables free pick-up of 5★ Rate-Up item after pulling a certain number of times (does not affect pity logic) </li>
-                    <li><strong>Pull Requirement:</strong> Number of pulls to "spark" or get an Item</li>
+                    <li><strong>Sparking System:</strong> Enables free pick-up of item at a certain pull amount (does not affect pity logic) [5★ Rate-Up only for now] </li>
+                    <li><strong>Pull Requirement:</strong> Number of pulls to "spark" or get an item [5★ Rate-Up only for now]</li>
                     <br>
                     <li><strong>Cost per Pull:</strong> Conversion of IRL money to pulls (based on Highest Top-Up)</li>
                     <br>
-                    <li><strong>Other Notes: </strong> 3★ Base Rate, 5★/4★ Non-Rate-Up Items are disabled/uneditable.</li>
+                    <li><strong>Other Notes: </strong> 3★ Base Rate, 5★/4★ Non-Rate-Up Items are disabled/uneditable (for now).</li>
                 </ul>
             </section>
         
@@ -371,10 +379,15 @@
                     "4★": parseFloat(document.getElementById('fourStarRateUpDistributionRate')?.value) || 0
                 };
 
-                const useHardPity = document.getElementById("enableHardPity").checked;
+                const useHardPitySystem = document.getElementById("enableHardPity").checked;
+
+                const useHardPity5 = useHardPitySystem && document.getElementById("enableFiveStarPityCap").checked;
+                const useHardPity4 = useHardPitySystem && document.getElementById("enableFourStarPityCap").checked;
+
+                const hardPity5Value = useHardPity5 ? parseInt(document.getElementById("fiveStarPity").value) : Infinity;
+                const hardPity4Value = useHardPity4 ? parseInt(document.getElementById("fourStarPity").value) : Infinity;
+
                 const useSoftPity = document.getElementById("enableSoftPity").checked;
-                const hardPity5Value = parseInt(document.getElementById("fiveStarPity").value) || 90;
-                const hardPity4Value = parseInt(document.getElementById("fourStarPity").value) || 10;
                 const useGuaranteedRateUp5 = document.getElementById("enableFiveStarGuaranteed").checked;
                 const guaranteeAfterNonRateUp5 = parseInt(document.getElementById("fiveStarGuaranteedAfter").value) || 1;
                 const useGuaranteedRateUp4 = document.getElementById("enableFourStarGuaranteed")?.checked;
@@ -389,9 +402,11 @@
                 let sparkStats = {
                     sparked: 0,
                     // nonSparked will be computed later
-                    preSparkSuccess: 0,
-                    preSparkFailure: 0,
-                    preSparkVariety: { "0": 0, "1": 0, "2+": 0 }
+                    preSparkSuccess: 0,          // Count of sparks where at least one unique rate-up was pulled
+                    preSparkFailure: 0,          // Count of sparks with zero unique rate-ups pulled
+                    preSparkVariety: {},         // Will track distribution of how many uniques were pulled
+                    preSparkUniqueCounts: [],    // Array recording how many uniques were pulled each spark
+                    preSparkAverage: 0,          // Will be computed later
                     // We'll add total and sparkAttempts later.
                 };
                 let sparkRateUpSet = new Set();
@@ -436,21 +451,21 @@
                     let fourStarRate = settings.rates["4★"];
 
                     if (useSoftPity) {
-                        if (internalPullCountSinceLast5 >= softPity["5★"].threshold) {
-                            fiveStarRate = Math.min(
-                                100,
-                                fiveStarRate +
-                                    (internalPullCountSinceLast5 - softPity["5★"].threshold + 1) *
-                                        softPity["5★"].rateIncrement
-                            );
+                        if (document.getElementById("enableFiveStarSoftThreshold").checked) {
+                            if (internalPullCountSinceLast5 >= softPity["5★"].threshold) {
+                                fiveStarRate = Math.min(
+                                    100,
+                                    fiveStarRate + (internalPullCountSinceLast5 - softPity["5★"].threshold + 1) * softPity["5★"].rateIncrement
+                                );
+                            }
                         }
-                        if (pullCountSinceLast4 >= softPity["4★"].threshold) {
-                            fourStarRate = Math.min(
-                                100 - fiveStarRate,
-                                fourStarRate +
-                                    (pullCountSinceLast4 - softPity["4★"].threshold + 1) *
-                                        softPity["4★"].rateIncrement
-                            );
+                        if (document.getElementById("enableFourStarSoftThreshold").checked) {
+                            if (pullCountSinceLast4 >= softPity["4★"].threshold) {
+                                fourStarRate = Math.min(
+                                    100 - fiveStarRate,
+                                    fourStarRate + (pullCountSinceLast4 - softPity["4★"].threshold + 1) * softPity["4★"].rateIncrement
+                                );
+                            }
                         }
                     }
 
@@ -462,7 +477,7 @@
                     let hitSoftPity5 = false,
                         hitSoftPity4 = false;
 
-                    if (useHardPity && internalPullCountSinceLast5 >= hardPity5Value) {
+                    if (useHardPity5 && internalPullCountSinceLast5 >= hardPity5Value) {
                         is5Star = true;
                         hitHardPity5 = true;
                     } else if (roll < fiveStarRate) {
@@ -470,11 +485,11 @@
                         if (
                             useSoftPity &&
                             internalPullCountSinceLast5 >= softPity["5★"].threshold &&
-                            (!useHardPity || internalPullCountSinceLast5 < hardPity5Value)
+                            (!useHardPity5 || internalPullCountSinceLast5 < hardPity5Value)
                         ) {
                             hitSoftPity5 = true;
                         }
-                    } else if (useHardPity && pullCountSinceLast4 >= hardPity4Value) {
+                    } else if (useHardPity4 && pullCountSinceLast4 >= hardPity4Value) {
                         is4Star = true;
                         hitHardPity4 = true;
                     } else if (roll < fiveStarRate + fourStarRate) {
@@ -482,7 +497,7 @@
                         if (
                             useSoftPity &&
                             pullCountSinceLast4 >= softPity["4★"].threshold &&
-                            (!useHardPity || pullCountSinceLast4 < hardPity4Value)
+                            (!useHardPity4 || pullCountSinceLast4 < hardPity4Value)
                         ) {
                             hitSoftPity4 = true;
                         }
@@ -593,44 +608,82 @@
                     } else {
                         results["3★"]++;
                     }
+                    
+                    if (fiveStarSet.size === fiveStarRateUpLabels.length) {
+                        results["5★"].RateUpSetStats.push(pullSinceLast5SetComplete);
+                        pullSinceLast5SetComplete = 0;
+                        fiveStarSet.clear();
+                    }
 
-                    // Spark logic
                     if (sparkEnabled && pullsSinceLastSpark >= sparkThreshold) {
                         sparkStats.sparked++;
 
-                        const preSparkPulled = sparkRateUpSet.size;
-                        if (preSparkPulled === 0) {
-                            sparkStats.preSparkFailure++;
-                        } else {
-                            sparkStats.preSparkSuccess++;
-                        }
-
-                        if (preSparkPulled >= 2) {
-                            sparkStats.preSparkVariety["2+"]++;
-                        } else {
-                            sparkStats.preSparkVariety[preSparkPulled.toString()]++;
-                        }
-
-                        const perItemSpark = 1 / fiveStarRateUpLabels.length;
-                        for (let label of fiveStarRateUpLabels) {
-                            const track = results["5★"].RateUpItems[label];
-                            track.count += perItemSpark;
-                            track.pullsToNext.push(pullsSinceLast5RateUp);
-                            track.totalPulls += pullsSinceLast5RateUp;
-                        }
-
+                        // Update global 5★ stats
                         results["5★"].total += 1;
                         results["5★"].RateUp += 1;
-                        results["5★"].RateUpPulls.push(pullsSinceLast5RateUp);
+                        results["5★"].RateUpPulls.push(Math.max(1, pullsSinceLast5RateUp));
                         results["5★"].RateUpPullNumbers.push(i + 1);
-                        results["5★"].pulls.push(pullCountSinceLast5);
+                        results["5★"].pulls.push(Math.max(1, pullCountSinceLast5));
                         results["5★"].pullNumbers.push(i + 1);
 
+                        // Track pre-spark state - NEW TRACKING LOGIC
+                        const preSparkPulled = new Set([...sparkRateUpSet].filter(x => fiveStarRateUpLabels.includes(x))).size;
+                        
+                        // Update pre-spark statistics
+                        if (preSparkPulled > 0) {
+                            sparkStats.preSparkSuccess++;
+                        } else {
+                            sparkStats.preSparkFailure++;
+                        }
+                        sparkStats.preSparkUniqueCounts.push(preSparkPulled);
+                        if (!sparkStats.preSparkVariety[preSparkPulled]) {
+                            sparkStats.preSparkVariety[preSparkPulled] = 0;
+                        }
+                        sparkStats.preSparkVariety[preSparkPulled]++;
+                        
+                        // Also store in results for per-session analysis
+                        if (!results["5★"].preSparkUniquePulls) {
+                            results["5★"].preSparkUniquePulls = [];
+                        }
+                        results["5★"].preSparkUniquePulls.push(preSparkPulled);
+                        
+                        // Select which item to spark
+                        let sparkLabel;
+                        const missingItems = fiveStarRateUpLabels.filter(label => !fiveStarSet.has(label));
+                        
+                        if (missingItems.length > 0) {
+                            sparkLabel = missingItems[Math.floor(Math.random() * missingItems.length)];
+                        } else {
+                            sparkLabel = fiveStarRateUpLabels[Math.floor(Math.random() * fiveStarRateUpLabels.length)];
+                        }
+
+                        // Update the item tracking
+                        const track = results["5★"].RateUpItems[sparkLabel];
+                        const actualDistance = track.pullsSinceLast || sparkThreshold;
+                        track.count++;
+                        track.pullsToNext.push(Math.max(1, actualDistance));
+                        track.totalPulls += actualDistance;
+                        track.pullsSinceLast = 0;
+                        track.sparked = (track.sparked || 0) + 1;
+
+                        // Update set completion tracking
+                        const wasSetComplete = fiveStarSet.size === fiveStarRateUpLabels.length;
+                        fiveStarSet.add(sparkLabel);
+                        
+                        if (!wasSetComplete && fiveStarSet.size === fiveStarRateUpLabels.length) {
+                            results["5★"].RateUpSetStats.push(pullSinceLast5SetComplete);
+                            pullSinceLast5SetComplete = 0;
+                            fiveStarSet.clear();
+                        }
+
+                        // Reset counters AND the spark tracking set
+                        pullsSinceLastSpark = 0;
                         pullCountSinceLast5 = 0;
                         pullsSinceLast5RateUp = 0;
-                        pullsSinceLastSpark = 0;
-                        sparkRateUpSet.clear();
+                        internalPullCountSinceLast5 = 0;
+                        sparkRateUpSet.clear(); // NEW: Reset for next spark session
                     }
+
                 }
 
                 results["5★"].RateUpItemCounts = {};
@@ -641,6 +694,11 @@
                 }
                 results["5★"].pullsToFullSet = results["5★"].RateUpSetStats;
 
+                // NEW: Add pre-spark unique counts data
+                results["5★"].preSparkUniquePulls = sparkStats.preSparkUniqueCounts;
+                results["5★"].preSparkUniqueVariety = sparkStats.preSparkVariety;
+                results["5★"].preSparkUniqueAverage = sparkStats.preSparkUniqueCounts.reduce((a, b) => a + b, 0) / sparkStats.sparked || 0;
+
                 results["4★"].RateUpItemCounts = {};
                 results["4★"].pullsToNext = {};
                 for (const [label, data] of Object.entries(results["4★"].RateUpItems)) {
@@ -649,13 +707,30 @@
                 }
                 results["4★"].pullsToFullSet = results["4★"].RateUpSetStats;
 
+                // Update spark statistics
                 sparkStats.nonSparked = results["5★"].total - sparkStats.sparked;
                 sparkStats.sparkAttempts = sparkStats.preSparkSuccess + sparkStats.preSparkFailure;
                 sparkStats.total = results["5★"].total;
 
+                // Calculate average unique rate-ups before spark
+                if (sparkStats.sparked > 0) {
+                    sparkStats.preSparkAverage = sparkStats.preSparkUniqueCounts.reduce((a, b) => a + b, 0) / sparkStats.sparked;
+                } else {
+                    sparkStats.preSparkAverage = 0;
+                }
+
                 // Alias for UI compatibility
                 sparkStats.successBeforeSpark = sparkStats.preSparkSuccess;
                 sparkStats.failureBeforeSpark = sparkStats.preSparkFailure;
+
+                // NEW: Add variety distribution summary
+                sparkStats.preSparkVarietySummary = {};
+                for (const [count, occurrences] of Object.entries(sparkStats.preSparkVariety)) {
+                    sparkStats.preSparkVarietySummary[count] = {
+                        count: occurrences,
+                        percentage: (occurrences / sparkStats.sparked) * 100
+                    };
+                }
 
                 updateSimulationResults(results, pulls, sparkStats);
             } catch (error) {
@@ -675,7 +750,12 @@
     
         function updateSimulationResults(results, pulls, sparkStats) {
             const useHardPity = document.getElementById("enableHardPity").checked;
+            const hardPityCap5Enabled = document.getElementById("enableFiveStarPityCap").checked;
+            const hardPityCap4Enabled = document.getElementById("enableFourStarPityCap").checked;
+
             const useSoftPity = document.getElementById("enableSoftPity").checked;
+            const softPityThreshold5Enabled = document.getElementById("enableFiveStarSoftThreshold").checked;
+            const softPityThreshold4Enabled = document.getElementById("enableFourStarSoftThreshold").checked;
 
             // Helper functions
             const formatDecimal = (num, decimals) => num.toFixed(decimals);
@@ -696,6 +776,11 @@
 
             const setStats5 = calculateStats(results["5★"].pullsToFullSet);
 
+            // NEW: Calculate pre-spark unique items statistics
+            const preSparkUniqueStats = calculateStats(results["5★"].preSparkUniquePulls || []);
+            const preSparkVariety = results["5★"].preSparkUniqueVariety || {};
+            const preSparkAverage = results["5★"].preSparkUniqueAverage || 0;
+
             const allNextCopyPulls = Object.values(results["5★"].pullsToNext).flat();
             const allNextCopyStats = calculateStats(allNextCopyPulls);
             const allNextCopyPulls4 = Object.values(results["4★"].pullsToNext).flat();
@@ -711,6 +796,17 @@
 
             const costPerPull = parseFloat(document.getElementById("costPerPull").value) || 0;
             const formatCost = (pulls) => `$${(pulls * costPerPull).toFixed(2)}`;
+
+            // NEW: Format pre-spark variety distribution for display
+            const formatPreSparkVariety = () => {
+                if (!preSparkVariety || Object.keys(preSparkVariety).length === 0) {
+                    return "N/A";
+                }
+                return Object.entries(preSparkVariety)
+                    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+                    .map(([count, freq]) => `${count}: ${freq} (${formatPct(freq, sparkStats.sparked)})`)
+                    .join(", ");
+            };
             
             let resultHTML = `
                 <h3>Simulation Results</h3>
@@ -730,12 +826,12 @@
                             <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
                         </ul><br>
 
-                        <p><strong>Non-Rate-Up / Rate-Up Rarity Distribution:</strong></p>
+                        <p><strong> Rate-Up Rarity / Non-Rate-Up Distribution:</strong></p>
                         <ul>
                             <li>5★ Rate-Up: ${results["5★"].RateUp} (${formatPct(results["5★"].RateUp, pulls)})</li>
                             <li>5★ Non-Rate-Up: ${results["5★"].NonRateUp} (${formatPct(results["5★"].NonRateUp, pulls)})</li>
                             <li>4★ Rate-Up: ${results["4★"].RateUp} (${formatPct(results["4★"].RateUp, pulls)})</li>
-                            <li>4★ NonRate-Up: ${results["4★"].NonRateUp} (${formatPct(results["4★"].NonRateUp, pulls)})</li>
+                            <li>4★ Non-Rate-Up: ${results["4★"].NonRateUp} (${formatPct(results["4★"].NonRateUp, pulls)})</li>
                             <li>3★: ${results["3★"]} (${formatPct(results["3★"], pulls)})</li>
                         </ul>
                     </div>
@@ -802,10 +898,19 @@
                                 <p><strong>Pulls to Get One Specific Rate-Up 5★ Item (Avg / Min / Max):</strong></p>
                                 <ul>
                                     ${(() => {
+                                        const itemStats = results["5★"].pullsToNext;
+                                        return Object.entries(itemStats).map(([item, pulls]) => {
+                                            const stat = calculateStats(pulls);
+                                            return `Item ${item}: <span class="avg-highlight stat-num">Avg (${stat.avg})</span>, Min (${stat.min}), Max (${stat.max})`;
+                                        }).join("<br>");
+                                    })()}
+                                </ul>
+                                <ul>
+                                    ${(() => {
                                         const allRateUpItemPulls = Object.values(results["5★"].pullsToNext).flat();
                                         const stat = calculateStats(allRateUpItemPulls);
                                         return `
-                                            <li>Pulls: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
+                                            <br><li>Overall: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
                                             Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
                                         `;
                                     })()}
@@ -881,14 +986,23 @@
 
                                 <p><strong>Pulls to Get One Specific Rate-Up 4★ Item (Avg / Min / Max):</strong></p>
                                 <ul>
-                                    ${(() => {
-                                        const allRateUpItemPulls = Object.values(results["4★"].pullsToNext).flat();
-                                        const stat = calculateStats(allRateUpItemPulls);
-                                        return `
-                                            <li>Pulls: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
-                                            Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
-                                        `;
-                                    })()}
+                                        ${(() => {
+                                            const itemStats = results["4★"].pullsToNext;
+                                            return Object.entries(itemStats).map(([item, pulls]) => {
+                                                const stat = calculateStats(pulls);
+                                                return `Item ${item}: <span class="avg-highlight stat-num">Avg (${stat.avg})</span>, Min (${stat.min}), Max (${stat.max})`;
+                                            }).join("<br>");
+                                        })()} 
+                                </ul>
+                                <ul>
+                                        ${(() => {
+                                            const allRateUpItemPulls = Object.values(results["4★"].pullsToNext).flat();
+                                            const stat = calculateStats(allRateUpItemPulls);
+                                            return `
+                                                <br><li>Overall: <span class="avg-highlight stat-num">Avg (${stat.avg}</span>), Min (<span class="stat-num">${stat.min}</span>), Max (<span class="stat-num">${stat.max}</span>)<br>
+                                                Cost: <span class="avg-highlight stat-cost">Avg (${formatCost(stat.avg)}</span>), Min (<span class="stat-cost">${formatCost(stat.min)}</span>), Max (<span class="stat-cost">${formatCost(stat.max)}</span>)</li>
+                                            `;
+                                        })()}
                                 </ul><br>
 
                                 <p><strong>Pulls to Get One Copy of Each Rate-Up 4★ Item (Avg / Min / Max):</strong></p>
@@ -905,7 +1019,7 @@
                 </div>
             `;
 
-            if (useHardPity) {
+            if (useHardPity && (hardPityCap5Enabled || hardPityCap4Enabled)) {
                 const nonHard5 = results["5★"].total - hard5.total;
                 const nonHard4 = results["4★"].total - hard4.total;
 
@@ -932,7 +1046,7 @@
                 `;
             }
 
-            if (useSoftPity) {
+            if (useSoftPity && (softPityThreshold5Enabled || softPityThreshold4Enabled)) {
                 const nonSoft5 = results["5★"].total - results["5★"].softPityHitCount;
                 const nonSoft4 = results["4★"].total - results["4★"].softPityHitCount;
 
@@ -986,19 +1100,38 @@
                         <div><canvas id="sparkedVsNonSparkedChart" class="donutchart-canvas"></canvas></div>
                         <div><canvas id="sparkSuccessChart" class="donutchart-canvas"></canvas></div>
                         <div class="stats-block">
-                            <p><strong>5★ Rate-Up Items - Sparked vs Non-Sparked:</strong></p>
+                            <p><strong>Sparked vs Non-Sparked (5★ Rate-Up):</strong></p>
                             <ul>
                                 <li>Sparked: ${sparkStats.sparked} (${formatPct(sparkStats.sparked, sparkStats.total)})</li>
                                 <li>Non-Sparked: ${sparkStats.nonSparked} (${formatPct(sparkStats.nonSparked, sparkStats.total)})</li>
                             </ul><br>
 
-                            <p><strong>Success vs Failure Before Spark:</strong></p>
+                            <p><strong>Success vs Failure Before Spark (Any 5★ Rate-Up):</strong></p>
                             <ul>
                                 <li>Success Before Spark: ${sparkStats.preSparkSuccess} (${formatPct(sparkStats.preSparkSuccess, sparkStats.sparkAttempts)})</li>
                                 <li>Failure Before Spark: ${sparkStats.preSparkFailure} (${formatPct(sparkStats.preSparkFailure, sparkStats.sparkAttempts)})</li>
+                            </ul><br>
+                        </div>
+                        <div class="full-width-wrapper"><canvas id="preSparkUniqueDistributionChart" class="histogram-canvas"></canvas></div>
+                        <div><canvas id="preSparkUniqueDonutChart" class="donutchart-canvas"></canvas></div>
+                        <div class="stats-block">
+                            <p><strong>Average Unique Rate-Up Items Before Spark (5★ Rate-Up):</strong></p>
+                            <ul>
+                                <li><span class="avg-highlight">Average: ${formatDecimal(sparkStats.preSparkAverage, 2)}</span></li>
+                            </ul><br>
+                            
+                            <p><strong>Unique Rate-Up Items Before Spark Distribution (5★ Rate-Up):</strong></p>
+                            <ul>
+                                ${Object.entries(sparkStats.preSparkVariety)
+                                .sort((a,b) => a[0]-b[0])
+                                .map(([count, freq]) => 
+                                    `<li>${count} Unique Items${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
+                                ).join('')}
                             </ul>
                         </div>
                     </div>
+                        
+
                 `;
             }
 
@@ -1026,28 +1159,29 @@
 
             // Render Charts
             renderDoughnutChart("rarityDistributionChart", ["5★ Rate-Up", "5★ Non-Rate-Up", "4★ Rate-Up", "4★ Non-Rate-Up", "3★"], [results["5★"].RateUp, results["5★"].NonRateUp, results["4★"].RateUp, results["4★"].NonRateUp, results["3★"]], ["#FFD700", "#BFB773", "#B366FF", "#9E84B7", "#3DA5A5"], "Total Item Distribution");
-            renderDoughnutChart("fiveStarDistributionChart", ["5★ Rate-Up", "5★ Non-Rate-Up"], [results["5★"].RateUp, results["5★"].NonRateUp], ["#FFD700", "#BFB773"], "5★: Non-ate-Up vs Rate-Up");
+            renderDoughnutChart("fiveStarDistributionChart", ["5★ Rate-Up", "5★ Non-Rate-Up"], [results["5★"].RateUp, results["5★"].NonRateUp], ["#FFD700", "#BFB773"], "5★: Non-Rate-Up vs Rate-Up");
             renderDoughnutChart("fourStarDistributionChart", ["4★ Rate-Up", "4★ Non-Rate-Up"], [results["4★"].RateUp, results["4★"].NonRateUp], ["#B366FF", "#9E84B7"], "4★: Non-Rate-Up vs Rate-Up");
 
-            renderHistogramChart(results["5★"].pulls, "5★", "fiveStarPullDistributionChart", "rgba(255, 215, 100, 0.6)", "5★ Pull Distribution", "Pull Number", "5★ Frequency");
-            renderHistogramChart(results["5★"].NonRateUpPulls, "5★", "fiveStarNonRateUpPullDistanceChart", "rgba(191, 183, 115, 0.6)", "5★ Pulls Distance (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 5★", "Count");
-            renderHistogramChart(results["5★"].RateUpPulls, "5★", "fiveStarRateUpPullDistanceChart", "rgba(255, 215, 0, 0.6)", "5★ Pulls Distance (Rate-Up)", "Pulls Since Last Rate-Up 5★", "Count");
+            renderHistogramChart(results["5★"].pulls, "5★", "fiveStarPullDistributionChart", "rgba(255, 215, 100, 0.6)", "5★ Pull Interval Distribution (Any)", "Pulls Since Last 5★", "Frequency");
+            renderHistogramChart(results["5★"].NonRateUpPulls, "5★", "fiveStarNonRateUpPullDistanceChart", "rgba(191, 183, 115, 0.6)", "5★ Pull Interval Distribution (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 5★", "Frequency");
+            renderHistogramChart(results["5★"].RateUpPulls, "5★", "fiveStarRateUpPullDistanceChart", "rgba(255, 215, 0, 0.6)", "5★ Pull Interval Distribution (Rate-Up)", "Pulls Since Last Rate-Up 5★", "Frequency");
 
-            renderHistogramChart(results["4★"].pulls, "4★", "fourStarPullDistributionChart", "rgba(179, 102, 230, 0.6)", "4★ Pull Distribution", "Pull Number", "4★ Frequency");
-            renderHistogramChart(results["4★"].NonRateUpPulls, "4★", "fourStarNonRateUpPullDistanceChart", "rgba(158, 132, 183, 0.6)", "4★ Pulls Distance (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 4★", "Count");
-            renderHistogramChart(results["4★"].RateUpPulls, "4★", "fourStarRateUpPullDistanceChart", "rgba(179, 102, 255, 0.6)", "4★ Pulls Distance (Rate-Up)", "Pulls Since Last Rate-Up 4★", "Count");
+            renderHistogramChart(results["4★"].pulls, "4★", "fourStarPullDistributionChart", "rgba(179, 102, 230, 0.6)", "4★ Pull Interval Distribution (Any)", "Pulls Since Last 4★", "Frequency");
+            renderHistogramChart(results["4★"].NonRateUpPulls, "4★", "fourStarNonRateUpPullDistanceChart", "rgba(158, 132, 183, 0.6)", "4★ Pull Interval Distribution (Non-Rate-Up)", "Pulls Since Last Non-Rate-Up 4★", "Frequency");
+            renderHistogramChart(results["4★"].RateUpPulls, "4★", "fourStarRateUpPullDistanceChart", "rgba(179, 102, 255, 0.6)", "4★ Pull Interval Distribution (Rate-Up)", "Pulls Since Last Rate-Up 4★", "Frequency");
 
 
-            if (useHardPity) {
+            if (useHardPity && (hardPityCap5Enabled || hardPityCap4Enabled)) {
                 renderDoughnutChart("fiveStarHardPityChart", ["Hard Pity", "Non-Hard Pity"], [hard5.total, results["5★"].total - hard5.total], ["#E6A400", "#FFDD66"], "5★ Hard vs Non-Hard Pity");
                 renderDoughnutChart("fourStarHardPityChart", ["Hard Pity", "Non-Hard Pity"], [hard4.total, results["4★"].total - hard4.total], ["#8E44AD", "#C39BD3"], "4★ Hard vs Non-Hard Pity");
             }
-            if (useSoftPity) {
+            if (useSoftPity && (softPityThreshold5Enabled || softPityThreshold4Enabled)) {
                 renderDoughnutChart("fiveStarSoftPityChart", ["Soft Pity", "Non-Soft Pity"], [results["5★"].softPityHitCount, results["5★"].total - results["5★"].softPityHitCount], ["#E6A400", "#FFDD66"], "5★ Soft vs Non-Soft Pity");
                 renderDoughnutChart("fourStarSoftPityChart", ["Soft Pity", "Non-Soft Pity"], [results["4★"].softPityHitCount, results["4★"].total - results["4★"].softPityHitCount], ["#8E44AD", "#C39BD3"], "4★ Soft vs Non-Soft Pity");
 
                 renderHistogramChart(results["5★"].softPityHits, "5★", "fiveStarSoftPityDistributionChart", "rgba(230, 164, 0, 0.6)", "5★ Soft Pity Pull Distribution", "Soft Pity Pull Number", "Soft Pity Hits");
                 renderHistogramChart(results["4★"].softPityHits, "4★", "fourStarSoftPityDistributionChart", "rgba(142, 68, 173, 0.6)", "4★ Soft Pity Pull Distribution", "Soft Pity Pull Number", "Soft Pity Hits");            }
+            
             if (document.getElementById("enableSparking").checked) {
                 renderDoughnutChart(
                     "sparkedVsNonSparkedChart",
@@ -1059,12 +1193,123 @@
 
                 renderDoughnutChart(
                     "sparkSuccessChart",
-                    ["Success Before Spark", "Failure (Needed Spark)"],
+                    ["Success (Got Rate-Up Item)", "Failure (Needed Spark)"],
                     [sparkStats.successBeforeSpark, sparkStats.failureBeforeSpark],
                     ["#90EE90", "#FF6B6B"],
-                    "Success vs Failure Before Spark (Any 5★ Rate-Up)"
+                    "Success vs Failure before Spark (Any 5★ Rate-Up)"
                 );
             }
+
+            if (document.getElementById("enableSparking").checked && sparkStats.preSparkVariety) {
+                // Convert the preSparkVariety object into chart data
+                const preSparkData = Object.entries(sparkStats.preSparkVariety)
+                    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+                
+                // Find max unique count (not highest frequency)
+                const maxUnique = preSparkData.length > 0 ? 
+                    parseInt(preSparkData[preSparkData.length-1][0]) : 0;
+
+                // Prepare data for charts with special labels
+                const preSparkCounts = preSparkData.map(([, freq]) => freq);
+                const preSparkLabels = preSparkData.map(([count]) => {
+                    count = parseInt(count);
+                    if (count === 0) return "0 (None)";
+                    if (count === maxUnique) return `${count} (All)`;
+                    return count.toString();
+                });
+                const preSparkFormattedLabels = preSparkData.map(([count]) => {
+                    count = parseInt(count);
+                    if (count === 0) return "0 (None)";
+                    if (count === maxUnique) return `${count} (All)`;
+                    return `${count} ${count === 1 ? '' : ''}`;
+                });
+                
+                // Generate consistent colors for both charts
+                const generateColors = (count) => {
+                    const baseHue = 200; // Blue base color
+                    const colors = [];
+                    for (let i = 0; i < count; i++) {
+                        const hue = (baseHue + (i * 30)) % 360;
+                        colors.push(`hsla(${hue}, 70%, 60%, 0.7)`);
+                    }
+                    return colors;
+                };
+                
+                const chartColors = generateColors(preSparkLabels.length);
+
+                // Update histogram x-axis title
+                const xAxisTitle = maxUnique > 0 ? 
+                    `Number of Unique Rate-Up Items (0 = None, ${maxUnique} = All)` : 
+                    "Number of Unique Rate-Up Items";
+
+                // Render histogram chart
+                const ctx = document.getElementById("preSparkUniqueDistributionChart").getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: preSparkLabels,
+                        datasets: [{
+                            label: 'Unique Rate-Up Items',
+                            data: preSparkCounts,
+                            backgroundColor: chartColors,
+                            borderRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Unique Rate-Up Items Pulled Before Spark Distribution (5★ Rate-Up)",
+                                color: '#ffffff',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold',
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 10,
+                                }
+                            },
+                            legend: {
+                                display: false
+                            },
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: xAxisTitle,
+                                    color: '#ffffff'
+                                },
+                                ticks: {
+                                    color: '#ffffff'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Frequency",
+                                    color: '#ffffff'
+                                },
+                                ticks: {
+                                    color: '#ffffff'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Render donut chart
+                renderDoughnutChart(
+                    "preSparkUniqueDonutChart",
+                    preSparkFormattedLabels,
+                    preSparkCounts,
+                    chartColors,
+                    "Pre-Spark Unique Items Breakdown"
+                );
+            }       
         }
 
         function calculatePercentileRanges(pulls, percentiles = [50, 70, 80, 90, 95]) {
@@ -1296,16 +1541,18 @@
             // Limit to 3 decimal places
             let decimalIndex = value.indexOf('.');
             if (decimalIndex !== -1) {
-                value = value.substring(0, decimalIndex + 4); // Allow 3 decimal places (index 0 + decimal point + 3 digits)
+                value = value.substring(0, decimalIndex + 4);
             }
 
+            let numericValue = parseFloat(value);
+
             // If the value is less than 0, default to 1
-            if (parseFloat(value) < 0) {
+            if (numericValue < 0) {
                 value = "1";
             }
 
-            // If the value is greater than 100, default to 100
-            if (parseFloat(value) > 100) {
+            // Apply max cap only if not costPerPull
+            if (id !== "costPerPull" && numericValue > 100) {
                 value = "100";
             }
 
@@ -1386,22 +1633,31 @@
             // Toggle visibility of the Hard Pity settings section
             hardPitySettings.style.display = hardPityEnabled ? "block" : "none";
             
-            // If Hard Pity is disabled, reset Guarantee RateUp settings
+            // If Hard Pity is disabled, reset Guarantee Rate-Up settings
             if (!hardPityEnabled) {
                 document.getElementById("enableFiveStarGuaranteed").checked = false;
                 document.getElementById("enableFourStarGuaranteed").checked = false;
                 
-                // Hide the inputs and labels for Guarantee RateUp settings
+                // Hide the inputs and labels for Guarantee Rate-Up settings
                 document.getElementById("fiveStarGuaranteedAfter").style.display = "none";
                 document.getElementById("fiveGuaranteedLabel").style.display = "none";
                 document.getElementById("fourStarGuaranteedAfter").style.display = "none";
                 document.getElementById("fourGuaranteedLabel").style.display = "none";
-            }
-            // If Hard Pity is enabled, you could optionally set up behaviors for the Guarantee options
+                
+                // Disable the input fields for guarantee settings
+                document.getElementById("fiveStarGuaranteedAfter").disabled = true;
+                document.getElementById("fourStarGuaranteedAfter").disabled = true;
+            } 
+            // If Hard Pity is enabled, show Guarantee Rate-Up settings again
             else {
-                // Uncomment and customize if you want to enable guarantee settings on Hard Pity enable
-                // document.getElementById("enableFiveStarGuaranteed").disabled = false;
-                // document.getElementById("enableFourStarGuaranteed").disabled = false;
+                document.getElementById("fiveStarGuaranteedAfter").style.display = "inline"; // Make it visible
+                document.getElementById("fiveGuaranteedLabel").style.display = "inline"; // Make the label visible
+                document.getElementById("fourStarGuaranteedAfter").style.display = "inline"; // Make it visible
+                document.getElementById("fourGuaranteedLabel").style.display = "inline"; // Make the label visible
+                
+                // Disable the input fields for guarantee settings by default
+                document.getElementById("fiveStarGuaranteedAfter").disabled = true;
+                document.getElementById("fourStarGuaranteedAfter").disabled = true;
             }
         }
 
@@ -1409,6 +1665,16 @@
             const softPitySettings = document.getElementById("softPitySettings");
             const isChecked = document.getElementById("enableSoftPity").checked;
             softPitySettings.style.display = isChecked ? "block" : "none";
+        }
+
+        function toggleSoftPityGroup(starType) {
+            const thresholdCheckbox = document.getElementById(`enable${starType}StarSoftThreshold`);
+            const thresholdInput = document.getElementById(`softPity${starType}StarThreshold`);
+            const incrementInput = document.getElementById(`softPity${starType}StarRate`);
+
+            const enabled = thresholdCheckbox.checked;
+            thresholdInput.disabled = !enabled;
+            incrementInput.disabled = !enabled;
         }
         
         function toggleSparkingSettings() {
@@ -1425,34 +1691,27 @@
         }
 
         function getSoftPityRates() {
-            const softPityFiveStarRate = parseFloat(document.getElementById("softPityFiveStarRate").value) || 0;
-            const softPityFourStarRate = parseFloat(document.getElementById("softPityFourStarRate").value) || 0;
-            const softPityFiveStarThreshold = parseInt(document.getElementById("softPityFiveStarThreshold").value) || 0;
-            const softPityFourStarThreshold = parseInt(document.getElementById("softPityFourStarThreshold").value) || 0;
+            const softPityEnabled5 = document.getElementById("enableFiveStarSoftThreshold").checked;
+            const softPityEnabled4 = document.getElementById("enableFourStarSoftThreshold").checked;
 
             return {
                 "5★": {
-                    rateIncrement: softPityFiveStarRate,
-                    threshold: softPityFiveStarThreshold
+                    rateIncrement: softPityEnabled5 ? parseFloat(document.getElementById("softPityFiveStarRate").value) || 0 : 0,
+                    threshold: softPityEnabled5 ? parseInt(document.getElementById("softPityFiveStarThreshold").value) || Infinity : Infinity
                 },
                 "4★": {
-                    rateIncrement: softPityFourStarRate,
-                    threshold: softPityFourStarThreshold
+                    rateIncrement: softPityEnabled4 ? parseFloat(document.getElementById("softPityFourStarRate").value) || 0 : 0,
+                    threshold: softPityEnabled4 ? parseInt(document.getElementById("softPityFourStarThreshold").value) || Infinity : Infinity
                 }
             };
         }
 
-        function toggleGuaranteedInput(starTier) {
-            const input = document.getElementById(`${starTier}StarGuaranteedAfter`);
-            const label = document.getElementById(`${starTier}GuaranteedLabel`);
-            const checkbox = document.getElementById(`enable${capitalize(starTier)}StarGuaranteed`);
-
-            if (checkbox.checked) {
-                input.style.display = 'inline-block';
-                label.style.display = 'inline-block';
-            } else {
-                input.style.display = 'none';
-                label.style.display = 'none';
+        function toggleGuaranteedInput(starType) {
+            const input = document.getElementById(`${starType}StarGuaranteedAfter`);
+            const checkbox = document.getElementById(`enable${capitalize(starType)}StarGuaranteed`);
+            
+            if (input && checkbox) {
+                input.disabled = !checkbox.checked;
             }
         }
 
