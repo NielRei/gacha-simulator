@@ -23,6 +23,7 @@ Please answer the survey form for my thesis! https://forms.gle/xnt2UUgmYqDMzo7T8
 # 📊 Statistical Results
 - Item Type Distributions (number of 5★ vs 4★ vs 3★, non-rate-ups vs rate-ups, etc...)
 - Average, Min, and Max Pulls to get Item (5★/4★/3★, Non-Rate-Ups/Rate-Up, etc)
+- Average, Min, and Max Pulls to get One Specific Item (if there are multiple rate-up items)
 - Average, Min, and Max Pulls to Complete Set of Items (pulls to get one copy of each rate-up item if there are multiple rate-up items)
 - Average, Min, and Max Cost (IRL cost to get an item)
 - Pull Interval Distribution (pull distances between each specific item)
