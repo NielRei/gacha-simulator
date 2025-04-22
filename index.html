@@ -1125,7 +1125,7 @@
                                 ${Object.entries(sparkStats.preSparkVariety)
                                 .sort((a,b) => a[0]-b[0])
                                 .map(([count, freq]) => 
-                                    `<li>${count} Unique Items${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
+                                    `<li>${count} Unique Item${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
                                 ).join('')}
                             </ul>
                         </div>
