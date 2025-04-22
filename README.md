@@ -3,6 +3,8 @@ A basic customizable gacha simulator with Monte Carlo Simulation - simulate hund
 
 Please answer the survey form for my thesis! https://forms.gle/xnt2UUgmYqDMzo7T8
 
+General Documentation/Guide: https://docs.google.com/document/d/17YxGOLZvl0bwRrtfMcuyZTC1UyWZgKxIQYCg7IDCvyk/edit?usp=sharing
+
 # 📌 Features
 - Fully customizable gacha settings
 - Supports basic gacha mechanics such as drop rates, distribution rates, rate-up/non-rate-up items, hard pity systems, soft pity systems, and sparking systems!
