@@ -18,15 +18,28 @@
                 <small class="header-subtext">(w/ Monte Carlo Simulation)</small>
                 <small class="header-subtext">v0.0.1</small>
             </h2>
-            <p>
-                <i> After using, please answer the survey form for my thesis!
-                <a href="https://forms.gle/xnt2UUgmYqDMzo7T8" target="_blank" rel="noopener">https://forms.gle/xnt2UUgmYqDMzo7T8</a> </i>
-            </p>
         </div>
     </header>
 
     <main>
         <div id="settingsPanel">
+            <div class="rate-box">
+                <label for="presetSelect"><strong>Load Preset:</strong></label>
+                <select id="presetSelect" onchange="applyPreset(this.value)" style="background-color: #1f2a44; border: none; border-bottom: 2px solid #3c4c70; color: #ffffff; padding: 0.3rem; font-size: 0.9rem; border-radius: 0.25rem; margin-top: 0.25rem;">
+                    <option value="">-- Select a Preset --</option>
+                    <option value="genshin_hsr">Genshin Impact / HSR</option>
+                    <option value="zzz">Zenless Zone Zero</option>
+                    <option value="wutheringWaves">Wuthering Waves</option>
+                    <option value="girlsFrontline2">Girls' Frontline 2</option>
+                    <option value="fgo">Fate Grand Order</option>
+                    <option value="arknights_normal">Arknights (Normal)</option>
+                    <option value="arknights_anni">Arknights (Anniversary)</option>
+                    <option value="reverse1999">Reverse: 1999</option>
+                    <option value="blueArchive">Blue Archive</option>
+                    <option value="blueArchiveAnni">Blue Archive (Anni)</option>
+                    <option value="touhou_lostword">Touhou: Lost Word</option>
+                </select>
+            </div>            
             <h3>
                 Banner Drop Rates
                 <span id="validationMessage"></span>
@@ -1125,7 +1138,7 @@
                                 ${Object.entries(sparkStats.preSparkVariety)
                                 .sort((a,b) => a[0]-b[0])
                                 .map(([count, freq]) => 
-                                    `<li>${count} Unique Item${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
+                                    `<li>${count} Unique Items${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
                                 ).join('')}
                             </ul>
                         </div>
@@ -1718,7 +1731,427 @@
         function capitalize(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
+
+        /* Presets */
+
+        const presets = {
+            genshin_hsr: {
+                fiveStarBaseRate: "0.60",
+                fourStarBaseRate: "5.10", // Use 9.40 for ZZZ if doing a ZZZ-specific preset
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "3", // Use 2 for ZZZ if needed
+                costPerPull: "1.98",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "90",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: true,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "74",
+                softPityFiveStarRate: "6",
+                enableFourStarSoftThreshold: true,
+                softPityFourStarThreshold: "9",
+                softPityFourStarRate: "44.9",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            zzz: {
+                fiveStarBaseRate: "0.60",
+                fourStarBaseRate: "9.40", // Use 9.40 for ZZZ if doing a ZZZ-specific preset
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "2", // Use 2 for ZZZ if needed
+                costPerPull: "1.98",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "90",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: true,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "74",
+                softPityFiveStarRate: "6",
+                enableFourStarSoftThreshold: true,
+                softPityFourStarThreshold: "9",
+                softPityFourStarRate: "44.9",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            wutheringWaves: {
+                fiveStarBaseRate: "0.80",
+                fourStarBaseRate: "6.00",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "3",
+                costPerPull: "1.98",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "80",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: true,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "66",
+                softPityFiveStarRate: "5",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "9",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            girlsFrontline2: {
+                fiveStarBaseRate: "0.60",
+                fourStarBaseRate: "6.00",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "2",
+                costPerPull: "1.98",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "80",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: true,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "58",
+                softPityFiveStarRate: "4.5", // Adjusted based on the 4.5–4.8% estimate
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "9",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+            
+            fgo: {
+                fiveStarBaseRate: "1.00",
+                fourStarBaseRate: "3.00",
+                fiveStarRateUpDistributionRate: "80.00",
+                fourStarRateUpDistributionRate: "70.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.306",
+                simulationCount: "500000",
+                enableHardPity: false,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "false",  // Due to Spark system with 330 pulls for 5★
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: false,
+                fourStarPity: "0",  // No specific cap for 4★ as it's based on rate-up
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",  // No guaranteed 4★ mechanics
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",  // Not applicable due to Spark system
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",  // Not applicable
+                softPityFourStarRate: "0",
+                enableSparking: true,
+                fiveStarSparkRequirement: "330"  // Spark system activation at 330 pulls
+            },
+
+            arknights_normal: {
+                fiveStarBaseRate: "2.00",
+                fourStarBaseRate: "8.00",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.80",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "51",
+                softPityFiveStarRate: "2",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            arknights_anni: {
+                fiveStarBaseRate: "2.00",
+                fourStarBaseRate: "8.00",
+                fiveStarRateUpDistributionRate: "70.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "2",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.80",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "1",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "51",
+                softPityFiveStarRate: "2",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: true,
+                fiveStarSparkRequirement: "300"
+            },
+
+            reverse1999: {
+                fiveStarBaseRate: "1.50",
+                fourStarBaseRate: "8.50",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "50.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.148",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "70",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: false,
+                fourStarPity: "0",  // No guaranteed for 3★ (4★ in-game)
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "61",
+                softPityFiveStarRate: "2.5",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            blueArchive: {
+                fiveStarBaseRate: "3.00",
+                fourStarBaseRate: "18.50",
+                fiveStarRateUpDistributionRate: "23.33",
+                fourStarRateUpDistributionRate: "16.22",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.000",
+                simulationCount: "500000",
+
+                enableHardPity: false,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: false,
+                fourStarPity: "0",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: true,
+                fiveStarSparkRequirement: "200"
+            },
+
+            blueArchiveAnni: {
+                fiveStarBaseRate: "6.00",
+                fourStarBaseRate: "18.50",
+                fiveStarRateUpDistributionRate: "11.67",
+                fourStarRateUpDistributionRate: "16.22",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.000",
+                simulationCount: "500000",
+
+                enableHardPity: false,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: false,
+                fourStarPity: "0",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: true,
+                fiveStarSparkRequirement: "200"
+            },
+
+            touhou_lostword: {
+                fiveStarBaseRate: "7.50",
+                fourStarBaseRate: "15.00",
+                fiveStarRateUpDistributionRate: "6.667",
+                fourStarRateUpDistributionRate: "10.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.667",
+                simulationCount: "500000",
+
+                enableHardPity: false,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: false,
+                fourStarPity: "0",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: true,
+                fiveStarSparkRequirement: "150"
+            }
+
+        };
+
+            
+        
+        function applyPreset(presetName) {
+            const p = presets[presetName];
+            if (!p) return;
+
+            // Base Rates
+            document.getElementById("fiveStarBaseRate").value = p.fiveStarBaseRate;
+            document.getElementById("fourStarBaseRate").value = p.fourStarBaseRate;
+            document.getElementById("fiveStarRateUpDistributionRate").value = p.fiveStarRateUpDistributionRate;
+            document.getElementById("fourStarRateUpDistributionRate").value = p.fourStarRateUpDistributionRate;
+
+            // Rate-Up Items
+            document.getElementById("fiveStarRateUpItems").value = p.fiveStarRateUpItems;
+            document.getElementById("fourStarRateUpItems").value = p.fourStarRateUpItems;
+
+            // Cost & Simulation
+            document.getElementById("costPerPull").value = p.costPerPull;
+            document.getElementById("simulationCount").value = p.simulationCount;
+
+            // Hard Pity
+            document.getElementById("enableHardPity").checked = p.enableHardPity;
+            toggleHardPitySettings();
+            setTimeout(() => {
+                document.getElementById("enableFiveStarPityCap").checked = p.enableFiveStarPityCap;
+                document.getElementById("fiveStarPity").disabled = !p.enableFiveStarPityCap;
+                document.getElementById("fiveStarPity").value = p.fiveStarPity;
+                document.getElementById("enableFiveStarGuaranteed").checked = p.enableFiveStarGuaranteed;
+                document.getElementById("fiveStarGuaranteedAfter").disabled = !p.enableFiveStarGuaranteed;
+                document.getElementById("fiveStarGuaranteedAfter").value = p.fiveStarGuaranteedAfter;
+
+                document.getElementById("enableFourStarPityCap").checked = p.enableFourStarPityCap;
+                document.getElementById("fourStarPity").disabled = !p.enableFourStarPityCap;
+                document.getElementById("fourStarPity").value = p.fourStarPity;
+                document.getElementById("enableFourStarGuaranteed").checked = p.enableFourStarGuaranteed;
+                document.getElementById("fourStarGuaranteedAfter").disabled = !p.enableFourStarGuaranteed;
+                document.getElementById("fourStarGuaranteedAfter").value = p.fourStarGuaranteedAfter;
+            }, 50);
+
+            // Soft Pity
+            document.getElementById("enableSoftPity").checked = p.enableSoftPity;
+            toggleSoftPitySettings();
+            setTimeout(() => {
+                document.getElementById("enableFiveStarSoftThreshold").checked = p.enableFiveStarSoftThreshold;
+                document.getElementById("softPityFiveStarThreshold").disabled = !p.enableFiveStarSoftThreshold;
+                document.getElementById("softPityFiveStarThreshold").value = p.softPityFiveStarThreshold;
+                document.getElementById("softPityFiveStarRate").disabled = !p.enableFiveStarSoftThreshold;
+                document.getElementById("softPityFiveStarRate").value = p.softPityFiveStarRate;
+
+                document.getElementById("enableFourStarSoftThreshold").checked = p.enableFourStarSoftThreshold;
+                document.getElementById("softPityFourStarThreshold").disabled = !p.enableFourStarSoftThreshold;
+                document.getElementById("softPityFourStarThreshold").value = p.softPityFourStarThreshold;
+                document.getElementById("softPityFourStarRate").disabled = !p.enableFourStarSoftThreshold;
+                document.getElementById("softPityFourStarRate").value = p.softPityFourStarRate;
+            }, 50);
+
+            // Sparking
+            document.getElementById("enableSparking").checked = p.enableSparking;
+            toggleSparkingSettings();
+            setTimeout(() => {
+                document.getElementById("fiveStarSparkRequirement").value = p.fiveStarSparkRequirement;
+            }, 50);
+        }
+
     </script>
 
+    
 </body>
 </html>
