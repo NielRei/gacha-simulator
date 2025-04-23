@@ -46,6 +46,8 @@
                     <option value="pgr_fate_arrival">Punishing: Gray Raven (Fate Arrival)</option>
                     <option value="uma_musume">Uma Musume</option>
                     <option value="love_and_deepspace">Love and Deepspace (Limited Solo Lunar)</option>
+                    <option value="snowbreak5050">Snowbreak: Containment Zone (50/50)</option>
+                    <option value="snowbreak100">Snowbreak: Containment Zone (100%)</option>
                 </select>
             </div>      
             <h3>
@@ -2218,7 +2220,72 @@
 
                 enableSparking: false,
                 fiveStarSparkRequirement: "0"
-            }
+            },
+
+            snowbreak5050: {
+                fiveStarBaseRate: "0.70",
+                fourStarBaseRate: "8.00",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "0.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.980",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "80",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "62",
+                softPityFiveStarRate: "5",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            snowbreak100: {
+                fiveStarBaseRate: "0.10",
+                fourStarBaseRate: "8.00",
+                fiveStarRateUpDistributionRate: "100",
+                fourStarRateUpDistributionRate: "0.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.980",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "100",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "70",
+                softPityFiveStarRate: "0.75",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
 
         };
 
