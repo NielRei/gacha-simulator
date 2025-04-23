@@ -42,8 +42,12 @@
                     <option value="blueArchive">Blue Archive</option>
                     <option value="blueArchiveAnni">Blue Archive (Anni)</option>
                     <option value="touhou_lostword">Touhou: Lost Word</option>
+                    <option value="pgr_arrival">Punishing: Gray Raven (Arrival Limited)</option>
+                    <option value="pgr_fate_arrival">Punishing: Gray Raven (Fate Arrival)</option>
+                    <option value="uma_musume">Uma Musume</option>
+                    <option value="love_and_deepspace">Love and Deepspace (Limited Solo Lunar)</option>
                 </select>
-            </div>            
+            </div>      
             <h3>
                 Banner Drop Rates
                 <span id="validationMessage"></span>
@@ -1142,7 +1146,7 @@
                                 ${Object.entries(sparkStats.preSparkVariety)
                                 .sort((a,b) => a[0]-b[0])
                                 .map(([count, freq]) => 
-                                    `<li>${count} Unique Item${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
+                                    `<li>${count} Unique Items${count == 1 ? '' : 's'}: ${freq} (${formatPct(freq, sparkStats.sparked)})</li>`
                                 ).join('')}
                             </ul>
                         </div>
@@ -2002,13 +2006,13 @@
                 costPerPull: "2.000",
                 simulationCount: "500000",
 
-                enableHardPity: false,
+                enableHardPity: true,
                 enableFiveStarPityCap: false,
                 fiveStarPity: "0",
                 enableFiveStarGuaranteed: false,
                 fiveStarGuaranteedAfter: "0",
-                enableFourStarPityCap: false,
-                fourStarPity: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
                 enableFourStarGuaranteed: false,
                 fourStarGuaranteedAfter: "0",
 
@@ -2034,13 +2038,13 @@
                 costPerPull: "2.000",
                 simulationCount: "500000",
 
-                enableHardPity: false,
+                enableHardPity: true,
                 enableFiveStarPityCap: false,
                 fiveStarPity: "0",
                 enableFiveStarGuaranteed: false,
                 fiveStarGuaranteedAfter: "0",
-                enableFourStarPityCap: false,
-                fourStarPity: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
                 enableFourStarGuaranteed: false,
                 fourStarGuaranteedAfter: "0",
 
@@ -2086,6 +2090,134 @@
 
                 enableSparking: true,
                 fiveStarSparkRequirement: "150"
+            },
+
+            pgr_arrival: {
+                fiveStarBaseRate: "0.50",
+                fourStarBaseRate: "13.95",
+                fiveStarRateUpDistributionRate: "70.00",
+                fourStarRateUpDistributionRate: "0.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.400",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "60",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            pgr_fate_arrival: {
+                fiveStarBaseRate: "1.50",
+                fourStarBaseRate: "13.95",
+                fiveStarRateUpDistributionRate: "70.00",
+                fourStarRateUpDistributionRate: "0.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.400",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "90", // Averaged between 80–100
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
+            },
+
+            uma_musume: {
+                fiveStarBaseRate: "3.00",
+                fourStarBaseRate: "18.00",
+                fiveStarRateUpDistributionRate: "25.00",
+                fourStarRateUpDistributionRate: "0.00",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "2.000",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: false,
+                fiveStarPity: "0",
+                enableFiveStarGuaranteed: false,
+                fiveStarGuaranteedAfter: "0",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: false,
+                enableFiveStarSoftThreshold: false,
+                softPityFiveStarThreshold: "0",
+                softPityFiveStarRate: "0",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: true,
+                fiveStarSparkRequirement: "200"
+            },
+
+            love_and_deepspace: {
+                fiveStarBaseRate: "1.00",
+                fourStarBaseRate: "7.00",
+                fiveStarRateUpDistributionRate: "50.00",
+                fourStarRateUpDistributionRate: "0",
+                fiveStarRateUpItems: "1",
+                fourStarRateUpItems: "1",
+                costPerPull: "1.856",
+                simulationCount: "500000",
+
+                enableHardPity: true,
+                enableFiveStarPityCap: true,
+                fiveStarPity: "70",
+                enableFiveStarGuaranteed: true,
+                fiveStarGuaranteedAfter: "1",
+                enableFourStarPityCap: true,
+                fourStarPity: "10",
+                enableFourStarGuaranteed: false,
+                fourStarGuaranteedAfter: "0",
+
+                enableSoftPity: true,
+                enableFiveStarSoftThreshold: true,
+                softPityFiveStarThreshold: "61",
+                softPityFiveStarRate: "10.00",
+                enableFourStarSoftThreshold: false,
+                softPityFourStarThreshold: "0",
+                softPityFourStarRate: "0",
+
+                enableSparking: false,
+                fiveStarSparkRequirement: "0"
             }
 
         };
